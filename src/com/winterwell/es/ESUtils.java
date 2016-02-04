@@ -18,8 +18,7 @@ import com.google.gson.JsonSerializer;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.containers.SharedStatic;
-import com.winterwell.utils.time.Time;
+import winterwell.utils.time.Time;
 import com.winterwell.utils.web.IHasJson;
 
 import creole.data.XId;
@@ -32,13 +31,18 @@ import creole.data.XId;
  */
 public class ESUtils {
 
+	static Gson _dflt;
+	
 	public static Gson gson() {
+		if (_dflt==null) {
+			_dflt = new GsonSetup().call();
+		}
 		// From
 		// https://sites.google.com/site/gson/gson-user-guide#TOC-Gson-Performance-and-Scalability
 		// The Gson instance does not maintain any state while invoking Json
 		// operations. So, you are free to reuse the same object for multiple
-		// Json serialization and deserialization operations.
-		return SharedStatic.get(Gson.class, new GsonSetup());
+		// Json serialization and deserialization operations.		
+		return _dflt;
 	}
 
 	/**

@@ -11,13 +11,17 @@ import java.util.concurrent.Callable;
 
 import org.elasticsearch.action.search.SearchType;
 
+import com.winterwell.es.client.admin.CreateIndexRequest;
 import com.winterwell.utils.web.SimpleJson;
-import com.winterwell.utils.FailureException;
-import com.winterwell.utils.TodoException;
+
+import winterwell.utils.FailureException;
+import winterwell.utils.TodoException;
+
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.threads.IProgress;
-import com.winterwell.utils.time.Dt;
-import com.winterwell.utils.time.TUnit;
+
+import winterwell.utils.time.Dt;
+import winterwell.utils.time.TUnit;
 
 /**
  * Reindex -- ie copy data from one index to another.

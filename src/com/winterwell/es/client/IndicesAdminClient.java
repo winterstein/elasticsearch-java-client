@@ -1,5 +1,11 @@
 package com.winterwell.es.client;
 
+import com.winterwell.es.client.admin.CreateIndexRequest;
+import com.winterwell.es.client.admin.DeleteIndexRequest;
+import com.winterwell.es.client.admin.DeleteMappingRequestBuilder;
+import com.winterwell.es.client.admin.PutMappingRequestBuilder;
+import com.winterwell.es.client.admin.StatsRequest;
+
 
 /**
  * @see org.elasticsearch.client.IndicesAdminClient
@@ -10,6 +16,11 @@ public class IndicesAdminClient {
 
 	ESHttpClient hClient;
 
+	public StatsRequest listIndices() {
+		// a light-weight StatsRequest
+		return new StatsRequest(hClient).setType("store");
+		// /_stats/store,docs,indexing
+	}
 
     /**
      * Deletes an index based on the index name.

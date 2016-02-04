@@ -3,7 +3,7 @@ package com.winterwell.es.client;
 import java.util.List;
 
 import com.winterwell.utils.StrUtils;
-import com.winterwell.utils.TodoException;
+import winterwell.utils.TodoException;
 
 public class ClearScrollRequestBuilder extends ESHttpRequest<ClearScrollRequestBuilder, IESResponse> {
 

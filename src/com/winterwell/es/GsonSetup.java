@@ -12,14 +12,14 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.winterwell.utils.containers.Properties;
-import com.winterwell.utils.containers.SharedStatic;
-import com.winterwell.utils.time.Time;
+import winterwell.utils.containers.Properties;
+
+import winterwell.utils.time.Time;
 import com.winterwell.utils.web.IHasJson;
 
 import creole.data.XId;
 
-public class GsonSetup implements Callable<Gson> {
+class GsonSetup implements Callable<Gson> {
 	
 	public GsonSetup() {
 	}
@@ -33,10 +33,10 @@ public class GsonSetup implements Callable<Gson> {
 
 //		gb.registerTypeAdapter(Properties.class, new PropertiesTypeAdapter());
 		
-		SharedStatic.putFactory(Gson.class, new GsonSetup());
+//		SharedStatic.putFactory(Gson.class, new GsonSetup());
 	}
 	
-	public Gson call() throws Exception {		
+	public Gson call() {		
 		return gb.create();
 	} 
 }

@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
@@ -27,7 +28,6 @@ import com.winterwell.utils.log.Log;
 import com.winterwell.utils.threads.IFuture;
 import com.winterwell.utils.threads.AFuture;
 import com.winterwell.utils.threads.SafeExecutor;
-import com.winterwell.utils.threads.WrappedFuture;
 import com.winterwell.utils.web.WebUtils2;
 import com.winterwell.web.FakeBrowser;
 import com.winterwell.web.WebEx;
@@ -81,15 +81,18 @@ public class ESHttpClient {
 		gson = config.gson;
 	}
 
+	/**
+	 * @deprecated Equivalent to {@link #admin().indices()}
+	 */
 	public IndicesAdminClient getIndicesAdminClient() {
-		return new IndicesAdminClient(this);
+		return admin().indices();
 	}
 
 	public AdminClient admin() {
 		return new AdminClient();
 	}
 	
-	public class AdminClient {
+	public final class AdminClient {
 		public IndicesAdminClient indices() {
 			return new IndicesAdminClient(ESHttpClient.this);
 		}

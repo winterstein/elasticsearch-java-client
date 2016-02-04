@@ -27,7 +27,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		params.put("fields", fieldsAsCSL);	return (SubClass) this;
 	}
 
-	String method;
+	protected String method;
 
 	ESHttpClient hClient;
 	String[] indices;
@@ -36,8 +36,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	/**
 	 * This becomes the body json. Can be String or Map
 	 */
-	Object src;
-	String endpoint;
+	protected Object src;
+	protected String endpoint;
 
 	Map<String,Object> params = new ArrayMap();
 
@@ -119,10 +119,18 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 	public ResponseSubClass get() {
 		get2_safetyCheck();
-		return (ResponseSubClass) hClient.execute(this);
+		return processResponse(hClient.execute(this));
 	}
 	
 
+	/**
+	 * Does nothing by default. Sub-classes can over-ride to unwrap the response object
+	 * @param response
+	 * @return
+	 */
+	protected ResponseSubClass processResponse(ESHttpResponse response) {
+		return (ResponseSubClass) response;
+	}
 	/**
 	 * Check for necessary parameters. E.g. an index request needs
 	 * an index-name, type, id and a document.

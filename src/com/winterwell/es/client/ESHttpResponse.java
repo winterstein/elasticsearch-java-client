@@ -18,9 +18,9 @@ import com.winterwell.web.WebEx;
  */
 public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse {
 
-	private String json;
-	private WebEx error;
-	private ESHttpRequest req;
+	private final String json;
+	private final WebEx error;
+	private final ESHttpRequest req;
 	private Map parsed;
 
 	/* (non-Javadoc)
@@ -31,14 +31,26 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		return "ESHttpResponse["+StrUtils.ellipsize(Utils.or(json, ""+error), 120)+"]";
 	}
 	
+	/**
+	 * For use by wrapper sub-classes
+	 * @param response
+	 */
+	protected ESHttpResponse(ESHttpResponse response) {
+		this.req = response.req;
+		this.json = response.json;
+		this.error = response.error;
+	}
+	
 	public ESHttpResponse(ESHttpRequest req, String json) {
 		this.req = req;
 		this.json = json;
+		this.error = null;
 	}
 
 	public ESHttpResponse(ESHttpRequest req, WebEx ex) {
 		this.error = ex;
 		this.req = req;
+		this.json = null;
 	}
 
 	/* (non-Javadoc)

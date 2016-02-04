@@ -21,8 +21,8 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.time.Dt;
-import com.winterwell.utils.time.TUnit;
+import winterwell.utils.time.Dt;
+import winterwell.utils.time.TUnit;
 
 /**
  * @see org.elasticsearch.action.search.SearchRequestBuilder
@@ -77,6 +77,11 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 		params.put("from", i);
 		return this;
 	}
+	/**
+	 * How many results to fetch. The default is 10.
+	 * @param n 
+	 * @return this
+	 */
 	public SearchRequestBuilder setSize(int n) {
 		params.put("size", n);
 		return this;
