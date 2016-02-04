@@ -12,7 +12,7 @@ public class StatsResponse extends ESHttpResponse {
 		super(response);
 	}
 
-	public Map getIndices() {
+	public Map<String,Map> getIndices() {
 		return (Map) getParsedJson().get("indices");
 	}
 }
