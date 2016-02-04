@@ -1,10 +1,7 @@
-package com.winterwell.es.client;
+package com.winterwell.es.client.admin;
 
-import com.winterwell.es.client.admin.CreateIndexRequest;
-import com.winterwell.es.client.admin.DeleteIndexRequest;
-import com.winterwell.es.client.admin.DeleteMappingRequestBuilder;
-import com.winterwell.es.client.admin.PutMappingRequestBuilder;
-import com.winterwell.es.client.admin.StatsRequest;
+import com.winterwell.es.client.ESHttpClient;
+import com.winterwell.es.client.IESResponse;
 
 
 /**

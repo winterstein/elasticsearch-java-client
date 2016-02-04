@@ -19,6 +19,7 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.winterwell.es.client.admin.ClusterAdminClient;
+import com.winterwell.es.client.admin.IndicesAdminClient;
 import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;

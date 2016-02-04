@@ -1,8 +1,10 @@
-package com.winterwell.es.client;
+package com.winterwell.es.client.admin;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import com.winterwell.es.client.ESHttpRequest;
+import com.winterwell.es.client.IESResponse;
 import com.winterwell.utils.containers.ArrayMap;
 
 /**

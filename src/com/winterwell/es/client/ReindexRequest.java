@@ -12,6 +12,7 @@ import java.util.concurrent.Callable;
 import org.elasticsearch.action.search.SearchType;
 
 import com.winterwell.es.client.admin.CreateIndexRequest;
+import com.winterwell.es.client.admin.IndicesAliasesRequest;
 import com.winterwell.utils.web.SimpleJson;
 
 import winterwell.utils.FailureException;
