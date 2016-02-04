@@ -1,0 +1,189 @@
+package com.winterwell.es.client;
+
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.jetty.util.ajax.JSON;
+
+import com.google.gson.Gson;
+import com.winterwell.utils.StrUtils;
+import com.winterwell.utils.Utils;
+import com.winterwell.utils.log.Log;
+import com.winterwell.web.WebEx;
+
+/**
+ * Imitates {@link GetResponse}
+ * @author daniel
+ *
+ */
+public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse {
+
+	private String json;
+	private WebEx error;
+	private ESHttpRequest req;
+	private Map parsed;
+
+	/* (non-Javadoc)
+	 * @see com.winterwell.es.client.IESResponse#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ESHttpResponse["+StrUtils.ellipsize(Utils.or(json, ""+error), 120)+"]";
+	}
+	
+	public ESHttpResponse(ESHttpRequest req, String json) {
+		this.req = req;
+		this.json = json;
+	}
+
+	public ESHttpResponse(ESHttpRequest req, WebEx ex) {
+		this.error = ex;
+		this.req = req;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.winterwell.es.client.IESResponse#isSuccess()
+	 */
+	@Override
+	public boolean isSuccess() {
+		return error==null;
+	}
+
+	@Override
+	public Map<String, Object> getSourceAsMap() {
+		Map<String, Object> map = getParsedJson();
+		// is it just the source?
+		if (req instanceof GetRequestBuilder && ((GetRequestBuilder)req).sourceOnly) {
+			return map;
+		}
+		Object source = map.get("_source");
+		return (Map) source;
+	}
+	
+	public Object getFromResultFields(String input) {
+		Map<String, Object> map = getParsedJson();
+		// is it just the source?
+		Object get = map.get("get");
+		Object fields = ((Map) get).get("fields");
+		return ((Map) fields).get(input);
+	}
+	
+	public Map<String, Object> getParsedJson() {
+		if (parsed!=null) return parsed;
+		parsed = gson().fromJson(json, Map.class);
+		return parsed;
+	}
+	/**
+	 * The raw json as returned by ES.
+	 */
+	public String getJson() {
+		return json;
+	}
+	
+	private Gson gson() {
+		return req.hClient.gson;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.winterwell.es.client.IESResponse#isAcknowledged()
+	 */
+	@Override
+	public boolean isAcknowledged() {
+		return isSuccess();
+	}
+
+	@Override
+	public List getField(String name) {
+		Map<String, Object> map = getFieldsFromGet();
+		Object output = map.get(name);
+		return (List) output;
+	}
+	
+	@Override
+	public String getSourceAsString() {
+		// is it just the source?
+		if (req instanceof GetRequestBuilder && ((GetRequestBuilder)req).sourceOnly) {
+			return json;
+		}
+		Map<String, Object> map = getParsedJson();
+		Object source = map.get("_source");
+		return gson().toJson(source);
+	}
+
+	@Override
+	public boolean hasFailures() {
+		if (isSuccess()) {			
+			return false;
+		}
+		Log.w("ES", error);
+		Map<String, Object> map = getParsedJson();
+		Object fails = map.get("failures");
+		return true;
+	}
+	
+	public WebEx getError() {
+		return error;
+	}
+	
+	
+	@Override
+	public ESHttpResponse check() {
+		if (error!=null) throw error;
+		return this;
+	}
+	
+
+	@Override
+	public List<Map> getHits() {
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getParsedJson();
+		Map hits = (Map) map.get("hits");
+		Object hitsList = hits.get("hits");
+		return (List<Map>) hitsList;
+	}
+
+	@Override
+	/**
+	 * This one doesn't return null.
+	 */
+	public Double getTotal() {
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getParsedJson();
+		Map hits = (Map) map.get("hits");
+		if (hits == null){
+			throw new IllegalArgumentException("hits field cannot be null");
+		}
+		Object hitTotal = hits.get("total");
+		if (hitTotal == null){
+			throw new IllegalArgumentException("hitTotal field cannot be null");
+		}
+
+		return (Double) hitTotal;
+	}
+
+	
+	@Override
+	public Map getFacets() {
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getParsedJson();
+		Object hits = map.get("facets");
+		return (Map) hits;
+	}
+
+	@Override
+	public Map getFieldsFromGet() {
+		if (error!=null) throw error;
+		Map<String, Object> map = getParsedJson();
+		Map<String, Object> get = (Map<String, Object>) map.get("get");
+		Map<String, Object> hits = (Map<String, Object>) (Map<String, Object>) get.get("fields");
+		return hits;
+	}
+	
+	@Override
+	public String getScrollId() {
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getParsedJson();
+		Object sid = map.get("_scroll_id");
+		return (String) sid;
+	}
+}
