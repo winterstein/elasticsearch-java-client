@@ -13,6 +13,8 @@ import java.util.concurrent.Future;
 import org.apache.commons.lang3.concurrent.CallableBackgroundInitializer;
 import org.eclipse.jetty.util.ajax.JSON;
 
+import winterwell.utils.time.TUnit;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -212,7 +214,7 @@ public class ESHttpClient {
 			ESHttpResponse r = new ESHttpResponse(req, json);
 			return r;
 		} catch(WebEx.E404 ex) {
-			// a get for an unstored object (a common case)
+			// e.g. a get for an unstored object (a common case)
 			return new ESHttpResponse(req, ex);
 		} catch(WebEx ex) {
 			// Quite possibly a script error
@@ -266,9 +268,9 @@ public class ESHttpClient {
 	}
 
 	public SearchScrollRequestBuilder prepareSearchScroll(String scrollId) {
-		return new SearchScrollRequestBuilder(this, scrollId);
+		return new SearchScrollRequestBuilder(this, scrollId, TUnit.MINUTE.dt);
 	}
-
+	
 	public ClearScrollRequestBuilder prepareClearScroll() {
 		return new ClearScrollRequestBuilder(this);
 	}

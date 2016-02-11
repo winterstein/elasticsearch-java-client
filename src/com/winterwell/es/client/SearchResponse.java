@@ -20,7 +20,7 @@ public interface SearchResponse extends IESResponse {
 	
 	/**
 	 * The initial search request and each subsequent scroll request returns a new scroll_id.
-	 * Only the most recent scroll_id should be used.
+	 * <b>Only the most recent scroll_id should be used.</b>
 	 * @return the new scroll_id for the next request
 	 */
 	String getScrollId();

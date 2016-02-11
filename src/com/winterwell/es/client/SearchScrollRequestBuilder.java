@@ -13,10 +13,20 @@ import winterwell.utils.time.TUnit;
  */
 public class SearchScrollRequestBuilder extends ESHttpRequest<SearchScrollRequestBuilder, SearchResponse> {
 
-	public SearchScrollRequestBuilder(ESHttpClient esHttpClient, String scrollId) {
+	/**
+	 * 
+	 * @param esHttpClient
+	 * @param scrollId
+	 * @param scrollWindow How long to keep the scroll open for until the next request. Can be null (in which case this request will close the scroll).
+	 * Suggested value: 1 minute
+	 */
+	public SearchScrollRequestBuilder(ESHttpClient esHttpClient, String scrollId, Dt scrollWindow) {
 		super(esHttpClient);
 		endpoint = "_search/scroll";
 		params.put("scroll_id", scrollId);
+		// You must keep setting a scroll window to keep the scroll alive.
+		// This is such a gotcha, that we'll make the user set it here.
+		setScroll(scrollWindow);
 	}
 	
 	/**

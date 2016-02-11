@@ -5,10 +5,10 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.utils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.web"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/elasticsearch"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/elasticsearch"/>
 	<classpathentry kind="lib" path="/middleware/jetty/jetty-util.jar" sourcepath="/home/agis/.m2/repository/org/eclipse/jetty/jetty-util/7.5.4.v20111024/jetty-util-7.5.4.v20111024-sources.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/flexi-gson"/>
-	<classpathentry kind="lib" path="/middleware/guava/guava.jar" sourcepath="/middleware/guava/src.zip"/>
+	<classpathentry exported="true" kind="lib" path="/middleware/guava/guava.jar" sourcepath="/middleware/guava/src.zip"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

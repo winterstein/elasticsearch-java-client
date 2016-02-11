@@ -49,8 +49,22 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 	}
 
 
+	/**
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-search-type.html
+	 * @param searchType
+	 * @return
+	 */
 	public SearchRequestBuilder setSearchType(SearchType searchType) {
-		params.put("search_type", searchType.toString().toLowerCase());
+		return setSearchType(searchType.toString().toLowerCase());
+	}
+	
+	/**
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-search-type.html
+	 * @param searchType e.g. "scan" (although that was deprecated in 2.1)
+	 * @return
+	 */
+	public SearchRequestBuilder setSearchType(String searchType) {
+		params.put("search_type", searchType);
 		return this;
 	}
 
@@ -102,7 +116,22 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 		sorts.add(ss);
 		return this;
 	}
-
+	
+	/**
+	 * See 
+	 * @param sort
+	 * @return
+	 */
+	public SearchRequestBuilder setSort(String sort) {
+		List sorts = (List) body.get("sort");
+		if (sorts==null) {
+			sorts = new ArrayList();
+			body.put("sort", sorts);
+		}
+		sorts.clear();
+		sorts.add("\""+sort+"\"");
+		return this;
+	}
 
 	public SearchRequestBuilder addFacet(FacetBuilder field) {
 		// TOTAL HACK
@@ -123,8 +152,12 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 
 	/**
 	 * How long to keep scroll resources open between requests.
-	 * NB: Scroll is typically used with {@link #setSearchType(SearchType)} {@link SearchType#SCAN}
+	 * NB: Scroll is typically used with setSort("_doc");
+	 * 
+	 * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html
+	 *  
 	 * @param keepAlive
+	 *  
 	 */
 	public void setScroll(TimeValue keepAlive) {
 		// lean on TimeValue.toString() fitting the right format
@@ -132,7 +165,9 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 	}
 	/**
 	 * How long to keep scroll resources open between requests.
-	 * NB: Scroll is typically used with {@link #setSearchType(SearchType)} {@link SearchType#SCAN}
+	 * NB: Scroll is typically used with setSort("_doc");
+	 * 
+	 * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html
 	 * @param keepAlive
 	 * @see SearchScrollRequestBuilder
 	 */
