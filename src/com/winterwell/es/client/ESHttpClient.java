@@ -196,7 +196,7 @@ public class ESHttpClient {
 				// NB: pretty=true was doc-as-upsert
 				if (debug) {
 					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"POST":req.method)+" '"+url+"' -d '"+srcJson+"'");
-//					Log.d("ES.curl", curl);
+					Log.d("ES.curl", curl);
 				}
 				json = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
 								
