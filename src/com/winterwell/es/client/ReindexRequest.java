@@ -162,7 +162,7 @@ public class ReindexRequest implements Callable, IProgress, Closeable {
 				index.setType(type);
 				// Preserve routing info?
 				if (keepRouting) {
-					String routing = (String) SimpleJson.getOrNull(doc, "fields", "_routing");
+					String routing = (String) SimpleJson.get(doc, "fields", "_routing");
 					if (routing!=null) index.setRouting(routing);
 				}
 				
