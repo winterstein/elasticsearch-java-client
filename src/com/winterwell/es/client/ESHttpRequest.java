@@ -13,7 +13,6 @@ import com.winterwell.utils.web.WebUtils;
 
 public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
-
 	/**
 	 * @param fields e.g. _parent, _routing etc.
 	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-fields.html
@@ -38,7 +37,11 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 */
 	protected Object src;
 	protected String endpoint;
-
+	
+	/**
+	 * The get params -- i.e. those parameters passed via the url.
+	 * @see #src
+	 */
 	Map<String,Object> params = new ArrayMap();
 
 	/**
@@ -145,16 +148,28 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		return getClass().getSimpleName()+"["+getUrl("")+"]";
 	}
 
+	/**
+	 * Set the request body. Can only be called once.
+	 * @param json
+	 * @return this
+	 */
 	public SubClass setSource(String json) {
+		if (src!=null) throw new IllegalStateException(this+": Source can only be set once");
 		this.src = json;
 		return (SubClass) this;
 	}
 	
 
+	/**
+	 * Set the request body. Can only be called once.
+	 * @param msrc
+	 * @return this
+	 */
 	public SubClass setSource(Map msrc) {
+		if (src!=null) throw new IllegalStateException(this+": Source can only be set once");
 		src = msrc;
 		return (SubClass) this;
-	}
+	}	
 
 	/**
 	 * Do it! Use a thread-pool to call async -- immediate response, future result.
