@@ -20,9 +20,8 @@ import winterwell.utils.TodoException;
 
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.threads.IProgress;
-
-import winterwell.utils.time.Dt;
-import winterwell.utils.time.TUnit;
+import com.winterwell.utils.time.Dt;
+import com.winterwell.utils.time.TUnit;
 
 /**
  * Reindex -- ie copy data from one index to another.
