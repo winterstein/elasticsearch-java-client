@@ -3,8 +3,8 @@ package com.winterwell.es.client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.util.concurrent.EsRejectedExecutionException;
 
-import com.winterwell.utils.time.Dt;
-import com.winterwell.utils.time.TUnit;
+import winterwell.utils.time.Dt;
+import winterwell.utils.time.TUnit;
 
 /**
  * @see org.elasticsearch.action.search.SearchScrollRequestBuilder

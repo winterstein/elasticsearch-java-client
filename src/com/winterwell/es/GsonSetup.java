@@ -15,7 +15,7 @@ import com.google.gson.JsonSerializer;
 
 import winterwell.utils.containers.Properties;
 
-import com.winterwell.utils.time.Time;
+import winterwell.utils.time.Time;
 import com.winterwell.utils.web.IHasJson;
 
 import creole.data.XId;
