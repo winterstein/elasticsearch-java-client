@@ -2,7 +2,7 @@ package com.winterwell.es.client.admin;
 
 import java.util.Map;
 
-import winterwell.utils.Utils;
+import com.winterwell.utils.Utils;
 
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.ESHttpRequest;
