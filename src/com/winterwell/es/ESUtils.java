@@ -3,6 +3,8 @@
  */
 package com.winterwell.es;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Map;
@@ -15,12 +17,22 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.winterwell.es.client.ESConfig;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.utils.StrUtils;
+import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.io.ArgsParser;
+import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.Time;
 import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.data.XId;
+import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.node.Node;
+import org.elasticsearch.node.NodeBuilder;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.ImmutableSettings.Builder;
 
 /**
  * Elastic Search utils
@@ -31,6 +43,40 @@ import com.winterwell.web.data.XId;
 public class ESUtils {
 
 	static Gson _dflt;
+	
+	public static Node startLocalES() {
+		return startLocalES(9200, false, new File("tmp-data"));
+	}
+	
+	public static Node startLocalES(int port, boolean persistToDisk, File dataDir) {		
+		ImmutableSettings.Builder esSettings = ImmutableSettings.settingsBuilder()
+				.put("node.http.enabled", "true")
+				.put("http.port", port)		
+				
+				.put("index.store.type", persistToDisk? "fs" : "memory")
+				.put("index.number_of_shards", 1)
+				.put("index.number_of_replicas", 0)
+
+				.put("discovery.zen.ping.multicast.enabled", "false")
+
+				.put("store.compress.stored", "true")
+
+				.put("path.data", dataDir.toString());
+		try {
+			File logFile = File.createTempFile("elasticsearch", ".log");
+			esSettings = esSettings.put("path.logs", logFile.toString());
+			Log.d("ES", "local node with log-file: "+logFile.getAbsolutePath()+" data-dir: "+dataDir.getAbsolutePath());
+		} catch (IOException e) {
+			throw Utils.runtime(e);
+		}				
+		if ( ! persistToDisk) {
+			esSettings = esSettings.put("gateway.type", "none");
+		}
+		Settings esSet = esSettings.build();
+
+		Node node = NodeBuilder.nodeBuilder().local(true).settings(esSet).node();
+		return node;
+	}
 	
 	public static Gson gson() {
 		if (_dflt==null) {
@@ -64,6 +110,10 @@ public class ESUtils {
 		String s2 = StrUtils.escape(s, chars, '\\');
 		// Note "&" will also have to be url-encoded!
 		return s2;
+	}
+
+	public static ESConfig getConfig() {
+		return ArgsParser.getConfig(new ESConfig(), new File("config/elasticsearch.properties"));
 	}
 
 }

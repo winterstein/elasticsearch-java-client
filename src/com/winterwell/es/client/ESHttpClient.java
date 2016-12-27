@@ -18,6 +18,7 @@ import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
 import com.winterwell.utils.ReflectionUtils;
@@ -72,7 +73,7 @@ public class ESHttpClient {
 	
 	public ESHttpClient() {
 		// Load a config
-		this(ArgsParser.getConfig(new ESConfig(), new File("config/elasticsearch.properties")));
+		this(ESUtils.getConfig());
 	}
 	
 	public ESHttpClient(ESConfig config) {
@@ -200,7 +201,7 @@ public class ESHttpClient {
 				json = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
 								
 			} else {
-				assert ! "POST".equals(req.method) : req;
+				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
 //				// DEBUG hack
 				if (debug) {
 					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"GET":req.method)+" '"+url+"&pretty=true'");
