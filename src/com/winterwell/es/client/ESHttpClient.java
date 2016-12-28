@@ -234,6 +234,13 @@ public class ESHttpClient {
 		return "ESHttpClient[servers=" + servers + "]";
 	}
 
+	/**
+	 * Prepare to index (aka store or insert) a document!
+	 * @param index
+	 * @param type
+	 * @param id
+	 * @return an IndexRequestBuilder Typical usage: call setSource(), then get()
+	 */
 	public IndexRequestBuilder prepareIndex(String index, String type, String id) {
 		IndexRequestBuilder urb = new IndexRequestBuilder(this);
 		urb.setIndex(index).setType(type).setId(id);
