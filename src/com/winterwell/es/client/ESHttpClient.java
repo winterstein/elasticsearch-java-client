@@ -176,7 +176,8 @@ public class ESHttpClient {
 	ESHttpResponse execute(ESHttpRequest req) {
 		String curl = "";
 		try {
-			FakeBrowser fb = new FakeBrowser();			//.setDebug(true);			
+			FakeBrowser fb = new FakeBrowser();			//.setDebug(true);
+			fb.setMaxDownload(-1); // Your data, your bandwidth, your call.
 			// random load balancing (if we have multiple servers setup)
 			String server = Utils.getRandomMember(servers);
 			StringBuilder url = req.getUrl(server);
