@@ -29,10 +29,10 @@ import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.data.XId;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
-import org.elasticsearch.node.NodeBuilder;
+//import org.elasticsearch.node.NodeBuilder;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.settings.ImmutableSettings;
-import org.elasticsearch.common.settings.ImmutableSettings.Builder;
+//import org.elasticsearch.common.settings.ImmutableSettings;
+//import org.elasticsearch.common.settings.ImmutableSettings.Builder;
 
 /**
  * Elastic Search utils
@@ -71,10 +71,10 @@ public class ESUtils {
 		}				
 		if ( ! persistToDisk) {
 			esSettings = esSettings.put("gateway.type", "none");
-		}
+		}		
 		Settings esSet = esSettings.build();
 
-		Node node = NodeBuilder.nodeBuilder().local(true).settings(esSet).node();
+		Node node = new Node(esSet); // .nodeBuilder().local(true).settings(esSet).node();
 		return node;
 	}
 	

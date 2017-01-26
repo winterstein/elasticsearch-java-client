@@ -3,9 +3,11 @@ package com.winterwell.es.query;
 import java.io.IOException;
 import java.util.Map;
 
+import org.elasticsearch.common.xcontent.ToXContent.Params;
 import org.elasticsearch.common.xcontent.XContentBuilder;
+//import org.elasticsearch.index.query.BaseFilterBuilder;
+//import org.elasticsearch.index.query.BaseQueryBuilder;
 import org.elasticsearch.index.query.BaseFilterBuilder;
-import org.elasticsearch.index.query.BaseQueryBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 
 /**
@@ -13,7 +15,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
  * @author daniel
  */
 public class MapFilterBuilder extends BaseFilterBuilder {
-
+	
 	final Map map;
 	
 	public MapFilterBuilder(Map map) {
