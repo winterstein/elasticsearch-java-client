@@ -3,6 +3,7 @@ package com.winterwell.es;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.node.Node;
@@ -22,7 +23,7 @@ import com.winterwell.utils.time.Time;
 public class ESUtilsTest {
 
 	@Test
-	public void testStartLocalES() {
+	public void testStartLocalES() throws IOException {
 		ESConfig config = ESUtils.getConfig();
 		config.port = 9200;
 		Node client = ESUtils.startLocalES(9200, true, new File("tmp-data"));
@@ -40,7 +41,6 @@ public class ESUtilsTest {
 		Printer.out(results.getHits());
 		assert results.getHits().size() > 0;
 		
-		client.stop();
 		client.close();
 	}
 

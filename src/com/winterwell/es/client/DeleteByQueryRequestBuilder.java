@@ -8,13 +8,8 @@ import org.eclipse.jetty.util.ajax.JSON;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.index.query.AndFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.facet.FacetBuilder;
-import org.elasticsearch.search.facet.statistical.StatisticalFacetBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -53,19 +48,7 @@ public class DeleteByQueryRequestBuilder extends ESHttpRequestWithBody<DeleteByQ
 	public DeleteByQueryRequestBuilder setQuery(QueryBuilder qb) {
 		body.put("query", qb.toString());
 		return this;
-	}
-	
-	/**
-	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html#_filtering_without_a_query
-	 * @param fb
-	 */
-	public DeleteByQueryRequestBuilder setQuery(FilterBuilder fb) {
-//		filtered = "filtered: {filter: "+fb.toString()+"}";
-		FilteredQueryBuilder q = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), fb);
-//		body.put("query", filtered);
-		setQuery(q);
-		return this;
-	}
+	}	
 
 
 	public DeleteByQueryRequestBuilder setFrom(int i) {

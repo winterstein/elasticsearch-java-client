@@ -3,6 +3,8 @@
  */
 package com.winterwell.es.client;
 
+import java.util.Map;
+
 import org.elasticsearch.action.Action;
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.ActionListener;
@@ -12,18 +14,16 @@ import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
-import org.elasticsearch.action.count.CountRequest;
-import org.elasticsearch.action.count.CountRequestBuilder;
-import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
-import org.elasticsearch.action.deletebyquery.DeleteByQueryRequest;
-import org.elasticsearch.action.deletebyquery.DeleteByQueryRequestBuilder;
-import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
+
 import org.elasticsearch.action.explain.ExplainRequest;
 import org.elasticsearch.action.explain.ExplainRequestBuilder;
 import org.elasticsearch.action.explain.ExplainResponse;
+import org.elasticsearch.action.fieldstats.FieldStatsRequest;
+import org.elasticsearch.action.fieldstats.FieldStatsRequestBuilder;
+import org.elasticsearch.action.fieldstats.FieldStatsResponse;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.get.GetResponse;
@@ -33,14 +33,7 @@ import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.mlt.MoreLikeThisRequest;
-import org.elasticsearch.action.mlt.MoreLikeThisRequestBuilder;
-import org.elasticsearch.action.percolate.MultiPercolateRequest;
-import org.elasticsearch.action.percolate.MultiPercolateRequestBuilder;
-import org.elasticsearch.action.percolate.MultiPercolateResponse;
-import org.elasticsearch.action.percolate.PercolateRequest;
-import org.elasticsearch.action.percolate.PercolateRequestBuilder;
-import org.elasticsearch.action.percolate.PercolateResponse;
+
 import org.elasticsearch.action.search.ClearScrollRequest;
 import org.elasticsearch.action.search.ClearScrollRequestBuilder;
 import org.elasticsearch.action.search.ClearScrollResponse;
@@ -52,21 +45,18 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.action.search.SearchScrollRequestBuilder;
-import org.elasticsearch.action.suggest.SuggestRequest;
-import org.elasticsearch.action.suggest.SuggestRequestBuilder;
-import org.elasticsearch.action.suggest.SuggestResponse;
-import org.elasticsearch.action.termvector.MultiTermVectorsRequest;
-import org.elasticsearch.action.termvector.MultiTermVectorsRequestBuilder;
-import org.elasticsearch.action.termvector.MultiTermVectorsResponse;
-import org.elasticsearch.action.termvector.TermVectorRequest;
-import org.elasticsearch.action.termvector.TermVectorRequestBuilder;
-import org.elasticsearch.action.termvector.TermVectorResponse;
+import org.elasticsearch.action.termvectors.MultiTermVectorsRequest;
+import org.elasticsearch.action.termvectors.MultiTermVectorsRequestBuilder;
+import org.elasticsearch.action.termvectors.MultiTermVectorsResponse;
+import org.elasticsearch.action.termvectors.TermVectorsRequest;
+import org.elasticsearch.action.termvectors.TermVectorsRequestBuilder;
+import org.elasticsearch.action.termvectors.TermVectorsResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateRequestBuilder;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.internal.InternalClient;
+
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.threadpool.ThreadPool;
 
@@ -75,7 +65,9 @@ import org.elasticsearch.threadpool.ThreadPool;
  * @author daniel
  *
  */
-public class DummyClient implements Client, InternalClient {
+public class DummyClient implements Client
+//, InternalClient 
+{
 
 	/* (non-Javadoc)
 	 * @see org.elasticsearch.client.internal.InternalGenericClient#threadPool()
@@ -248,478 +240,6 @@ public class DummyClient implements Client, InternalClient {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareDelete()
-	 */
-	@Override
-	public DeleteRequestBuilder prepareDelete() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareDelete(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public DeleteRequestBuilder prepareDelete(String index, String type,
-			String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#bulk(org.elasticsearch.action.bulk.BulkRequest)
-	 */
-	@Override
-	public ActionFuture<BulkResponse> bulk(BulkRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#bulk(org.elasticsearch.action.bulk.BulkRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void bulk(BulkRequest request, ActionListener<BulkResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareBulk()
-	 */
-	@Override
-	public BulkRequestBuilder prepareBulk() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#deleteByQuery(org.elasticsearch.action.deletebyquery.DeleteByQueryRequest)
-	 */
-	@Override
-	public ActionFuture<DeleteByQueryResponse> deleteByQuery(
-			DeleteByQueryRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#deleteByQuery(org.elasticsearch.action.deletebyquery.DeleteByQueryRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void deleteByQuery(DeleteByQueryRequest request,
-			ActionListener<DeleteByQueryResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareDeleteByQuery(java.lang.String[])
-	 */
-	@Override
-	public DeleteByQueryRequestBuilder prepareDeleteByQuery(String... indices) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#get(org.elasticsearch.action.get.GetRequest)
-	 */
-	@Override
-	public ActionFuture<GetResponse> get(GetRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#get(org.elasticsearch.action.get.GetRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void get(GetRequest request, ActionListener<GetResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareGet()
-	 */
-	@Override
-	public GetRequestBuilder prepareGet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareGet(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public GetRequestBuilder prepareGet(String index, String type, String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiGet(org.elasticsearch.action.get.MultiGetRequest)
-	 */
-	@Override
-	public ActionFuture<MultiGetResponse> multiGet(MultiGetRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiGet(org.elasticsearch.action.get.MultiGetRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void multiGet(MultiGetRequest request,
-			ActionListener<MultiGetResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareMultiGet()
-	 */
-	@Override
-	public MultiGetRequestBuilder prepareMultiGet() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#count(org.elasticsearch.action.count.CountRequest)
-	 */
-	@Override
-	public ActionFuture<CountResponse> count(CountRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#count(org.elasticsearch.action.count.CountRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void count(CountRequest request,
-			ActionListener<CountResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareCount(java.lang.String[])
-	 */
-	@Override
-	public CountRequestBuilder prepareCount(String... indices) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#suggest(org.elasticsearch.action.suggest.SuggestRequest)
-	 */
-	@Override
-	public ActionFuture<SuggestResponse> suggest(SuggestRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#suggest(org.elasticsearch.action.suggest.SuggestRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void suggest(SuggestRequest request,
-			ActionListener<SuggestResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareSuggest(java.lang.String[])
-	 */
-	@Override
-	public SuggestRequestBuilder prepareSuggest(String... indices) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#search(org.elasticsearch.action.search.SearchRequest)
-	 */
-	@Override
-	public ActionFuture<SearchResponse> search(SearchRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#search(org.elasticsearch.action.search.SearchRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void search(SearchRequest request,
-			ActionListener<SearchResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareSearch(java.lang.String[])
-	 */
-	@Override
-	public SearchRequestBuilder prepareSearch(String... indices) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#searchScroll(org.elasticsearch.action.search.SearchScrollRequest)
-	 */
-	@Override
-	public ActionFuture<SearchResponse> searchScroll(SearchScrollRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#searchScroll(org.elasticsearch.action.search.SearchScrollRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void searchScroll(SearchScrollRequest request,
-			ActionListener<SearchResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareSearchScroll(java.lang.String)
-	 */
-	@Override
-	public SearchScrollRequestBuilder prepareSearchScroll(String scrollId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiSearch(org.elasticsearch.action.search.MultiSearchRequest)
-	 */
-	@Override
-	public ActionFuture<MultiSearchResponse> multiSearch(
-			MultiSearchRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiSearch(org.elasticsearch.action.search.MultiSearchRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void multiSearch(MultiSearchRequest request,
-			ActionListener<MultiSearchResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareMultiSearch()
-	 */
-	@Override
-	public MultiSearchRequestBuilder prepareMultiSearch() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#moreLikeThis(org.elasticsearch.action.mlt.MoreLikeThisRequest)
-	 */
-	@Override
-	public ActionFuture<SearchResponse> moreLikeThis(MoreLikeThisRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#moreLikeThis(org.elasticsearch.action.mlt.MoreLikeThisRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void moreLikeThis(MoreLikeThisRequest request,
-			ActionListener<SearchResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareMoreLikeThis(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public MoreLikeThisRequestBuilder prepareMoreLikeThis(String index,
-			String type, String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#termVector(org.elasticsearch.action.termvector.TermVectorRequest)
-	 */
-	@Override
-	public ActionFuture<TermVectorResponse> termVector(TermVectorRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#termVector(org.elasticsearch.action.termvector.TermVectorRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void termVector(TermVectorRequest request,
-			ActionListener<TermVectorResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareTermVector(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public TermVectorRequestBuilder prepareTermVector(String index,
-			String type, String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiTermVectors(org.elasticsearch.action.termvector.MultiTermVectorsRequest)
-	 */
-	@Override
-	public ActionFuture<MultiTermVectorsResponse> multiTermVectors(
-			MultiTermVectorsRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiTermVectors(org.elasticsearch.action.termvector.MultiTermVectorsRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void multiTermVectors(MultiTermVectorsRequest request,
-			ActionListener<MultiTermVectorsResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareMultiTermVectors()
-	 */
-	@Override
-	public MultiTermVectorsRequestBuilder prepareMultiTermVectors() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#percolate(org.elasticsearch.action.percolate.PercolateRequest)
-	 */
-	@Override
-	public ActionFuture<PercolateResponse> percolate(PercolateRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#percolate(org.elasticsearch.action.percolate.PercolateRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void percolate(PercolateRequest request,
-			ActionListener<PercolateResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#preparePercolate()
-	 */
-	@Override
-	public PercolateRequestBuilder preparePercolate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiPercolate(org.elasticsearch.action.percolate.MultiPercolateRequest)
-	 */
-	@Override
-	public ActionFuture<MultiPercolateResponse> multiPercolate(
-			MultiPercolateRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#multiPercolate(org.elasticsearch.action.percolate.MultiPercolateRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void multiPercolate(MultiPercolateRequest request,
-			ActionListener<MultiPercolateResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareMultiPercolate()
-	 */
-	@Override
-	public MultiPercolateRequestBuilder prepareMultiPercolate() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareExplain(java.lang.String, java.lang.String, java.lang.String)
-	 */
-	@Override
-	public ExplainRequestBuilder prepareExplain(String index, String type,
-			String id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#explain(org.elasticsearch.action.explain.ExplainRequest)
-	 */
-	@Override
-	public ActionFuture<ExplainResponse> explain(ExplainRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#explain(org.elasticsearch.action.explain.ExplainRequest, org.elasticsearch.action.ActionListener)
-	 */
-	@Override
-	public void explain(ExplainRequest request,
-			ActionListener<ExplainResponse> listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#prepareClearScroll()
-	 */
-	@Override
-	public ClearScrollRequestBuilder prepareClearScroll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.elasticsearch.client.Client#clearScroll(org.elasticsearch.action.search.ClearScrollRequest)
-	 */
-	@Override
-	public ActionFuture<ClearScrollResponse> clearScroll(
-			ClearScrollRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
 	 * @see org.elasticsearch.client.Client#clearScroll(org.elasticsearch.action.search.ClearScrollRequest, org.elasticsearch.action.ActionListener)
 	 */
 	@Override
@@ -727,6 +247,252 @@ public class DummyClient implements Client, InternalClient {
 			ActionListener<ClearScrollResponse> listener) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public DeleteRequestBuilder prepareDelete() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DeleteRequestBuilder prepareDelete(String index, String type, String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<BulkResponse> bulk(BulkRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void bulk(BulkRequest request, ActionListener<BulkResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public BulkRequestBuilder prepareBulk() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<GetResponse> get(GetRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void get(GetRequest request, ActionListener<GetResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public GetRequestBuilder prepareGet() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GetRequestBuilder prepareGet(String index, String type, String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<MultiGetResponse> multiGet(MultiGetRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void multiGet(MultiGetRequest request, ActionListener<MultiGetResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public MultiGetRequestBuilder prepareMultiGet() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<SearchResponse> search(SearchRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void search(SearchRequest request, ActionListener<SearchResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public SearchRequestBuilder prepareSearch(String... indices) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<SearchResponse> searchScroll(SearchScrollRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void searchScroll(SearchScrollRequest request, ActionListener<SearchResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public SearchScrollRequestBuilder prepareSearchScroll(String scrollId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<MultiSearchResponse> multiSearch(MultiSearchRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void multiSearch(MultiSearchRequest request, ActionListener<MultiSearchResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public MultiSearchRequestBuilder prepareMultiSearch() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<TermVectorsResponse> termVectors(TermVectorsRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void termVectors(TermVectorsRequest request, ActionListener<TermVectorsResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public TermVectorsRequestBuilder prepareTermVectors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TermVectorsRequestBuilder prepareTermVectors(String index, String type, String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<TermVectorsResponse> termVector(TermVectorsRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void termVector(TermVectorsRequest request, ActionListener<TermVectorsResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public TermVectorsRequestBuilder prepareTermVector() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TermVectorsRequestBuilder prepareTermVector(String index, String type, String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<MultiTermVectorsResponse> multiTermVectors(MultiTermVectorsRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void multiTermVectors(MultiTermVectorsRequest request, ActionListener<MultiTermVectorsResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public MultiTermVectorsRequestBuilder prepareMultiTermVectors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ExplainRequestBuilder prepareExplain(String index, String type, String id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<ExplainResponse> explain(ExplainRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void explain(ExplainRequest request, ActionListener<ExplainResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ClearScrollRequestBuilder prepareClearScroll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<ClearScrollResponse> clearScroll(ClearScrollRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FieldStatsRequestBuilder prepareFieldStats() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<FieldStatsResponse> fieldStats(FieldStatsRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void fieldStats(FieldStatsRequest request, ActionListener<FieldStatsResponse> listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Client filterWithHeader(Map<String, String> headers) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

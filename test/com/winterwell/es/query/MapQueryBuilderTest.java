@@ -15,7 +15,7 @@ public class MapQueryBuilderTest {
 
 	@Test
 	public void testMapFilterBuilder() {
-		MapQueryBuilder mfb = new MapQueryBuilder(new ArrayMap(""));
+		MapQueryBuilder mfb = new MapQueryBuilder(new ArrayMap());
 		// link parent/child to get time & details
 		QueryBuilder query = new MapQueryBuilder(new ArrayMap(
 				"has_parent", new ArrayMap(

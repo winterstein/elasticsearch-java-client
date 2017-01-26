@@ -8,13 +8,9 @@ import org.eclipse.jetty.util.ajax.JSON;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.index.query.AndFilterBuilder;
-import org.elasticsearch.index.query.FilterBuilder;
-import org.elasticsearch.index.query.FilteredQueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.facet.FacetBuilder;
-import org.elasticsearch.search.facet.statistical.StatisticalFacetBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -74,17 +70,17 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 		return this;
 	}
 	
-	/**
-	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html#_filtering_without_a_query
-	 * @param fb
-	 */
-	public SearchRequestBuilder setQuery(FilterBuilder fb) {
-//		filtered = "filtered: {filter: "+fb.toString()+"}";
-		FilteredQueryBuilder q = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), fb);
-//		body.put("query", filtered);
-		setQuery(q);
-		return this;
-	}
+//	/**
+//	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html#_filtering_without_a_query
+//	 * @param fb
+//	 */
+//	public SearchRequestBuilder setQuery(Object FilterBuilderfb) {
+////		filtered = "filtered: {filter: "+fb.toString()+"}";
+//		BoolQueryBuilder q = QueryBuilders.boolQuery().m filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilderfb);
+////		body.put("query", filtered);
+//		setQuery(q);
+//		return this;
+//	}
 
 
 	public SearchRequestBuilder setFrom(int i) {
@@ -118,7 +114,7 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 	}
 	
 	/**
-	 * See 
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
 	 * @param sort
 	 * @return
 	 */
@@ -133,16 +129,16 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 		return this;
 	}
 
-	public SearchRequestBuilder addFacet(FacetBuilder field) {
-		// TOTAL HACK
-		org.elasticsearch.action.search.SearchRequestBuilder srb = new org.elasticsearch.action.search.SearchRequestBuilder(new DummyClient());
-		srb.addFacet(field);
-		String srbs = srb.toString();
-		Map map = hClient.gson.fromJson(srbs, Map.class);
-		Object facets = map.get("facets");
-		body.put("facets", hClient.gson.toJson(facets));
-		return this;
-	}
+//	public SearchRequestBuilder addFacet(FacetBuilder field) {
+//		// TOTAL HACK
+//		org.elasticsearch.action.search.SearchRequestBuilder srb = new org.elasticsearch.action.search.SearchRequestBuilder(new DummyClient());
+//		srb.addFacet(field);
+//		String srbs = srb.toString();
+//		Map map = hClient.gson.fromJson(srbs, Map.class);
+//		Object facets = map.get("facets");
+//		body.put("facets", hClient.gson.toJson(facets));
+//		return this;
+//	}
 
 
 

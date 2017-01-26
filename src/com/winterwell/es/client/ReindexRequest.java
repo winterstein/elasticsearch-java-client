@@ -128,7 +128,8 @@ public class ReindexRequest implements Callable, IProgress, Closeable {
 		SearchRequestBuilder srb = new SearchRequestBuilder(client);
 		srb.setIndex(fromIndex);
 		srb.setFields("_routing","_source");
-		srb.setSearchType(SearchType.SCAN);
+//		srb.setSearchType(SearchType.SCAN); see https://www.elastic.co/guide/en/elasticsearch/reference/5.1/breaking_50_search_changes.html#_literal_search_type_scan_literal_removed
+		srb.setSort("_doc");
 		srb.setScroll(new Dt(10, TUnit.MINUTE));
 		SearchResponse sr = srb.get();
 		scrollId = sr.getScrollId();

@@ -49,7 +49,7 @@ public class ESUtils {
 	}
 	
 	public static Node startLocalES(int port, boolean persistToDisk, File dataDir) {		
-		ImmutableSettings.Builder esSettings = ImmutableSettings.settingsBuilder()
+		Settings.Builder esSettings = Settings.builder()
 				.put("node.http.enabled", "true")
 				.put("http.port", port)		
 				
@@ -57,10 +57,12 @@ public class ESUtils {
 				.put("index.number_of_shards", 1)
 				.put("index.number_of_replicas", 0)
 
+				.put("transport.type","local")
 				.put("discovery.zen.ping.multicast.enabled", "false")
 
 				.put("store.compress.stored", "true")
 
+//				.put("path.home", dataDir.toString()); TODO
 				.put("path.data", dataDir.toString());
 		try {
 			File logFile = File.createTempFile("elasticsearch", ".log");
@@ -71,10 +73,10 @@ public class ESUtils {
 		}				
 		if ( ! persistToDisk) {
 			esSettings = esSettings.put("gateway.type", "none");
-		}		
+		}
+		
 		Settings esSet = esSettings.build();
-
-		Node node = new Node(esSet); // .nodeBuilder().local(true).settings(esSet).node();
+		Node node = new Node(esSet);
 		return node;
 	}
 	
