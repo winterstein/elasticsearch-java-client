@@ -27,6 +27,7 @@ import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.Time;
 import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.data.XId;
+
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 //import org.elasticsearch.node.NodeBuilder;
@@ -48,22 +49,28 @@ public class ESUtils {
 		return startLocalES(9200, false, new File("tmp-data"));
 	}
 	
-	public static Node startLocalES(int port, boolean persistToDisk, File dataDir) {		
+	public static Node startLocalES(int port, boolean persistToDisk, File dataDir) {
+		// broken in 5.1 :(
 		Settings.Builder esSettings = Settings.builder()
-				.put("node.http.enabled", "true")
-				.put("http.port", port)		
+				.put("http.enabled", "true")
+				.put("http.port", port)
 				
-				.put("index.store.type", persistToDisk? "fs" : "memory")
-				.put("index.number_of_shards", 1)
-				.put("index.number_of_replicas", 0)
+				// what is needed here??
+				.put("http.type", "local")	
+				
+				// not allowed in v5.1?!
+//				.put("index.store.type", persistToDisk? "fs" : "memory")
+//				.put("index.number_of_shards", 1)
+//				.put("index.number_of_replicas", 0)
 
 				.put("transport.type","local")
-				.put("discovery.zen.ping.multicast.enabled", "false")
+//				.put("discovery.zen.ping.multicast.enabled", "false")
 
-				.put("store.compress.stored", "true")
+//				.put("store.compress.stored", "true")
 
-//				.put("path.home", dataDir.toString()); TODO
-				.put("path.data", dataDir.toString());
+				.put("path.home", dataDir.toString())
+				.put("path.data", dataDir.toString())
+				;
 		try {
 			File logFile = File.createTempFile("elasticsearch", ".log");
 			esSettings = esSettings.put("path.logs", logFile.toString());
