@@ -171,4 +171,18 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 		int s = (int) keepAlive.convertTo(TUnit.SECOND).getValue();
 		setScroll(TimeValue.timeValueSeconds(s));
 	}
+
+
+	public SearchRequestBuilder addAggregation(String aggResultName, String aggType, String field) {
+		Map sorts = (Map) body.get("aggs");
+		if (sorts==null) {
+			sorts = new ArrayList();
+			body.put("sort", sorts);
+		}
+		sorts.clear();
+		sorts.add("\""+sort+"\"");
+		return this;
+
+		return this;
+	}
 }
