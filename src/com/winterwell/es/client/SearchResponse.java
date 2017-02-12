@@ -3,7 +3,7 @@ package com.winterwell.es.client;
 import java.util.List;
 import java.util.Map;
 
-import com.winterwell.datalog.Stat;
+import com.winterwell.datalog.DataLog;
 import com.winterwell.web.WebEx;
 
 public interface SearchResponse extends IESResponse {
