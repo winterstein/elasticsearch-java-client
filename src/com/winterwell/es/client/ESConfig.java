@@ -47,7 +47,7 @@ public class ESConfig {
 	/**
 	 * NOT the normal default!!! This is what we use in Winterwell!
 	 * Why? To make hacking just that little bit trickier.
-	 * The normal default is ??
+	 * The normal default is 9200
 	 */
 	@Option
 	public int port = 8800;
