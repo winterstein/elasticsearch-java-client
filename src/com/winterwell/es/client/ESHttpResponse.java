@@ -153,6 +153,14 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		Object hitsList = hits.get("hits");
 		return (List<Map>) hitsList;
 	}
+	
+	@Override
+	public Map getAggregations() {
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getParsedJson();
+		Map hits = (Map) map.get("aggregations");
+		return hits;
+	}
 
 	@Override
 	/**

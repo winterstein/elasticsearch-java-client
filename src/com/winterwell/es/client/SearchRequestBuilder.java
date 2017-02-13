@@ -176,6 +176,7 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 
 	/**
 	 * 
+	 * If you only want the aggregation results and not the documents, set size-0 with {@link #setSize(int)}.
 	 * @param aggResultName
 	 * @param aggType e.g. "stats", "sum"
 	 * @param field

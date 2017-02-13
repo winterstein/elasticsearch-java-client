@@ -188,7 +188,6 @@ public class ESHttpClient {
 			String json;
 			String srcJson = req.getBodyJson();
 			if (srcJson!=null) {
-				assert JSON.parse(srcJson) != null : srcJson;
 				// add in the get params
 				WebUtils2.addQueryParameters(url, req.params);
 				// ?? encode the srcJson for url-encoding ??
@@ -199,6 +198,9 @@ public class ESHttpClient {
 					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"POST":req.method)+" '"+url+"' -d '"+srcJson+"'");
 					Log.d("ES.curl", curl);
 				}
+				
+				assert JSON.parse(srcJson) != null : srcJson;
+				
 				json = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
 								
 			} else {

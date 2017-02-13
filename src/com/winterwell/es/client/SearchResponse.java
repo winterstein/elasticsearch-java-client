@@ -32,5 +32,7 @@ public interface SearchResponse extends IESResponse {
 	 */
 	Double getTotal();
 
+	Map getAggregations();
+
 
 }
