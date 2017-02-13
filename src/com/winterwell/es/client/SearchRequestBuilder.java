@@ -16,6 +16,7 @@ import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.winterwell.utils.StrUtils;
+import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
@@ -173,16 +174,22 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 	}
 
 
+	/**
+	 * 
+	 * @param aggResultName
+	 * @param aggType e.g. "stats", "sum"
+	 * @param field
+	 * @return this
+	 */
 	public SearchRequestBuilder addAggregation(String aggResultName, String aggType, String field) {
+		Utils.check4null(aggResultName, aggType, field);		
 		Map sorts = (Map) body.get("aggs");
 		if (sorts==null) {
-			sorts = new ArrayList();
-			body.put("sort", sorts);
+			sorts = new ArrayMap();
+			body.put("aggs", sorts);
 		}
-		sorts.clear();
-		sorts.add("\""+sort+"\"");
-		return this;
-
+		// e.g.      "grades_stats" : { "stats" : { "field" : "grade" } }
+		sorts.put(aggResultName, new ArrayMap(aggType, new ArrayMap("field", field)));
 		return this;
 	}
 }
