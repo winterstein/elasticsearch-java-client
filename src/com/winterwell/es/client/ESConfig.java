@@ -45,12 +45,10 @@ public class ESConfig {
 	}
 	
 	/**
-	 * NOT the normal default!!! This is what we use in Winterwell!
-	 * Why? To make hacking just that little bit trickier.
-	 * The normal default is 9200
+	 * The normal default is 9200. This can be changed in /etc/elasticsearch/elasticsearch.yml
 	 */
 	@Option
-	public int port = 8800;
+	public int port = 9200;
 	
 	@Option
 	public String server = "localhost";
