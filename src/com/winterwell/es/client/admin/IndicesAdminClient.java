@@ -32,8 +32,14 @@ public class IndicesAdminClient {
 		hClient = esHttpClient;
 	}
 
-	public PutMappingRequestBuilder preparePutMapping(String idx) {
-		return new PutMappingRequestBuilder(hClient, idx);
+	/**
+	 * Sets field.type info for a type (or several types)
+	 * @param idx The index
+	 * @param type 
+	 * @return
+	 */
+	public PutMappingRequestBuilder preparePutMapping(String idx, String type) {
+		return new PutMappingRequestBuilder(hClient, idx, type);
 	}
 	
 	/**
