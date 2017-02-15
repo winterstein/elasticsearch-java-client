@@ -14,6 +14,9 @@ import com.winterwell.utils.time.Dt;
 
 
 /**
+ * Update a document based on a script provided.
+ * https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#_literal_doc_as_upsert_literal
+ * 
  * @see org.elasticsearch.action.update.UpdateRequestBuilder
  * @author daniel
  * @testedby UpdateRequestBuilderTest
@@ -49,11 +52,16 @@ public class UpdateRequestBuilder extends ESHttpRequestWithBody<UpdateRequestBui
         return this;
     }
 	
-	public UpdateRequestBuilder setDoc(String json) {
-		body.put("doc", json);
+	public UpdateRequestBuilder setDoc(Map doc) {
+		body.put("doc", doc);
 		return this;
 	}
 
+	/**
+	 * Ref: https://www.elastic.co/guide/en/elasticsearch/reference/5.2/docs-update.html#_literal_doc_as_upsert_literal
+	 * @param b
+	 * @return
+	 */
 	public UpdateRequestBuilder setDocAsUpsert(boolean b) {
 		if (b==docAsUpsert) return this;
 		docAsUpsert = b;
