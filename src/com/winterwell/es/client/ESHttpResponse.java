@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.gson.Gson;
+import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.log.Log;
@@ -166,19 +167,18 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	/**
 	 * This one doesn't return null.
 	 */
-	public Double getTotal() {
+	public int getTotal() {
 		if ( ! isSuccess()) throw error;
 		Map<String, Object> map = getParsedJson();
 		Map hits = (Map) map.get("hits");
 		if (hits == null){
 			throw new IllegalArgumentException("hits field cannot be null");
 		}
-		Object hitTotal = hits.get("total");
+		Number hitTotal = (Number) hits.get("total");
 		if (hitTotal == null){
 			throw new IllegalArgumentException("hitTotal field cannot be null");
 		}
-
-		return (Double) hitTotal;
+		return hitTotal.intValue();
 	}
 
 	

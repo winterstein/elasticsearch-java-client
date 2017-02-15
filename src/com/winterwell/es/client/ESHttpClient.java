@@ -65,7 +65,7 @@ public class ESHttpClient {
 	final ESConfig config;
 
 
-	static boolean debug = true;
+	public static boolean debug = true;
 
 	public void setServer(String server) {
 		this.servers = Collections.singletonList(server);

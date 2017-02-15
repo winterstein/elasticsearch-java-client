@@ -28,7 +28,11 @@ import com.winterwell.utils.time.Time;
 import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.data.XId;
 
+import org.elasticsearch.common.io.stream.StreamOutput;
+import org.elasticsearch.common.io.stream.Writeable;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.xcontent.ToXContent;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.node.Node;
 //import org.elasticsearch.node.NodeBuilder;
 import org.elasticsearch.client.Client;
@@ -123,6 +127,18 @@ public class ESUtils {
 
 	public static ESConfig getConfig() {
 		return ArgsParser.getConfig(new ESConfig(), new File("config/elasticsearch.properties"));
+	}
+
+	/**
+	 * HACK convert an ES class into a json object.
+	 * TODO replace these ES classes with something nicer.
+	 * Preferably auto-generated from the ES source
+	 * @param qb
+	 * @return
+	 */
+	public static Object jobj(ToXContent qb) {
+		String s = qb.toString();
+		return Gson.fromJSON(s);
 	}
 
 }

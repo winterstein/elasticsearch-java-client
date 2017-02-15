@@ -15,11 +15,13 @@ import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
+import com.winterwell.es.ESUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
+import com.winterwell.utils.web.SimpleJson;
 
 /**
  * @see org.elasticsearch.action.search.SearchRequestBuilder
@@ -67,7 +69,12 @@ public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBui
 
 
 	public SearchRequestBuilder setQuery(QueryBuilder qb) {
-		body.put("query", qb.toString());
+		body.put("query", ESUtils.jobj(qb));
+		return this;
+	}
+	
+	public SearchRequestBuilder setFilter(QueryBuilder qb) {
+		SimpleJson.set(body, ESUtils.jobj(qb), "query", "bool", "filter");
 		return this;
 	}
 	

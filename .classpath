@@ -10,7 +10,7 @@
 	<classpathentry exported="true" kind="lib" path="/middleware/guava/guava.jar" sourcepath="/home/daniel/winterwell/code/middleware/guava/guava-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.bob"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/elasticsearch"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/elasticsearch"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/flexi-gson"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
