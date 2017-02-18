@@ -143,20 +143,6 @@ public class ESUtils {
 
 }
 
-class TimeTypeAdapter implements JsonSerializer<Time>, JsonDeserializer<Time> {
-	@Override
-	public JsonElement serialize(Time src, Type srcType,
-			JsonSerializationContext context) {
-		return new JsonPrimitive(src.getTime());
-	}
-
-	@Override
-	public Time deserialize(JsonElement json, Type type,
-			JsonDeserializationContext context) throws JsonParseException {
-		return new Time(json.getAsLong());
-	}
-}
-
 class XIdTypeAdapter implements JsonSerializer<XId>, JsonDeserializer<XId> {
 	@Override
 	public JsonElement serialize(XId src, Type srcType,
@@ -170,25 +156,4 @@ class XIdTypeAdapter implements JsonSerializer<XId>, JsonDeserializer<XId> {
 		return new XId(json.getAsString(), false);
 	}
 }
-
-class ClassTypeAdapter implements JsonSerializer<Class>,
-		JsonDeserializer<Class> {
-	@Override
-	public JsonElement serialize(Class src, Type srcType,
-			JsonSerializationContext context) {
-		return new JsonPrimitive(src.getCanonicalName());
-	}
-
-	@Override
-	public Class deserialize(JsonElement json, Type type,
-			JsonDeserializationContext context) throws JsonParseException {
-		try {
-			return Class.forName(json.getAsString());
-		} catch (ClassNotFoundException e) {
-			throw new JsonParseException(e);
-		}
-	}
-}
-
-
 

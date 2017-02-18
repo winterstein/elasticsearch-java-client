@@ -12,7 +12,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-
+import com.winterwell.gson.StandardAdapters;
 import com.winterwell.utils.containers.Properties;
 
 import com.winterwell.utils.time.Time;
@@ -27,9 +27,9 @@ class GsonSetup implements Callable<Gson> {
 	public static GsonBuilder gb = new GsonBuilder();
 	static {
 		// "Standard" mappings
-		gb.registerTypeAdapter(Time.class, new TimeTypeAdapter());
+		gb.registerTypeAdapter(Time.class, new StandardAdapters.TimeTypeAdapter());
 		gb.registerTypeAdapter(XId.class, new XIdTypeAdapter());
-		gb.registerTypeAdapter(Class.class, new ClassTypeAdapter());
+		gb.registerTypeAdapter(Class.class, new StandardAdapters.ClassTypeAdapter());
 
 //		gb.registerTypeAdapter(Properties.class, new PropertiesTypeAdapter());
 		
