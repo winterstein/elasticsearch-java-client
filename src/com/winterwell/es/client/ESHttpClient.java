@@ -21,6 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
+import com.winterwell.utils.Dependency;
 import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
@@ -72,8 +73,7 @@ public class ESHttpClient {
 	}
 	
 	public ESHttpClient() {
-		// Load a config
-		this(ESUtils.getConfig());
+		this(Dependency.get(ESConfig.class));
 	}
 	
 	public ESHttpClient(ESConfig config) {

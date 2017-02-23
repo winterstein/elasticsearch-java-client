@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Map;
 
+import com.google.gson.FlexiGson;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -47,7 +48,6 @@ import org.elasticsearch.client.Client;
  */
 public class ESUtils {
 
-	static Gson _dflt;
 	
 //	public static Node startLocalES() {
 //		return startLocalES(9200, false, new File("tmp-data"));
@@ -91,18 +91,6 @@ public class ESUtils {
 //		return node;
 //	}
 	
-	public static Gson gson() {
-		if (_dflt==null) {
-			_dflt = new GsonSetup().call();
-		}
-		// From
-		// https://sites.google.com/site/gson/gson-user-guide#TOC-Gson-Performance-and-Scalability
-		// The Gson instance does not maintain any state while invoking Json
-		// operations. So, you are free to reuse the same object for multiple
-		// Json serialization and deserialization operations.		
-		return _dflt;
-	}
-
 	/**
 	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.x/
 	 * mapping-core-types.html
@@ -124,11 +112,7 @@ public class ESUtils {
 		// Note "&" will also have to be url-encoded!
 		return s2;
 	}
-
-	public static ESConfig getConfig() {
-		return ArgsParser.getConfig(new ESConfig(), new File("config/elasticsearch.properties"));
-	}
-
+	
 	/**
 	 * HACK convert an ES class into a json object.
 	 * TODO replace these ES classes with something nicer.
@@ -138,7 +122,7 @@ public class ESUtils {
 	 */
 	public static Object jobj(ToXContent qb) {
 		String s = qb.toString();
-		return Gson.fromJSON(s);
+		return FlexiGson.fromJSON(s);
 	}
 
 }
