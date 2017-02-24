@@ -2,9 +2,11 @@ package com.winterwell.es.client;
 
 import java.io.File;
 
+import com.google.gson.FlexiGson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.winterwell.es.ESUtils;
+import com.winterwell.utils.Dependency;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.io.Option;
@@ -53,7 +55,6 @@ public class ESConfig {
 	@Option
 	public String server = "localhost";
 
-	// TODO expose gson setup options here??
-	public Gson gson = ESUtils.gson();
+	public Gson gson = Dependency.get(FlexiGson.class);
 	
 }

@@ -13,12 +13,18 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.winterwell.gson.StandardAdapters;
+import com.winterwell.utils.Dependency;
 import com.winterwell.utils.containers.Properties;
 
 import com.winterwell.utils.time.Time;
 import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.data.XId;
 
+/**
+ * @deprecated Use {@link Dependency}
+ * @author daniel
+ *
+ */
 class GsonSetup implements Callable<Gson> {
 	
 	public GsonSetup() {
