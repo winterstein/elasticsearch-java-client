@@ -3,8 +3,6 @@ package com.winterwell.es.client;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.eclipse.jetty.util.ajax.JSON;
-
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.winterwell.utils.StrUtils;
@@ -35,8 +33,14 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	/**
 	 * This becomes the body json. Can be String or Map
 	 */
-	protected Object src;
+	protected Map<String,Object> body;
+	protected String bodyJson;
 	protected String endpoint;
+	
+	protected Map<String, Object> body() {
+		if (body==null) setSource(new ArrayMap());
+		return body;
+	}
 	
 	/**
 	 * The get params -- i.e. those parameters passed via the url.
@@ -154,8 +158,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * @return this
 	 */
 	public SubClass setSource(String json) {
-		if (src!=null) throw new IllegalStateException(this+": Source can only be set once");
-		this.src = json;
+		if (body!=null && bodyJson!=null) throw new IllegalStateException(this+": Source can only be set once");
+		this.bodyJson = json;
 		return (SubClass) this;
 	}
 	
@@ -166,8 +170,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * @return this
 	 */
 	public SubClass setSource(Map msrc) {
-		if (src!=null) throw new IllegalStateException(this+": Source can only be set once");
-		src = msrc;
+		if (body!=null && bodyJson!=null) throw new IllegalStateException(this+": Source can only be set once");
+		body = msrc;
 		return (SubClass) this;
 	}	
 
@@ -199,16 +203,12 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * @return Can be null. The source json
 	 */
 	public String getBodyJson() {
-		if (src==null) return null;
-		String srcJson;
-		if (src instanceof String) {
-			srcJson = (String) src;
-		} else {
-			srcJson = JSON.toString(src);
-		}	
+		if (bodyJson!=null) return bodyJson;
+		if (body==null) return null;
+		bodyJson = gson().toJson(body);
 		// sanity check the json				
-		assert JSON.parse(srcJson) != null : srcJson;
-		return srcJson;
+//		assert JSON.parse(srcJson) != null : srcJson;
+		return bodyJson;
 	}
 
 

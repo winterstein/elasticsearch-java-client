@@ -185,7 +185,7 @@ public class ESHttpClient {
 			// e.g. HEAD
 			fb.setRequestMethod(req.method);
 			
-			String json;
+			String jsonResult;
 			String srcJson = req.getBodyJson();
 			if (srcJson!=null) {
 				// add in the get params
@@ -201,9 +201,10 @@ public class ESHttpClient {
 				
 				assert JSON.parse(srcJson) != null : srcJson;
 				
-				json = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
+				jsonResult = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
 								
 			} else {
+				assert req.body == null : req.body;
 				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
 //				// DEBUG hack
 				if (debug) {
@@ -211,10 +212,10 @@ public class ESHttpClient {
 //					Log.v("ES.curl", curl);
 				}
 
-				json = fb.getPage(url.toString(), req.params);
+				jsonResult = fb.getPage(url.toString(), req.params);
 			}
 			
-			ESHttpResponse r = new ESHttpResponse(req, json);
+			ESHttpResponse r = new ESHttpResponse(req, jsonResult);
 			return r;
 		} catch(WebEx.E404 ex) {
 			// e.g. a get for an unstored object (a common case)

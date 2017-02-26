@@ -29,10 +29,10 @@ public class PutIndexTemplateRequest extends ESHttpRequest<IndicesExistsRequestB
 	
 	public PutIndexTemplateRequest addMapping(String type, Map mapping) {
 		assert ! type.isEmpty();
-		Map mappings = (Map) ((Map)src).get("mappings");
+		Map mappings = (Map) body.get("mappings");
 		if (mappings==null) {
 			mappings = new ArrayMap();
-			((Map)src).put("mappings", mappings);
+			body.put("mappings", mappings);
 		}
 		mappings.put(type, mapping);
 		return this;

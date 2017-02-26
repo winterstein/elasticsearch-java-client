@@ -28,11 +28,12 @@ import com.winterwell.utils.web.SimpleJson;
  * @author daniel
  *
  */
-public class SearchRequestBuilder extends ESHttpRequestWithBody<SearchRequestBuilder,SearchResponse> {
+public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,SearchResponse> {
 
 
 	public SearchRequestBuilder(ESHttpClient hClient) {
 		super(hClient);
+		this.body = new ArrayMap();
 		endpoint = "_search";		
 	}
 

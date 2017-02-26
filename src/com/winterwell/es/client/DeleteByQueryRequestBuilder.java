@@ -24,7 +24,7 @@ import com.winterwell.utils.time.TUnit;
  * @author daniel
  *
  */
-public class DeleteByQueryRequestBuilder extends ESHttpRequestWithBody<DeleteByQueryRequestBuilder,IESResponse> {
+public class DeleteByQueryRequestBuilder extends ESHttpRequest<DeleteByQueryRequestBuilder,IESResponse> {
 
 
 	public DeleteByQueryRequestBuilder(ESHttpClient hClient, String index) {

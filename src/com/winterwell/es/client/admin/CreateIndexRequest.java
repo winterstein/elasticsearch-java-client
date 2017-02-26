@@ -24,8 +24,7 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 	 * @see Analyzer
 	 */
 	public CreateIndexRequest setDefaultAnalyzer(String analyzer) {
-		if (src==null) setSource(new ArrayMap());
-		SimpleJson.set((Map)src, analyzer, 
+		SimpleJson.set(body(), analyzer, 
 				"index", "analysis", "analyzer", "default", "type");
 		return this;
 	}

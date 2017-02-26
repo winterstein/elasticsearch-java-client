@@ -21,7 +21,7 @@ import com.winterwell.utils.time.Dt;
  * @author daniel
  * @testedby UpdateRequestBuilderTest
  */
-public class UpdateRequestBuilder extends ESHttpRequestWithBody<UpdateRequestBuilder,IESResponse> {
+public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IESResponse> {
 
 	private boolean docAsUpsert;
 	
