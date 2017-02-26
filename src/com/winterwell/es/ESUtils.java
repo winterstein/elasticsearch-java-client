@@ -127,17 +127,3 @@ public class ESUtils {
 
 }
 
-class XIdTypeAdapter implements JsonSerializer<XId>, JsonDeserializer<XId> {
-	@Override
-	public JsonElement serialize(XId src, Type srcType,
-			JsonSerializationContext context) {
-		return new JsonPrimitive(src.toString());
-	}
-
-	@Override
-	public XId deserialize(JsonElement json, Type type,
-			JsonDeserializationContext context) throws JsonParseException {
-		return new XId(json.getAsString(), false);
-	}
-}
-

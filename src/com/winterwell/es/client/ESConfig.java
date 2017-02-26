@@ -55,6 +55,6 @@ public class ESConfig {
 	@Option
 	public String server = "localhost";
 
-	public Gson gson = Dependency.get(FlexiGson.class);
+	public Gson gson = Dependency.get(Gson.class);
 	
 }
