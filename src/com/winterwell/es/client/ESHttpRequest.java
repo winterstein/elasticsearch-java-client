@@ -3,6 +3,8 @@ package com.winterwell.es.client;
 import java.util.Arrays;
 import java.util.Map;
 
+import org.eclipse.jetty.util.ajax.JSON;
+
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.winterwell.utils.StrUtils;
@@ -205,7 +207,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	public String getBodyJson() {
 		if (bodyJson!=null) return bodyJson;
 		if (body==null) return null;
-		bodyJson = gson().toJson(body);
+		bodyJson = JSON.toString(body); 
+//				TODO gson().toJson(body);
 		// sanity check the json				
 //		assert JSON.parse(srcJson) != null : srcJson;
 		return bodyJson;

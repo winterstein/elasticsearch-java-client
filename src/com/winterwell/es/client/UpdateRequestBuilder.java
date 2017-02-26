@@ -54,10 +54,27 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
     }
 	
 	public UpdateRequestBuilder setDoc(Map doc) {
-		body.put("doc", doc);
+		body().put("doc", doc);
 		return this;
 	}
 
+	/**
+	 * @deprecated Use {@link #setDoc(Map)} or {@link #setScript(String)}
+	 */
+	@Override
+	public UpdateRequestBuilder setSource(String json) {
+		return super.setSource(json);
+	}
+
+	/**
+	 * @deprecated Use {@link #setDoc(Map)} or {@link #setScript(String)}
+	 */
+	@Override
+	public UpdateRequestBuilder setSource(Map msrc) {
+		// TODO Auto-generated method stub
+		return super.setSource(msrc);
+	}
+	
 	/**
 	 * Ref: https://www.elastic.co/guide/en/elasticsearch/reference/5.2/docs-update.html#_literal_doc_as_upsert_literal
 	 * @param b
@@ -144,6 +161,11 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	public void setTimeToLive(Dt ttl) {
 		if (ttl==null) params.remove("_ttl");
 		else params.put("_ttl", ttl.getMillisecs());
+	}
+
+	public void setDoc(String docJson) {
+		// HACK - poke the doc json into a wrapping doc property
+		setSource("{\"doc\":"+docJson+"}");
 	}
 
 

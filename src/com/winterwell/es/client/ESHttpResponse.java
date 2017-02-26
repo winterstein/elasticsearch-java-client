@@ -83,6 +83,7 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	
 	public Map<String, Object> getParsedJson() {
 		if (parsed!=null) return parsed;
+		System.out.println(json);
 		parsed = gson().fromJson(json, Map.class);
 		return parsed;
 	}
