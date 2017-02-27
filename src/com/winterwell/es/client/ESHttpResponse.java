@@ -164,11 +164,11 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		return hits;
 	}
 
-	@Override
 	/**
-	 * This one doesn't return null.
+	 * @return Never null - can throw exceptions
 	 */
-	public int getTotal() {
+	@Override
+	public long getTotal() throws IllegalArgumentException {
 		if ( ! isSuccess()) throw error;
 		Map<String, Object> map = getParsedJson();
 		Map hits = (Map) map.get("hits");
@@ -179,7 +179,7 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		if (hitTotal == null){
 			throw new IllegalArgumentException("hitTotal field cannot be null");
 		}
-		return hitTotal.intValue();
+		return hitTotal.longValue();
 	}
 
 	

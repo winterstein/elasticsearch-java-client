@@ -30,7 +30,7 @@ public interface SearchResponse extends IESResponse {
 	 * not necessarily the amount which WILL be returned (See ResultsPerPage)
 	 * 
 	 */
-	int getTotal();
+	long getTotal();
 
 	Map getAggregations();
 
