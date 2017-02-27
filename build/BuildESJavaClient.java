@@ -27,5 +27,9 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 		setIncSrc(true);
 	}
 
+	@Override
+	public void doTask() throws Exception {
+		super.doTask();
+	}
 
 }
