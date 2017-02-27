@@ -23,5 +23,9 @@ public class PutMappingRequestBuilder extends ESHttpRequest<PutMappingRequestBui
 		setType(type);
 	}
 
+	public PutMappingRequestBuilder setMapping(ESType type) {
+		body().putAll(type);
+		return this;
+	}
 
 }

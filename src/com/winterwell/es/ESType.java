@@ -12,6 +12,11 @@ import com.winterwell.utils.containers.ArrayMap;
  * PutMappingRequestBuilder#setSource(). It defines handy builder methods
  * for setting up ElasticSearch settings.
  * 
+ * E.g.
+ * 
+ * new ESType()
+ * 	.
+ * 
  * Ref: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-core-types.html
  * @author daniel
  *
@@ -19,8 +24,17 @@ import com.winterwell.utils.containers.ArrayMap;
 public class ESType extends LinkedHashMap<String,Object> {	
 	private static final long serialVersionUID = 1L;
 
-	public ESType string() {
-		put("type", "string");
+	/**
+	 * Analysed "body" text
+	 * @return this
+	 */
+	public ESType text() {
+		put("type", "text");
+		return this;
+	}
+	
+	public ESType keyword() {
+		put("type", "keyword");
 		return this;
 	}
 	
@@ -155,4 +169,6 @@ public class ESType extends LinkedHashMap<String,Object> {
 		put("store", store);
 		return this;
 	}
+
+	
 }
