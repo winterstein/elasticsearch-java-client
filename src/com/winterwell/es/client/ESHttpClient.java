@@ -270,6 +270,17 @@ public class ESHttpClient {
 		return r.getSourceAsMap();
 	}
 
+	public <X> X get(String index, String type, String id, Class<X> class1) {
+		GetRequestBuilder gr = new GetRequestBuilder(this);
+		gr.setIndex(index).setType(type).setId(id);
+		gr.setSourceOnly(true);
+		GetResponse r = gr.get();
+		if ( ! r.isSuccess()) return null;
+		String json = r.getSourceAsString();
+		X x = gson.fromJson(json, class1);
+		return x;
+	}
+
 	public SearchRequestBuilder prepareSearch(String index) {
 		return new SearchRequestBuilder(this).setIndex(index);
 	}
@@ -291,5 +302,6 @@ public class ESHttpClient {
 		threads.shutdown();
 		closed = true;
 	}
+
 	
 }
