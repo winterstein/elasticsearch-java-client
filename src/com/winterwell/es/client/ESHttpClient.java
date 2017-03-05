@@ -205,7 +205,8 @@ public class ESHttpClient {
 								
 			} else {
 				assert req.body == null : req.body;
-				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
+				// NB: create index is a bodyless post
+//				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
 //				// DEBUG hack
 				if (debug) {
 					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"GET":req.method)+" '"+url+"&pretty=true'");
