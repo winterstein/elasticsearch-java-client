@@ -175,7 +175,7 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	@Override
 	public <X> List<X> getSearchResults() {
 		List<Map> hits = getHits();
-		List results = Containers.apply(hit -> hit.get("_source"), hits);
+		List results = Containers.apply(hits, hit -> hit.get("_source"));
 		return results;
 	}
 
