@@ -25,7 +25,7 @@ public class IndicesAliasesRequest extends ESHttpRequest<IndicesAliasesRequest, 
 		endpoint = "_aliases";
 		method = "POST";
 		actions = new ArrayList();
-		setSource(new ArrayMap("actions", actions));
+		setBodyMap(new ArrayMap("actions", actions));
 	}
 	
 	/**

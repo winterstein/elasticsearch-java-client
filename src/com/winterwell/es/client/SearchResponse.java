@@ -34,5 +34,7 @@ public interface SearchResponse extends IESResponse {
 
 	Map getAggregations();
 
+	<X> List<X> getSearchResults();
+
 
 }

@@ -62,17 +62,17 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	 * @deprecated Use {@link #setDoc(Map)} or {@link #setScript(String)}
 	 */
 	@Override
-	public UpdateRequestBuilder setSource(String json) {
-		return super.setSource(json);
+	public UpdateRequestBuilder setBodyJson(String json) {
+		return super.setBodyJson(json);
 	}
 
 	/**
 	 * @deprecated Use {@link #setDoc(Map)} or {@link #setScript(String)}
 	 */
 	@Override
-	public UpdateRequestBuilder setSource(Map msrc) {
+	public UpdateRequestBuilder setBodyMap(Map msrc) {
 		// TODO Auto-generated method stub
-		return super.setSource(msrc);
+		return super.setBodyMap(msrc);
 	}
 	
 	/**
@@ -165,7 +165,7 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 
 	public void setDoc(String docJson) {
 		// HACK - poke the doc json into a wrapping doc property
-		setSource("{\"doc\":"+docJson+"}");
+		setBodyJson("{\"doc\":"+docJson+"}");
 	}
 
 

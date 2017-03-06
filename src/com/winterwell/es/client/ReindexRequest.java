@@ -157,7 +157,7 @@ public class ReindexRequest implements Callable, IProgress, Closeable {
 				IndexRequestBuilder index = new IndexRequestBuilder(client);
 				index.setIndex(toIndex);
 				Map docSrc = (Map) doc.get("_source");
-				index.setSource(docSrc);
+				index.setBodyMap(docSrc);
 				String type = (String) doc.get("_type");
 				index.setType(type);
 				// Preserve routing info?

@@ -22,7 +22,7 @@ public class PutIndexTemplateRequest extends ESHttpRequest<IndicesExistsRequestB
 		endpoint = "/_template";
 		method = "PUT";
 		ArrayMap msrc = new ArrayMap();
-		setSource(msrc);
+		setBodyMap(msrc);
 		msrc.put("template", templatePattern);
 		assert templatePattern.contains("*");
 	}

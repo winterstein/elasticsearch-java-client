@@ -31,6 +31,26 @@ import com.winterwell.utils.web.SimpleJson;
 public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,SearchResponse> {
 
 
+	/**
+	 * @param excluded Can use wildcards, e.g. "*.bloat"
+	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html#get-source-filtering
+	 * @return 
+	 */
+	public SearchRequestBuilder setResultsSourceExclude(String... excluded) {
+		params.put("_source_exclude", StrUtils.join(excluded, ","));
+		return this;
+	}
+	/**
+	 * @param included Can use wildcards, e.g. "*.bloat"
+	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html#get-source-filtering
+	 * @return 
+	 */
+	public SearchRequestBuilder setResultsSourceInclude(String... included) {
+		params.put("_source_include", StrUtils.join(included, ","));
+		return this;
+	}
+
+
 	public SearchRequestBuilder(ESHttpClient hClient) {
 		super(hClient);
 		this.body = new ArrayMap();

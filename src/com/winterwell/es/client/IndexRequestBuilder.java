@@ -1,6 +1,7 @@
 package com.winterwell.es.client;
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * Index (store) a document.
@@ -16,6 +17,21 @@ public class IndexRequestBuilder extends ESHttpRequest<IndexRequestBuilder, IESR
 		method = "POST";
 		bulkOpName = "index";
 	}
+	
+	/**
+	 * Set the request body by converting a pojo to json. The request body can only be set once.
+	 * @param msrc
+	 * @return 
+	 * @return this
+	 * @see #setBodyJson(String)
+	 */
+	public IndexRequestBuilder setBodyDoc(Object doc) throws IllegalStateException {
+		String json = gson().toJson(doc);
+		setBodyJson(json);
+		return this;
+	}
+	
+	
 
 	/**
 	 * Force a refresh?

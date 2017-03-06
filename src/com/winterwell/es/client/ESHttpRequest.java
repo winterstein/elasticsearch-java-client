@@ -40,7 +40,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	protected String endpoint;
 	
 	protected Map<String, Object> body() {
-		if (body==null) setSource(new ArrayMap());
+		if (body==null) setBodyMap(new ArrayMap());
 		return body;
 	}
 	
@@ -49,23 +49,6 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * @see #src
 	 */
 	Map<String,Object> params = new ArrayMap();
-
-	/**
-	 * @param excluded Can use wildcards, e.g. "*.bloat"
-	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html#get-source-filtering
-	 */
-	public SubClass setSourceExclude(String... excluded) {
-		params.put("_source_exclude", StrUtils.join(excluded, ","));
-		return (SubClass) this;
-	}
-	/**
-	 * @param included Can use wildcards, e.g. "*.bloat"
-	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html#get-source-filtering
-	 */
-	public SubClass setSourceInclude(String... included) {
-		params.put("_source_include", StrUtils.join(included, ","));
-		return (SubClass) this;
-	}
 
 	
 	String bulkOpName;
@@ -155,27 +138,33 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 	/**
-	 * Set the request body. Can only be called once.
+	 * Set the request body. The request body can only be set once.
 	 * @param json
 	 * @return this
+	 * @see ESHttpRequest#setBodyMap(Map)
 	 */
-	public SubClass setSource(String json) {
-		if (body!=null && bodyJson!=null) throw new IllegalStateException(this+": Source can only be set once");
+	public SubClass setBodyJson(String json) throws IllegalStateException {
+		if (body!=null || bodyJson!=null) {
+			throw new IllegalStateException(this+": Body can only be set once");
+		}
 		this.bodyJson = json;
 		return (SubClass) this;
 	}
 	
 
 	/**
-	 * Set the request body. Can only be called once.
+	 * Set the request body. The request body can only be set once.
 	 * @param msrc
 	 * @return this
+	 * @see #setBodyJson(String)
 	 */
-	public SubClass setSource(Map msrc) {
-		if (body!=null && bodyJson!=null) throw new IllegalStateException(this+": Source can only be set once");
+	public SubClass setBodyMap(Map msrc) throws IllegalStateException {
+		if (body!=null || bodyJson!=null) {
+			throw new IllegalStateException(this+": Body can only be set once");
+		}
 		body = msrc;
 		return (SubClass) this;
-	}	
+	}
 
 	/**
 	 * Do it! Use a thread-pool to call async -- immediate response, future result.
@@ -207,6 +196,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	public String getBodyJson() {
 		if (bodyJson!=null) return bodyJson;
 		if (body==null) return null;
+		// vanilla convert??
 		bodyJson = JSON.toString(body); 
 //				TODO gson().toJson(body);
 		// sanity check the json				

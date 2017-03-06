@@ -6,9 +6,11 @@ import java.util.Map;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
+import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.log.Log;
 import com.winterwell.web.WebEx;
 
@@ -83,10 +85,24 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	
 	public Map<String, Object> getParsedJson() {
 		if (parsed!=null) return parsed;
-		System.out.println(json);
 		parsed = gson().fromJson(json, Map.class);
 		return parsed;
 	}
+	
+	public Map<String, Object> getJsonMap() {
+		Map map = plainGson().fromJson(json, Map.class);
+		return map;
+	}
+	
+	
+	
+	private Gson plainGson() {
+		Gson gb = new GsonBuilder()
+						.setClassProperty(null)
+						.create();
+		return gb;
+	}
+
 	/**
 	 * The raw json as returned by ES.
 	 */
@@ -155,6 +171,14 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		Object hitsList = hits.get("hits");
 		return (List<Map>) hitsList;
 	}
+
+	@Override
+	public <X> List<X> getSearchResults() {
+		List<Map> hits = getHits();
+		List results = Containers.apply(hit -> hit.get("_source"), hits);
+		return results;
+	}
+
 	
 	@Override
 	public Map getAggregations() {
