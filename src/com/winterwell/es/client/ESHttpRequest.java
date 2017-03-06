@@ -9,7 +9,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.PlainGson;
-import com.winterwell.utils.Dependency;
+import com.winterwell.utils.Dep;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.web.WebUtils;
@@ -98,7 +98,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 	Gson gson() {
-		return hClient.gson;
+		return hClient.config.gson;
 	}
 	
 	public SubClass setIndices(String... indices) {
@@ -202,7 +202,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		if (bodyJson!=null) return bodyJson;
 		if (body==null) return null;
 		// TODO Do we need a vanilla convert - no @class in the maps and lists??
-		bodyJson = gson().toJson(body); 
+		Gson gson = gson();
+		bodyJson = gson.toJson(body); 
 //				TODO gson().toJson(body);
 		// sanity check the json				
 //		assert JSON.parse(srcJson) != null : srcJson;
@@ -210,7 +211,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 	Gson plainGson() {
-		return Dependency.get(PlainGson.class).get();
+		return Dep.get(PlainGson.class).get();
 	}
 
 

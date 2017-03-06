@@ -6,7 +6,7 @@ import com.google.gson.FlexiGson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.winterwell.es.ESUtils;
-import com.winterwell.utils.Dependency;
+import com.winterwell.utils.Dep;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.io.Option;
@@ -55,6 +55,6 @@ public class ESConfig {
 	@Option
 	public String server = "localhost";
 
-	public Gson gson = Dependency.get(Gson.class);
+	public Gson gson = Dep.get(Gson.class);
 	
 }

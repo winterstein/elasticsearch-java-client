@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
 
+import com.google.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.io.FileUtils;
@@ -164,12 +165,7 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	
 	public void setDoc(String docJson) {
 		// HACK - poke the doc json into a wrapping doc property
-		body().put("doc", new Object(){
-			@Override
-			public String toString() {
-				return docJson;
-			}
-		});
+		body().put("doc", new RawJson(docJson));
 //		setBodyJson("{\"doc\":"+docJson+"}");
 	}
 

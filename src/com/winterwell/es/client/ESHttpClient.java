@@ -21,7 +21,7 @@ import com.google.gson.GsonBuilder;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
-import com.winterwell.utils.Dependency;
+import com.winterwell.utils.Dep;
 import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
@@ -45,7 +45,6 @@ import com.winterwell.web.WebEx;
  */
 public class ESHttpClient {
 
-	Gson gson;
 	
 	public ESConfig getConfig() {
 		return config;
@@ -73,7 +72,7 @@ public class ESHttpClient {
 	}
 	
 	public ESHttpClient() {
-		this(Dependency.get(ESConfig.class));
+		this(Dep.get(ESConfig.class));
 	}
 	
 	public ESHttpClient(ESConfig config) {
@@ -81,7 +80,6 @@ public class ESHttpClient {
 		threads = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
 		String s = "http://"+config.server+":"+config.port;		
 		servers = Arrays.asList(s);
-		gson = config.gson;
 	}
 
 	/**
@@ -278,7 +276,7 @@ public class ESHttpClient {
 		GetResponse r = gr.get();
 		if ( ! r.isSuccess()) return null;
 		String json = r.getSourceAsString();
-		X x = gson.fromJson(json, class1);
+		X x = config.gson.fromJson(json, class1);
 		return x;
 	}
 
