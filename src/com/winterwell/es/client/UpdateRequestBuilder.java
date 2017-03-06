@@ -36,7 +36,6 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 		super(esHttpClient);
 		endpoint = "_update";
 		method = "POST";
-		body = new ArrayMap();
 		bulkOpName = "update";
 	}
 	
@@ -145,12 +144,12 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	 * @return Can be null
 	 */
 	public String getScript() {
-		return (String) body.get("script");
+		return body==null? null : (String) body.get("script");
 	}
 
 
 	public UpdateRequestBuilder setScriptParams(Map params) {
-		body.put("params", JSON.toString(params));
+		body().put("params", JSON.toString(params));
 		return this;
 	}
 
@@ -162,13 +161,17 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 		if (ttl==null) params.remove("_ttl");
 		else params.put("_ttl", ttl.getMillisecs());
 	}
-
+	
 	public void setDoc(String docJson) {
 		// HACK - poke the doc json into a wrapping doc property
-		setBodyJson("{\"doc\":"+docJson+"}");
+		body().put("doc", new Object(){
+			@Override
+			public String toString() {
+				return docJson;
+			}
+		});
+//		setBodyJson("{\"doc\":"+docJson+"}");
 	}
-
-
 
 
 }

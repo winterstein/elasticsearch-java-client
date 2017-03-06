@@ -7,6 +7,9 @@ import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.PlainGson;
+import com.winterwell.utils.Dependency;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.web.WebUtils;
@@ -198,12 +201,16 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	public String getBodyJson() {
 		if (bodyJson!=null) return bodyJson;
 		if (body==null) return null;
-		// vanilla convert??
-		bodyJson = JSON.toString(body); 
+		// TODO Do we need a vanilla convert - no @class in the maps and lists??
+		bodyJson = gson().toJson(body); 
 //				TODO gson().toJson(body);
 		// sanity check the json				
 //		assert JSON.parse(srcJson) != null : srcJson;
 		return bodyJson;
+	}
+
+	Gson plainGson() {
+		return Dependency.get(PlainGson.class).get();
 	}
 
 
