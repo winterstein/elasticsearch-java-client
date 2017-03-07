@@ -2,10 +2,10 @@ package com.winterwell.es.client;
 
 import java.io.File;
 
-import com.google.gson.FlexiGson;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.winterwell.es.ESUtils;
+import com.winterwell.gson.FlexiGson;
+import com.winterwell.gson.Gson;
+import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.io.FileUtils;

@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.winterwell.gson.Gson;
+import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
