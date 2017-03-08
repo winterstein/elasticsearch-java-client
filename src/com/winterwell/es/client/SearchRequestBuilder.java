@@ -58,6 +58,7 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		super(hClient);
 		this.body = new ArrayMap();
 		endpoint = "_search";		
+		// what method is it?? probably post for the body 
 	}
 
 
