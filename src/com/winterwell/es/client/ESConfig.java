@@ -55,6 +55,6 @@ public class ESConfig {
 	@Option
 	public String server = "localhost";
 
-	public Gson gson = Dep.get(Gson.class);
+	public Gson gson = Dep.has(Gson.class)? Dep.get(Gson.class) : new Gson();
 	
 }

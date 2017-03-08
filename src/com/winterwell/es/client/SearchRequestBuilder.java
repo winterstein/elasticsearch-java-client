@@ -11,16 +11,19 @@ import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.winterwell.es.ESUtils;
+import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
+import com.winterwell.utils.time.Time;
 import com.winterwell.utils.web.SimpleJson;
 
 /**
@@ -95,7 +98,7 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 	
 	public SearchRequestBuilder setFilter(QueryBuilder qb) {
-		SimpleJson.set(body, ESUtils.jobj(qb), "query", "bool", "filter");
+		SimpleJson.set(body(), ESUtils.jobj(qb), "query", "bool", "filter");
 		return this;
 	}
 	
@@ -136,9 +139,9 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		// HACK correct the toString from ES
 		// TODO Better!!
 		String ss = sort.toString();
-		ss = "{"+ss.replace("\"{", "\": {") +"}";
+//		ss = "{"+ss.replace("\"{", "\": {") +"}";
 		assert JSON.parse(ss) != null;
-		sorts.add(ss);
+		sorts.add(new RawJson(ss));
 		return this;
 	}
 	
@@ -221,4 +224,5 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		sorts.put(aggResultName, new ArrayMap(aggType, new ArrayMap("field", field)));
 		return this;
 	}
+	
 }
