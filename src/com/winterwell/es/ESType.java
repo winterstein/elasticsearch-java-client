@@ -170,5 +170,14 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
+	/**
+	 * Set this for text fields to enable searches which sort on this field.
+	 * @param yes
+	 */
+	public ESType fielddata(boolean yes) {
+		put("fielddata", yes);
+		return this;
+	}
+
 	
 }
