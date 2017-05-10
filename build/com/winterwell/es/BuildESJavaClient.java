@@ -16,7 +16,7 @@ import com.winterwell.utils.io.FileUtils;
 import jobs.BuildBob;
 import jobs.BuildDepot;
 import jobs.BuildMaths;
-import jobs.BuildStat;
+import jobs.BuildDataLog;
 import jobs.BuildUtils;
 import jobs.BuildWeb;
 import jobs.BuildWinterwellProject;
