@@ -49,7 +49,13 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
      * Ref: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-scripting.html
      */
     public UpdateRequestBuilder setScriptLang(String scriptLang) {
-    	params.put("lang", scriptLang);
+    	Map script = (Map) body().get("script");
+    	if (script==null) {
+    		script = new ArrayMap();
+    		body().put("script", script);
+    	}
+    	script.put("lang", scriptLang);
+//    	params.put("lang", scriptLang); ES v old
         return this;
     }
 	
@@ -134,9 +140,11 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 
 	public UpdateRequestBuilder setScript(String script) {
 //		String _json = hClient.gson.toJson(script);
-		String json = JSON.toString(script);
+		String json = script; //JSON.toString(script); // older ES is different :(
 //		assert json.equals(_json); can be different -- choices on encoding chars
-		body.put("script", json);
+		body().put("script", new ArrayMap(
+				"inline", json
+				));
 		return this;
 	}
 	
