@@ -52,9 +52,11 @@ public class GetRequestBuilder extends ESHttpRequest<GetRequestBuilder,GetRespon
 
     /**
      * If true, only return the item _source json, without the surrounding score and other metadata.
+     * @return 
      */
-	public void setSourceOnly(boolean b) {
+	public GetRequestBuilder setSourceOnly(boolean b) {
 		sourceOnly = b;
+		return this;
 	}
 
 }
