@@ -14,8 +14,8 @@ import com.winterwell.utils.log.Log;
 
 public class ESConfig {
 
-	public static final String CLIENT_VERSION = "0.8";
-	public static final String ES_SUPPORTED_VERSION = "1.2";
+	public static final String CLIENT_VERSION = "0.9";
+	public static final String ES_SUPPORTED_VERSION = "5.0";
 	
 	@Override
 	public String toString() {
