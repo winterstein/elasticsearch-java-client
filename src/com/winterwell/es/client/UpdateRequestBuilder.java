@@ -1,5 +1,6 @@
 package com.winterwell.es.client;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,17 @@ import com.winterwell.utils.time.Dt;
 public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IESResponse> {
 
 	private boolean docAsUpsert;
+	
+	/**
+	 * Force a refresh?
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html
+	 * @param string false | true | wait_for
+	 */
+	public void setRefresh(String refresh) {
+		assert Arrays.asList("false","true","wait_for").contains(refresh) : refresh;
+		params.put("refresh", refresh);		
+	}
+
 	
 	@Override
 	protected void get2_safetyCheck() {

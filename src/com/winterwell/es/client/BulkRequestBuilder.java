@@ -2,6 +2,7 @@ package com.winterwell.es.client;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,16 @@ import com.winterwell.utils.containers.ArrayMap;
  * @testedby {@link BulkRequestBuilderTest}
  */
 public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkResponse> {
+
+	/**
+	 * Force a refresh?
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html
+	 * @param string false | true | wait_for
+	 */
+	public void setRefresh(String refresh) {
+		assert Arrays.asList("false","true","wait_for").contains(refresh) : refresh;
+		params.put("refresh", refresh);		
+	}
 
 	public BulkRequestBuilder(ESHttpClient hClient) {
 		super(hClient);
