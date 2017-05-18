@@ -20,7 +20,8 @@ public class IndexRequestBuilder extends ESHttpRequest<IndexRequestBuilder, IESR
 	
 	/**
 	 * Set the request body by converting a pojo to json. The request body can only be set once.
-	 * @param msrc
+	 * Convenience for {@link #setBodyJson(String)} with a standard pojo->json convertor.
+	 * @param doc This is the document you want to store!
 	 * @return 
 	 * @return this
 	 * @see #setBodyJson(String)
