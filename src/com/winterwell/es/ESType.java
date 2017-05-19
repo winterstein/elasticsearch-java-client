@@ -25,6 +25,40 @@ public class ESType extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * Often you'll want text indexing for keyword search, but exact keyword indexing for e.g. alphabetical sorting.
+	 * For this, a property can have several fields (aka "multi-fields").
+	 *  
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/multi-fields.html
+	 * @param name the field name, e.g. "raw". You then access this in queries as property-name.field-name, e.g. "title.raw"
+	 * @param type e.g. "keyword
+	 * @return this
+	 */
+	public ESType field(String name, String type) {
+		ESType f = new ESType();
+		f.put("type", type);
+		return field(name, f);
+	}
+	
+	/**
+	 * Often you'll want text indexing for keyword search, but exact keyword indexing for e.g. alphabetical sorting.
+	 * For this, a property can have several fields (aka "multi-fields").
+	 *  
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/multi-fields.html
+	 * @param name the field name, e.g. "raw". You then access this in queries as property-name.field-name, e.g. "title.raw"
+	 * @param field e.g. new ESType().keyword()
+	 * @return
+	 */
+	public ESType field(String name, ESType field) {
+		Map fields = (Map) get("fields");
+		if (fields==null) {
+			fields = new ArrayMap();
+			put("fields", fields);
+		}
+		fields.put(name, field);
+		return this;
+	}
+	
+	/**
 	 * Analysed "body" text
 	 * @return this
 	 */
@@ -172,6 +206,10 @@ public class ESType extends LinkedHashMap<String,Object> {
 
 	/**
 	 * Set this for text fields to enable searches which sort on this field.
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/fielddata.html
+	 * 
+	 * Before using this -- consider using {@link #field(String, String)} instead.
+	 * 
 	 * @param yes
 	 */
 	public ESType fielddata(boolean yes) {
