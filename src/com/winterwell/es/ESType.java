@@ -115,6 +115,8 @@ public class ESType extends LinkedHashMap<String,Object> {
 	/**
 	 * Mark this property as not analyzed, i.e. the input strings will be indexed as-is
 	 * without being tokenised. E.g. useful for id values.
+	 * 
+	 * Note: #no
 	 * @return
 	 */
 	public ESType noAnalyzer() {
