@@ -174,12 +174,13 @@ public class ESHttpClient {
 	ESHttpResponse execute(ESHttpRequest req) {
 		String curl = "";
 		try {
-			FakeBrowser fb = new FakeBrowser();			//.setDebug(true);
-			fb.setMaxDownload(-1); // Your data, your bandwidth, your call.
 			// random load balancing (if we have multiple servers setup)
 			String server = Utils.getRandomMember(servers);
 			StringBuilder url = req.getUrl(server);
-						
+
+			// NB: FakeBrowser should close down the IO it uses
+			FakeBrowser fb = new FakeBrowser();			//.setDebug(true);
+			fb.setMaxDownload(-1); // Your data, your bandwidth, your call.			
 			// e.g. HEAD
 			fb.setRequestMethod(req.method);
 			
@@ -227,7 +228,7 @@ public class ESHttpClient {
 		} catch(Throwable ex) {
 //			System.out.println(curl);
 			throw Utils.runtime(ex);
-		}
+		}	
 	}
 	
 	
