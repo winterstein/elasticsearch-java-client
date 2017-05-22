@@ -7,7 +7,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.winterwell.es.client.ESConfig;
 import com.winterwell.es.client.ESHttpClient;
@@ -23,6 +26,8 @@ import com.winterwell.gson.JsonSerializer;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.Containers;
+import com.winterwell.utils.containers.Pair2;
 import com.winterwell.utils.io.ArgsParser;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.Time;
@@ -123,6 +128,32 @@ public class ESUtils {
 	public static Object jobj(ToXContent qb) {
 		String s = qb.toString();
 		return FlexiGson.fromJSON(s);
+	}
+
+	/**
+	 * ElasticSearch gets upset by many keys (they explode the schema)
+	 * so we can't store maps the obvious way.
+	 * @param map
+	 * @param k What to call the key-key in the output mini-maps, e.g. "key" or "k"
+	 * @param v What to call the value-key in the output mini-maps, e.g. "value" or "v"
+	 * @return a sort of association list, where each key:value mapping
+	 * is turned into a {k:key, v:value} map in a list
+	 */
+	public static List<Map<String,Object>> assocListFromMap(Map<String, ?> map, String k, String v) {
+		List<Map<String, Object>> list = Containers.apply(map.entrySet(), 
+				e -> new ArrayMap(k, e.getKey(), v, e.getValue())
+				);
+		return list;
+	}
+
+	public static <V> Map<String, V> mapFromAssocList(List<Map<String,Object>> topmapList, 
+			String k, String v) 
+	{
+		Map<String, V> map = new HashMap();
+		for (Map<String, Object> kv : topmapList) {
+			map.put((String)kv.get(k), (V) kv.get(v));
+		}
+		return map;
 	}
 
 }

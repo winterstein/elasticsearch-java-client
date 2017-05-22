@@ -1,23 +1,23 @@
 package com.winterwell.es.query;
 
-import java.io.IOException;
+import java.io.IOException
+;
 import java.util.Map;
 
 import org.apache.lucene.search.Query;
 import org.elasticsearch.common.io.stream.StreamOutput;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.AbstractQueryBuilder;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryShardContext;
 
 import com.winterwell.utils.TodoException;
-import com.winterwell.utils.Utils;
 
 /**
  * Directly make the query input. This is useful for "manually" bridging between ES versions.
  * @author daniel
  */
-public class MapQueryBuilder extends AbstractQueryBuilder<MapQueryBuilder> {
+public class MapQueryBuilder extends AbstractQueryBuilder<MapQueryBuilder> 
+implements org.elasticsearch.index.query.QueryBuilder {
 
 	final Map map;
 	

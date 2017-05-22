@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 
 /**
@@ -216,6 +217,13 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 */
 	public ESType fielddata(boolean yes) {
 		put("fielddata", yes);
+		return this;
+	}
+
+	public ESType setParentType(String parentType) {
+		assert ! Utils.isBlank(parentType);
+		put("_parent", new ArrayMap("type", parentType));
+		put("_routing", new ArrayMap("required", true));
 		return this;
 	}
 
