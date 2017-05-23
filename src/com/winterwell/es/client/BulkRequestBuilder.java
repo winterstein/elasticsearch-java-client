@@ -18,6 +18,10 @@ import com.winterwell.utils.containers.ArrayMap;
  */
 public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkResponse> {
 
+	public List<ESHttpRequest> getActions() {
+		return actions;
+	}
+	
 	/**
 	 * Force a refresh?
 	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html

@@ -140,15 +140,19 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		return gson().toJson(source);
 	}
 
+	// From BulkResponse
 	@Override
-	public boolean hasFailures() {
-		if (isSuccess()) {			
-			return false;
+	public boolean hasErrors() {		
+		if ( ! isSuccess()) {			
+			return true;
 		}
 		Log.w("ES", error);
 		Map<String, Object> map = getParsedJson();
-		Object fails = map.get("failures");
-		return true;
+		Object fails = map.get("errors"); // TODO Out of date?!
+		if (Utils.yes(fails)) {
+			return true;
+		}
+		return false;
 	}
 	
 	public WebEx getError() {
