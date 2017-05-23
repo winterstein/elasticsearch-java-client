@@ -125,7 +125,7 @@ public class ESUtils {
 	 * @param qb
 	 * @return
 	 */
-	public static Object jobj(ToXContent qb) {
+	public static Map jobj(ToXContent qb) {
 		String s = qb.toString();
 		return FlexiGson.fromJSON(s);
 	}

@@ -21,6 +21,10 @@ implements org.elasticsearch.index.query.QueryBuilder {
 
 	final Map map;
 	
+	public Map getMap() {
+		return map;
+	}
+	
 	public MapQueryBuilder(Map map) {
 		this.map = map;
 	}
