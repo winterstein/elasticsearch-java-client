@@ -162,7 +162,10 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	
 	@Override
 	public ESHttpResponse check() {
-		if (error!=null) throw error;
+		if (error!=null) {
+			Log.d("fail.check", "throw from "+req);
+			throw error;
+		}
 		return this;
 	}
 	
