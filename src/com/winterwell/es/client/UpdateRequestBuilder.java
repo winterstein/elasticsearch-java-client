@@ -101,7 +101,7 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	public UpdateRequestBuilder setDocAsUpsert(boolean b) {
 		if (b==docAsUpsert) return this;
 		docAsUpsert = b;
-		body.put("doc_as_upsert", docAsUpsert);
+		body().put("doc_as_upsert", docAsUpsert);		
 //		// move the doc/upsert data if it was set already
 //		if (docAsUpsert) {
 //			Object doc = body.get("doc");
@@ -141,12 +141,21 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 		return this;
 	}
 
-	public UpdateRequestBuilder setUpsert(Map<String, Object> json) {
+	/**
+	 * If the doc does not exist -- set to initialJson and don't run the script.
+	 * If it does exist -- this has no effect: just run the script.
+	 * 
+	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#upserts
+	 * @param initialJson
+	 */
+	public UpdateRequestBuilder setUpsert(Map<String, Object> initialJson) {
 		// jetty JSON is slightly more readable
 //		String _sjson = hClient.gson.toJson(json);
-		String sjson = JSON.toString(json);
-//		assert sjson.equals(_sjson);
-		body.put("upsert", sjson);
+//		String sjson = JSON.toString(initialJson);
+		body().put("upsert", initialJson); //sjson);
+		if (docAsUpsert) {
+			throw new IllegalStateException("doc-as-upsert does not go with upsert + script");
+		}	
 		return this;
 	}
 
