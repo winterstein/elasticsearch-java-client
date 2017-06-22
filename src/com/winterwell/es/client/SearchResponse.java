@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.winterwell.datalog.DataLog;
+import com.winterwell.es.client.agg.AggregationResults;
 import com.winterwell.web.WebEx;
 
 public interface SearchResponse extends IESResponse {
@@ -35,6 +36,8 @@ public interface SearchResponse extends IESResponse {
 	Map getAggregations();
 
 	<X> List<X> getSearchResults();
+
+	AggregationResults getAggregationResults(String name);
 
 
 }

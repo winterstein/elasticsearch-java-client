@@ -17,6 +17,7 @@ import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
 import com.winterwell.es.ESUtils;
+import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
@@ -219,15 +220,19 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	 * @return this
 	 */
 	public SearchRequestBuilder addAggregation(String aggResultName, String aggType, String field) {
-		Utils.check4null(aggResultName, aggType, field);		
-		Map sorts = (Map) body.get("aggs");
+		return addAggregation(new Aggregation(aggResultName, aggType, field));
+	}
+	
+	public SearchRequestBuilder addAggregation(Aggregation dh) {
+		// NB: This is copy pasta Aggregation.subAggregation()
+		Map sorts = (Map) body().get("aggs");
 		if (sorts==null) {
 			sorts = new ArrayMap();
 			body.put("aggs", sorts);
 		}
 		// e.g.      "grades_stats" : { "stats" : { "field" : "grade" } }
-		sorts.put(aggResultName, new ArrayMap(aggType, new ArrayMap("field", field)));
-		return this;
+		sorts.put(dh.name, dh.toJson2());
+		return this;		
 	}
 	
 }

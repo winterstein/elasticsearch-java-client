@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
 
+import com.winterwell.es.client.agg.AggregationResults;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.MathUtils;
@@ -193,6 +194,12 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		Map<String, Object> map = getParsedJson();
 		Map hits = (Map) map.get("aggregations");
 		return hits;
+	}
+	
+	@Override
+	public AggregationResults getAggregationResults(String aggName) {
+		Map rs = (Map) getAggregations().get(aggName);
+		return new AggregationResults(aggName, rs);
 	}
 
 	/**

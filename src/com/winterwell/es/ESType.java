@@ -227,5 +227,14 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
+	/**
+	 * see https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-point.html
+	 * @return
+	 */
+	public ESType geo_point() {
+		put("type", "geo_point");
+		return this;
+	}
+
 	
 }
