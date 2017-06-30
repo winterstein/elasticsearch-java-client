@@ -21,8 +21,21 @@ public class Aggregations {
 		return new Aggregation(name, "date_histogram", field).put("interval", "day");
 	}
 
+	/**
+	 * Stats on a numeric field
+	 * @param name
+	 * @param field This MUST be numeric
+	 * @return
+	 */
 	public static Aggregation stats(String name, String field) {
 		return new Aggregation(name, "stats", field);
 	}
 
+	public static Aggregation terms(String name, String field) {
+		return new Aggregation(name, "terms", field);
+	}	
+	
+	public static Aggregation significantTerms(String name, String field) {
+		return new Aggregation(name, "significant_terms", field);
+	}	
 }
