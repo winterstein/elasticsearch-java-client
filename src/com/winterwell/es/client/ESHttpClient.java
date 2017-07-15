@@ -16,6 +16,7 @@ import org.eclipse.jetty.util.ajax.JSON;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
+import com.winterwell.es.ESPath;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
@@ -268,6 +269,10 @@ public class ESHttpClient {
 		GetResponse r = gr.get();
 		if ( ! r.isSuccess()) return null;
 		return r.getSourceAsMap();
+	}
+	
+	public Map<String, Object> get(ESPath path) {
+		return get(path.index(), path.type, path.id);
 	}
 
 	public <X> X get(String index, String type, String id, Class<X> class1) {
