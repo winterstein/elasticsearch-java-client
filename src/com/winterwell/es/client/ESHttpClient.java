@@ -150,6 +150,7 @@ public class ESHttpClient {
 		@Override
 		public ESHttpResponse call() throws Exception {
 			try {
+				Thread.currentThread().setName("ESHttpClient (threaded): "+req);
 				assert req.retries+1 >= 1;
 				ESHttpResponse r = null;
 				for(int t=0; t<req.retries+1; t++) {
@@ -173,6 +174,7 @@ public class ESHttpClient {
 	}
 	
 	ESHttpResponse execute(ESHttpRequest req) {
+		Thread.currentThread().setName("ESHttpClient: "+req);
 		String curl = "";
 		try {
 			// random load balancing (if we have multiple servers setup)
