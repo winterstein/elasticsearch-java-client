@@ -175,7 +175,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	/**
 	 * Do it! Use a thread-pool to call async -- immediate response, future result.
 	 */
-	public Future<ESHttpResponse> execute() {
+	public ListenableFuture<ESHttpResponse> execute() {
 		return hClient.executeThreaded(this);
 	}
 
