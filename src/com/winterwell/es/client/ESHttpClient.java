@@ -54,7 +54,8 @@ public class ESHttpClient {
 	/**
 	 * You can optionally request a future.
 	 */
-	private final ListeningExecutorService threads;
+//	NB: ListeningExecutorService appears to be buggy?! it creates more and more threads!
+	private final ExecutorService threads;
 
 
 	private List<String> servers;
@@ -78,7 +79,9 @@ public class ESHttpClient {
 	
 	public ESHttpClient(ESConfig config) {
 		this.config = config;
-		threads = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(10));
+		threads = Executors.newFixedThreadPool(10);
+		// WTF? This just creates more & more threads! A bug in Guava?
+//				MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(2));
 		String s = "http://"+config.server+":"+config.port;		
 		servers = Arrays.asList(s);
 	}
@@ -116,9 +119,9 @@ public class ESHttpClient {
 	 * @param req
 	 * @return
 	 */
-	ListenableFuture<ESHttpResponse> executeThreaded(final ESHttpRequest req) {
+	Future<ESHttpResponse> executeThreaded(final ESHttpRequest req) {
 		CallES call = new CallES(req);
-		ListenableFuture<ESHttpResponse> future = threads.submit(call);
+		Future<ESHttpResponse> future = threads.submit(call);
 		return future;
 	}
 	

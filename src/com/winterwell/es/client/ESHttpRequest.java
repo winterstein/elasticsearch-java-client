@@ -2,6 +2,7 @@ package com.winterwell.es.client;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import org.eclipse.jetty.util.ajax.JSON;
 
@@ -174,7 +175,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	/**
 	 * Do it! Use a thread-pool to call async -- immediate response, future result.
 	 */
-	public ListenableFuture<ESHttpResponse> execute() {
+	public Future<ESHttpResponse> execute() {
 		return hClient.executeThreaded(this);
 	}
 
