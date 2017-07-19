@@ -169,8 +169,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		body = msrc;
 		return (SubClass) this;
 	}
-	
-	
+		
 
 	/**
 	 * Do it! Use a thread-pool to call async -- immediate response, future result.
