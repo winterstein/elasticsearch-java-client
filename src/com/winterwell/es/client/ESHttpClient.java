@@ -285,7 +285,7 @@ public class ESHttpClient {
 		GetResponse r = gr.get();
 		if ( ! r.isSuccess()) return null;
 		String json = r.getSourceAsString();
-		X x = config.gson.fromJson(json, class1);
+		X x = config.getGson().fromJson(json, class1);
 		return x;
 	}
 

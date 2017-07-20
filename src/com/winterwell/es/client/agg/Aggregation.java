@@ -27,6 +27,10 @@ public class Aggregation implements IHasJson {
 	}
 
 	Map aggs;
+	/**
+	 * a weak defence against lifecycle-breaking edits -- but this does not protect against sub-aggs being edited!
+	 */
+	private transient boolean toJsond;
 	
 	@Override
 	public Map toJson2() throws UnsupportedOperationException {
@@ -34,19 +38,22 @@ public class Aggregation implements IHasJson {
 		if (aggs!=null) {
 			map.put("aggs", aggs);
 		}
+		toJsond = true;
 		return map;
 	}
 
 	public Aggregation put(String k, Object v) {
+		assert ! toJsond : "Cannot modify with "+k+"="+v+". This has already been converted into json :(";
 		props.put(k, v);
 		return this;
 	}
 
 	public Aggregation subAggregation(Aggregation dh) {
+		assert ! toJsond : "Cannot modify with sub-agg "+dh+". This has already been converted into json :(";
 		if (aggs==null) {
 			aggs = new ArrayMap();
 		}
-		aggs.put(dh.name, dh.toJson2());
+		aggs.put(dh.name, dh); //.toJson2());
 		return this;		
 	}
 

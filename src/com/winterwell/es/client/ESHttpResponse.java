@@ -112,7 +112,7 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	}
 	
 	private Gson gson() {
-		return req.hClient.config.gson;
+		return req.hClient.config.getGson();
 	}
 
 	/* (non-Javadoc)

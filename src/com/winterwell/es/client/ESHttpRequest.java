@@ -1,5 +1,6 @@
 package com.winterwell.es.client;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -7,8 +8,13 @@ import java.util.concurrent.Future;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.winterwell.es.client.agg.Aggregation;
+import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
+import com.winterwell.gson.JsonElement;
+import com.winterwell.gson.JsonSerializationContext;
+import com.winterwell.gson.JsonSerializer;
 import com.winterwell.gson.PlainGson;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.StrUtils;
@@ -99,7 +105,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 	Gson gson() {
-		return hClient.config.gson;
+		return hClient.config.getGson();
 	}
 	
 	public SubClass setIndices(String... indices) {
@@ -201,17 +207,21 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	public String getBodyJson() {
 		if (bodyJson!=null) return bodyJson;
 		if (body==null) return null;
-		// TODO Do we need a vanilla convert - no @class in the maps and lists??
-		Gson gson = gson();
+		// A vanilla convertor for handling our objects
+		// -- no @class in the maps and lists -- with handling of ES Client internal objects.
+		// This is DIFFERENT from #gson(), which is for handling the caller's objects.  
+		Gson gson = GsonBuilder.safe()
+				.registerTypeAdapter(Aggregation.class, new JsonSerializer<Aggregation>() {
+					@Override
+					public JsonElement serialize(Aggregation src, Type typeOfSrc, JsonSerializationContext context) {
+						return context.serialize(src.toJson2());
+					}
+				}).create();
 		bodyJson = gson.toJson(body); 
 //				TODO gson().toJson(body);
 		// sanity check the json				
 //		assert JSON.parse(srcJson) != null : srcJson;
 		return bodyJson;
-	}
-
-	Gson plainGson() {
-		return Dep.get(PlainGson.class).get();
 	}
 
 

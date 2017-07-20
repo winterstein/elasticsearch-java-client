@@ -231,7 +231,7 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 			body.put("aggs", sorts);
 		}
 		// e.g.      "grades_stats" : { "stats" : { "field" : "grade" } }
-		sorts.put(dh.name, dh.toJson2());
+		sorts.put(dh.name, dh); //.toJson2());
 		return this;		
 	}
 	

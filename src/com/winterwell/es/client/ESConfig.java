@@ -55,6 +55,17 @@ public class ESConfig {
 	@Option
 	public String server = "localhost";
 
-	public Gson gson = Dep.has(Gson.class)? Dep.get(Gson.class) : new Gson();
+	private Gson gson;
+	
+	public Gson getGson() {
+		if (gson==null) gson = Dep.has(Gson.class)? Dep.get(Gson.class) : new Gson(); 
+		return gson;
+	}
+	
+	public ESConfig setGson(Gson gson) {
+		this.gson = gson;		
+		// ??could we put in a type adapter
+		return this;
+	}
 	
 }
