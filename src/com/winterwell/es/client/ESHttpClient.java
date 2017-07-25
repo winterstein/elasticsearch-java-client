@@ -105,12 +105,6 @@ public class ESHttpClient {
 		}
 		
 	}
-
-	public UpdateRequestBuilder prepareUpdate(String index, String type, String id) {
-		UpdateRequestBuilder urb = new UpdateRequestBuilder(this);
-		urb.setIndex(index).setType(type).setId(id);
-		return urb;
-	}
 	
 	/**
 	 * Use a thread-pool to call async -- immediate response, future result.
@@ -250,9 +244,7 @@ public class ESHttpClient {
 	 * @return an IndexRequestBuilder Typical usage: call setSource(), then get()
 	 */
 	public IndexRequestBuilder prepareIndex(String index, String type, String id) {
-		IndexRequestBuilder urb = new IndexRequestBuilder(this);
-		urb.setIndex(index).setType(type).setId(id);
-		return urb;
+		return prepareIndex(new ESPath(index, type, id));
 	}
 
 	public DeleteRequestBuilder prepareDelete(String esIndex, String esType, String id) {
@@ -289,6 +281,12 @@ public class ESHttpClient {
 		return x;
 	}
 
+	public <X> X get(ESPath path, Class<X> class1) {
+		return get(path.index(), path.type, path.id, class1);
+	}
+
+	
+
 	public SearchRequestBuilder prepareSearch(String index) {
 		return new SearchRequestBuilder(this).setIndex(index);
 	}
@@ -309,6 +307,18 @@ public class ESHttpClient {
 		if (closed) return;
 		threads.shutdown();
 		closed = true;
+	}
+
+	public UpdateRequestBuilder prepareUpdate(ESPath path) {
+		UpdateRequestBuilder urb = new UpdateRequestBuilder(this);
+		urb.setPath(path);
+		return urb;
+	}
+
+	public IndexRequestBuilder prepareIndex(ESPath path) {
+		IndexRequestBuilder urb = new IndexRequestBuilder(this);
+		urb.setPath(path);
+		return urb;
 	}
 
 	

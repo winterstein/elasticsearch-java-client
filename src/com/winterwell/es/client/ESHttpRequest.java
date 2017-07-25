@@ -8,6 +8,7 @@ import java.util.concurrent.Future;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
@@ -17,8 +18,10 @@ import com.winterwell.gson.JsonSerializationContext;
 import com.winterwell.gson.JsonSerializer;
 import com.winterwell.gson.PlainGson;
 import com.winterwell.utils.Dep;
+import com.winterwell.utils.Printer;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.web.WebUtils;
 
 public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
@@ -35,10 +38,17 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		}
 		params.put("fields", fieldsAsCSL);	return (SubClass) this;
 	}
+	
+	public SubClass setPath(ESPath path) {
+		if (path.indices!=null) setIndices(path.indices);
+		if (path.type!=null) setType(path.type);
+		if (path.id!=null) setId(path.id);
+		return (SubClass) this;
+	}
 
 	protected String method;
 
-	ESHttpClient hClient;
+	final ESHttpClient hClient;
 	String[] indices;
 	String type;
 	String id;
@@ -87,6 +97,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 	public ESHttpRequest(ESHttpClient hClient) {
 		this.hClient = hClient;
+		assert hClient != null;
 	}
 
 	public Map<String,Object> getParams() {
@@ -144,7 +155,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	
 	@Override
 	public String toString() {
-		return getClass().getSimpleName()+"["+getUrl("")+"]";
+		if (indices!=null && indices.length==1) {
+			return getClass().getSimpleName()+"["+getUrl("")+"]";
+		}
+		return getClass().getSimpleName();		
 	}
 
 	/**
@@ -185,10 +199,17 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 	StringBuilder getUrl(String server) {
+		// see https://www.elastic.co/guide/en/elasticsearch/reference/current/multi-index.html
 		StringBuilder url = new StringBuilder(server);
-		if (indices!=null && indices.length!=0) {
-			assert indices.length == 1 : this;
-			url.append("/"+WebUtils.urlEncode(indices[0]));
+		if (indices==null) {
+			url.append("/_all");
+		} else {
+			url.append("/");
+			for(String idx : indices) {
+				url.append(WebUtils.urlEncode(idx));
+				url.append(",");
+			}
+			if (indices.length!=0) StrUtils.pop(url, 1);
 		}
 		if (type!=null) url.append("/"+WebUtils.urlEncode(type));
 		if (id!=null) url.append("/"+WebUtils.urlEncode(id));

@@ -3,11 +3,11 @@ package com.winterwell.es;
 import java.util.Arrays;
 
 /**
- * Wrap the 3 parts of an ES identifier into one object
+ * Wrap the 3 parts of an ES identifier (index, type, id) into one object
  * @author daniel
  *
  */
-public class ESPath {
+public final class ESPath {
 
 	public final String id;
 	public final String type;
