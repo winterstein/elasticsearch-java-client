@@ -147,7 +147,6 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		if ( ! isSuccess()) {			
 			return true;
 		}
-		Log.w("ES", error);
 		Map<String, Object> map = getParsedJson();
 		Object fails = map.get("errors"); // TODO Out of date?!
 		if (Utils.yes(fails)) {
