@@ -8,7 +8,7 @@ public class GetRequestBuilder extends ESHttpRequest<GetRequestBuilder,GetRespon
 	boolean sourceOnly;
 
 	public GetRequestBuilder(ESHttpClient hClient) {
-		super(hClient);
+		super(hClient, null);
 	}
 
 

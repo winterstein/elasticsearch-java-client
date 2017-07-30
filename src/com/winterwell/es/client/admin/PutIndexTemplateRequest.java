@@ -18,8 +18,7 @@ import com.winterwell.utils.containers.ArrayMap;
 public class PutIndexTemplateRequest extends ESHttpRequest<IndicesExistsRequestBuilder,IESResponse> {	
 	
 	public PutIndexTemplateRequest(ESHttpClient hClient, String templatePattern) {
-		super(hClient);
-		endpoint = "/_template";
+		super(hClient, "_template");
 		method = "PUT";
 		ArrayMap msrc = new ArrayMap();
 		setBodyMap(msrc);

@@ -10,9 +10,8 @@ import com.winterwell.utils.TodoException;
 public class ClearScrollRequestBuilder extends ESHttpRequest<ClearScrollRequestBuilder, IESResponse> {
 
 	public ClearScrollRequestBuilder(ESHttpClient esHttpClient) {
-		super(esHttpClient);
+		super(esHttpClient, "_search/scroll");
 		method = "DELETE";
-		endpoint = "_search/scroll";
 	}
 
 	public ClearScrollRequestBuilder setScrollIds(List<String> asList) {

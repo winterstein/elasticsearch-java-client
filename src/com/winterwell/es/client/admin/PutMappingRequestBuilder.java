@@ -16,10 +16,9 @@ import com.winterwell.es.client.IESResponse;
 public class PutMappingRequestBuilder extends ESHttpRequest<PutMappingRequestBuilder,IESResponse> {
 
 	public PutMappingRequestBuilder(ESHttpClient hClient, String idx, String type) {
-		super(hClient);
+		super(hClient, "_mapping");
 		setIndex(idx);
 		method = "PUT";
-		endpoint = "_mapping";
 		setType(type);
 	}
 

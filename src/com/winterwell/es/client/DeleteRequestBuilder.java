@@ -15,7 +15,7 @@ public class DeleteRequestBuilder extends ESHttpRequest<DeleteRequestBuilder, IE
 	}
 
 	public DeleteRequestBuilder(ESHttpClient hClient) {
-		super(hClient);
+		super(hClient, null);
 		method = "DELETE";
 	}
 

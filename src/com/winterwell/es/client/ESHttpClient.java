@@ -80,6 +80,7 @@ public class ESHttpClient {
 	
 	public ESHttpClient(ESConfig config) {
 		this.config = config;
+		if (config==null) throw new NullPointerException("null config for ES");
 		String s = "http://"+config.server+":"+config.port;		
 		servers = Arrays.asList(s);
 	}

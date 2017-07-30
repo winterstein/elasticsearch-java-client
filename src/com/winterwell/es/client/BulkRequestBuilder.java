@@ -33,8 +33,7 @@ public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkRes
 	}
 
 	public BulkRequestBuilder(ESHttpClient hClient) {
-		super(hClient);
-		endpoint = "_bulk";
+		super(hClient, "_bulk");
 		method = "POST";
 	}
 

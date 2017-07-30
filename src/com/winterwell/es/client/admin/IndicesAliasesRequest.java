@@ -21,8 +21,7 @@ public class IndicesAliasesRequest extends ESHttpRequest<IndicesAliasesRequest, 
 	private ArrayList<Map> actions;
 
 	public IndicesAliasesRequest(IndicesAdminClient iac) {
-		super(iac.hClient);
-		endpoint = "_aliases";
+		super(iac.hClient, "_aliases");
 		method = "POST";
 		actions = new ArrayList();
 		setBodyMap(new ArrayMap("actions", actions));

@@ -13,7 +13,7 @@ public class IndexRequestBuilder extends ESHttpRequest<IndexRequestBuilder, IESR
 	 * @param esHttpClient
 	 */
 	public IndexRequestBuilder(ESHttpClient esHttpClient) {
-		super(esHttpClient);
+		super(esHttpClient, null);
 		method = "POST";
 		bulkOpName = "index";
 	}

@@ -13,7 +13,7 @@ import com.winterwell.es.client.IESResponse;
 public class StatsRequest extends ESHttpRequest<StatsRequest,StatsResponse> {
 
 	public StatsRequest(ESHttpClient hClient) {
-		super(hClient);
+		super(hClient, null);
 //		method = "HEAD";
 		setIndex("_stats");
 	}

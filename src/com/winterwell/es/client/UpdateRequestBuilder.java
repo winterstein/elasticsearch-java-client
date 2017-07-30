@@ -46,8 +46,7 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	}
 	
 	public UpdateRequestBuilder(ESHttpClient esHttpClient) {
-		super(esHttpClient);
-		endpoint = "_update";
+		super(esHttpClient,"_update");
 		method = "POST";
 		bulkOpName = "update";
 	}

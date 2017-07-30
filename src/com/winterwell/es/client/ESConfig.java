@@ -57,6 +57,9 @@ public class ESConfig {
 
 	private Gson gson;
 	
+	@Option
+	private String indexAliasVersion = "1";
+	
 	public Gson getGson() {
 		if (gson==null) gson = Dep.has(Gson.class)? Dep.get(Gson.class) : new Gson(); 
 		return gson;
@@ -66,6 +69,20 @@ public class ESConfig {
 		this.gson = gson;		
 		// ??could we put in a type adapter
 		return this;
+	}
+
+	/**
+	 * Convenience hack: It's handy to make an index with a version name (e.g. "foo_1")
+	 * and an alias with a public name (e.g. "foo"). This provides a convenient place
+	 * to set which "version" to use for new indices.
+	 * It is not directly used in the ES client itself, though it is loaded from the
+	 * .properties file.
+	 */
+	public String getIndexAliasVersion() {
+		return indexAliasVersion;
+	}
+	public void setIndexAliasVersion(String indexAliasVersion) {
+		this.indexAliasVersion = indexAliasVersion;
 	}
 	
 }

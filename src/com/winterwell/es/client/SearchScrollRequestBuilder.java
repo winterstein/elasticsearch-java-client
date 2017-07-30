@@ -21,8 +21,7 @@ public class SearchScrollRequestBuilder extends ESHttpRequest<SearchScrollReques
 	 * Suggested value: 1 minute
 	 */
 	public SearchScrollRequestBuilder(ESHttpClient esHttpClient, String scrollId, Dt scrollWindow) {
-		super(esHttpClient);
-		endpoint = "_search/scroll";
+		super(esHttpClient, "_search/scroll");
 		params.put("scroll_id", scrollId);
 		// You must keep setting a scroll window to keep the scroll alive.
 		// This is such a gotcha, that we'll make the user set it here.

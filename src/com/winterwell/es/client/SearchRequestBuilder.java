@@ -56,9 +56,7 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 
 
 	public SearchRequestBuilder(ESHttpClient hClient) {
-		super(hClient);
-		this.body = new ArrayMap();
-		endpoint = "_search";		
+		super(hClient, "_search");
 		// what method is it?? probably post for the body 
 	}
 
@@ -137,10 +135,10 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 
 
 	public SearchRequestBuilder addSort(SortBuilder sort) {
-		List sorts = (List) body.get("sort");
+		List sorts = (List) body().get("sort");
 		if (sorts==null) {
 			sorts = new ArrayList();
-			body.put("sort", sorts);
+			body().put("sort", sorts);
 		}
 		// HACK correct the toString from ES
 		// TODO Better!!
@@ -157,10 +155,10 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	 * @return
 	 */
 	public SearchRequestBuilder setSort(String sort) {
-		List sorts = (List) body.get("sort");
+		List sorts = (List) body().get("sort");
 		if (sorts==null) {
 			sorts = new ArrayList();
-			body.put("sort", sorts);
+			body().put("sort", sorts);
 		}
 		sorts.clear();
 		sorts.add("\""+sort+"\"");

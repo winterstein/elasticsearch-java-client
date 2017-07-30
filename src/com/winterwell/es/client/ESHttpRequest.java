@@ -57,7 +57,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 */
 	protected Map<String,Object> body;
 	protected String bodyJson;
-	protected String endpoint;
+	protected final String endpoint;
 	
 	protected Map<String, Object> body() {
 		if (body==null) setBodyMap(new ArrayMap());
@@ -95,9 +95,16 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		return (SubClass) this;
 	}
 
-	public ESHttpRequest(ESHttpClient hClient) {
+	/**
+	 * 
+	 * @param hClient
+	 * @param endpoint Can be null -- a lot of operations, e.g. index,  use the http method (PUT/DELETE etc)
+	 * as a marker without having their own endpoint per se.
+	 */
+	public ESHttpRequest(ESHttpClient hClient, String endpoint) {
 		this.hClient = hClient;
 		assert hClient != null;
+		this.endpoint = endpoint;
 	}
 
 	public Map<String,Object> getParams() {

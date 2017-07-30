@@ -28,9 +28,8 @@ public class DeleteByQueryRequestBuilder extends ESHttpRequest<DeleteByQueryRequ
 
 
 	public DeleteByQueryRequestBuilder(ESHttpClient hClient, String index) {
-		super(hClient);
+		super(hClient, "_query");
 		method = "DELETE";
-		endpoint = "_query";		
 		setIndex(index);
 	}
 	

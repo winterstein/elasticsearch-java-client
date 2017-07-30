@@ -11,7 +11,7 @@ import com.winterwell.es.client.IESResponse;
 public class IndicesExistsRequestBuilder extends ESHttpRequest<IndicesExistsRequestBuilder,IESResponse> {
 
 	public IndicesExistsRequestBuilder(IndicesAdminClient iac) {
-		super(iac.hClient);
+		super(iac.hClient, null);
 		method = "HEAD";
 	}
 

@@ -7,7 +7,7 @@ import com.winterwell.es.client.IESResponse;
 public class DeleteIndexRequest extends ESHttpRequest<DeleteIndexRequest, IESResponse>{
 
 	public DeleteIndexRequest(ESHttpClient hClient, String... indices) {
-		super(hClient);
+		super(hClient, null);
 		method = "DELETE";
 		setIndices(indices);
 	}

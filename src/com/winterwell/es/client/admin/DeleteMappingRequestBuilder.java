@@ -14,10 +14,9 @@ import com.winterwell.es.client.IESResponse;
 public class DeleteMappingRequestBuilder extends ESHttpRequest<DeleteMappingRequestBuilder,IESResponse> {
 
 	public DeleteMappingRequestBuilder(ESHttpClient hClient, String... indices) {
-		super(hClient);
+		super(hClient, "_mapping");
 		setIndices(indices);		
 		method = "DELETE";
-		endpoint = "_mapping";
 	}
 
 

@@ -8,10 +8,16 @@ import com.winterwell.es.client.IESResponse;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.web.SimpleJson;
 
+/**
+ * Create a new index!
+ * 
+ * @author daniel
+ *
+ */
 public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResponse> {
 
 	public CreateIndexRequest(ESHttpClient hClient, String index) {
-		super(hClient);
+		super(hClient, null);
 		setIndex(index);
 //		endpoint; Just do a put to the index url
 		method = "PUT";
@@ -73,5 +79,16 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 //		The fingerprint analyzer is a specialist analyzer which creates a fingerprint which can be used for duplicate detection.
 //		public static final String 
 	} // ./Analyzer
+
+	/**
+	 * Also create an alias.
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/5.5/indices-create-index.html#create-index-aliases
+	 * @param index
+	 * @return 
+	 */
+	public CreateIndexRequest setAlias(String index) {
+		body().put("aliases", new ArrayMap(index, new ArrayMap()));
+		return this;
+	}
 	
 }
