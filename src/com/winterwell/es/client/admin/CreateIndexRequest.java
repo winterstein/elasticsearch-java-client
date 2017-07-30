@@ -12,7 +12,7 @@ import com.winterwell.utils.web.SimpleJson;
  * Create a new index!
  * 
  * @author daniel
- *
+ * @testedby CreateIndexRequestTest
  */
 public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResponse> {
 
@@ -82,6 +82,11 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 
 	/**
 	 * Also create an alias.
+	 * 
+	 * What happens if the alias already exists?
+	 * ES will happily let you create multiple indices with the same alias! 
+	 * BUT an index request (i.e. "put this doc into alias") will fail.
+	 * 
 	 * See https://www.elastic.co/guide/en/elasticsearch/reference/5.5/indices-create-index.html#create-index-aliases
 	 * @param index
 	 * @return 
