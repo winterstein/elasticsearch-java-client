@@ -208,7 +208,7 @@ public class ESHttpClient {
 //				// DEBUG hack
 				if (debug) {
 					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"GET":req.method)+" '"+url+"&pretty=true'");
-//					Log.v("ES.curl", curl);
+					Log.d("ES.curl", curl);
 				}
 
 				jsonResult = fb.getPage(url.toString(), req.params);
