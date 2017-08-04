@@ -11,6 +11,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.bob"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/flexi-gson"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.USER_LIBRARY/elasticsearch"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/elasticsearch"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
