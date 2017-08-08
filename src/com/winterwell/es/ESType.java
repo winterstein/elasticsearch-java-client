@@ -24,6 +24,8 @@ import com.winterwell.utils.containers.ArrayMap;
  */
 public class ESType extends LinkedHashMap<String,Object> {	
 	private static final long serialVersionUID = 1L;
+	
+	public static final ESType keyword = new ESType().keyword();
 
 	/**
 	 * Often you'll want text indexing for keyword search, but exact keyword indexing for e.g. alphabetical sorting.
