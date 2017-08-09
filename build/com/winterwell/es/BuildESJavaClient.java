@@ -30,7 +30,9 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 
 	@Override
 	public void doTask() throws Exception {
-		super.doTask();
+		super.doTask();		
+//		File zflibs = new File(FileUtils.getWinterwellDir(), "zonefox/libs");
+//		FileUtils.copy(getJar(), zflibs);
 	}
 
 }
