@@ -14,10 +14,12 @@ import com.winterwell.utils.containers.ArrayMap;
  * for setting up ElasticSearch settings.
  * 
  * E.g.
- * 
+ * <code>
  * new ESType()
- * 	.
- * 
+ * 	.property("my_id", ESType.keyword)
+ *  .property("name", new ESType().text())
+ * </code>
+ *
  * Ref: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-core-types.html
  * @author daniel
  *
@@ -26,7 +28,18 @@ public class ESType extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
 	
 	public static final ESType keyword = new ESType().keyword();
-
+	
+	/**
+	 * Use to switch off norms for efficiency.
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/norms.html
+	 * @param onOff
+	 * @return this
+	 */
+	public ESType norms(boolean onOff) {
+		put("norms", onOff);
+		return this;
+	}
+	
 	/**
 	 * Often you'll want text indexing for keyword search, but exact keyword indexing for e.g. alphabetical sorting.
 	 * For this, a property can have several fields (aka "multi-fields").

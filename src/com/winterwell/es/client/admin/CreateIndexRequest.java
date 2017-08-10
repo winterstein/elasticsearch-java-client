@@ -36,6 +36,18 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 	}
 
 	/**
+	 * TODO 
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-stemmer-tokenfilter.html
+	 * 
+	 */
+	public CreateIndexRequest addTokenFilter(String analyzer) {
+		SimpleJson.set(body(), analyzer, 
+				"index", "analysis", "analyzer", "default", "type");
+		return this;
+	}
+
+	
+	/**
 	 * String constants for the built-in analyzer types.
 	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/analysis-analyzers.html
 	 */
@@ -70,9 +82,47 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 //		The pattern analyzer uses a regular expression to split the text into terms. It supports lower-casing and stop words.
 //		public static final String 
 		
-//		Language Analyzers
-//		Elasticsearch provides many language-specific analyzers like english or french.
-//		public static final String 
+		/** Language Analyzers
+			Elasticsearch provides many language-specific analyzers like english or french.
+		See https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html
+		*/
+		public static final String arabic = "arabic";
+ public static final String armenian = "armenian";
+ public static final String basque = "basque";
+ public static final String brazilian = "brazilian";
+ public static final String bulgarian = "bulgarian";
+ public static final String catalan = "catalan";
+ public static final String cjk = "cjk";
+ public static final String czech = "czech";
+ public static final String danish = "danish";
+ public static final String dutch = "dutch";
+ /** Language Analyzers
+	Elasticsearch provides many language-specific analyzers like english or french.
+See https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lang-analyzer.html
+*/
+ public static final String english = "english";
+ public static final String finnish = "finnish";
+ public static final String french = "french";
+ public static final String galician = "galician";
+ public static final String german = "german";
+ public static final String greek = "greek";
+ public static final String hindi = "hindi";
+ public static final String hungarian = "hungarian";
+ public static final String indonesian = "indonesian";
+ public static final String irish = "irish";
+ public static final String italian = "italian";
+ public static final String latvian = "latvian";
+ public static final String lithuanian = "lithuanian";
+ public static final String norwegian = "norwegian";
+ public static final String persian = "persian";
+ public static final String portuguese = "portuguese";
+ public static final String romanian = "romanian";
+ public static final String russian = "russian";
+ public static final String sorani = "sorani";
+ public static final String spanish = "spanish";
+ public static final String swedish = "swedish";
+ public static final String turkish = "turkish";
+ public static final String thai = "thai";
 //		public static final String 
 		
 //		Fingerprint Analyzer
