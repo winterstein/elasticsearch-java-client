@@ -164,6 +164,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 		put("type", "integer");
 		return this;
 	}
+	
 	/**
 	 * Set the nested properties for an object type.
 	 *  Must only be called once.

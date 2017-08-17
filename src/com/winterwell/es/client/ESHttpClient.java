@@ -306,7 +306,7 @@ public class ESHttpClient {
 
 	public void close() {
 		if (closed) return;
-		threads.shutdown();
+//		threads.shutdown(); the threads are a shared static pool
 		closed = true;
 	}
 
