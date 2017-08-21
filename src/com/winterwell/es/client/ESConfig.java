@@ -8,9 +8,11 @@ import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.StrUtils;
+import com.winterwell.utils.Utils;
 import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.io.Option;
 import com.winterwell.utils.log.Log;
+import com.winterwell.utils.time.TUnit;
 
 public class ESConfig {
 
@@ -25,40 +27,47 @@ public class ESConfig {
 	public ESConfig() {
 	}
 	
-	public ESConfig sniffPort() {
-		// Since we use a non-standard port as a bit of extra security
-		// -- let's try to sniff out the port number
-		try {
-			String yml = FileUtils.read(new File("/etc/elasticsearch/elasticsearch.yml"));
-			String[] lines = StrUtils.splitLines(yml);
-			for (String line : lines) {
-				line = line.trim();
-				if (line.startsWith("http.port:")) {
-					String sport = line.substring("http.port:".length()).trim();
-					this.port = Integer.parseInt(sport);
-					break;
-				}
-			}
-		} catch(Throwable ex) {
-			// oh well
-			Log.d("ES", "Could not sniff port: "+ex);
-		}
-		return this;
-	}
-	
 	/**
-	 * The normal default is 9200. This can be changed in /etc/elasticsearch/elasticsearch.yml
+	 * @deprecated set esUrl instead
+	 * 
+	 * The normal default for ES is 9200. This can be changed in /etc/elasticsearch/elasticsearch.yml
+	 * -1 to not list a port in the url (ie use the port 80/443 http/https default).
 	 */
 	@Option
-	public int port = 9200;
+	private int port = 9200;
 	
+	/**
+	 * @deprecated set esUrl instead
+	 */
 	@Option
-	public String server = "localhost";
+	private String server = "localhost";
+	
+	/**
+	 * @deprecated set esUrl instead
+	 */
+	@Option
+	private String protocol = "http";
+		
+	@Option
+	public String esUrl = "http://localhost:9200";
 
+	public String getESUrl() {
+		if ( ! Utils.isBlank(esUrl)) return esUrl;
+		return protocol+"://"+server+(port>0? ":"+port : "");
+	}
+	
 	private Gson gson;
 	
+	/**
+	 * Bit of a hack. When creating indices, its nice to use a versioned-name + public-alias.
+	 * This is a convenient place for saying what version to use. 
+	 * TODO support per-index version numbers.
+	 */
 	@Option
 	private String indexAliasVersion = "1";
+	
+	@Option(description="milliseconds for the http request to timeout")
+	public long esRequestTimeout = TUnit.MINUTE.millisecs;
 	
 	public Gson getGson() {
 		if (gson==null) gson = Dep.has(Gson.class)? Dep.get(Gson.class) : new Gson(); 

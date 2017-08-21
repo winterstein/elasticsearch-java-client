@@ -81,7 +81,7 @@ public class ESHttpClient {
 	public ESHttpClient(ESConfig config) {
 		this.config = config;
 		if (config==null) throw new NullPointerException("null config for ES");
-		String s = "http://"+config.server+":"+config.port;		
+		String s = config.esUrl;		
 		servers = Arrays.asList(s);
 	}
 
@@ -179,7 +179,8 @@ public class ESHttpClient {
 
 			// NB: FakeBrowser should close down the IO it uses
 			FakeBrowser fb = new FakeBrowser();			//.setDebug(true);
-			fb.setMaxDownload(-1); // Your data, your bandwidth, your call.			
+			fb.setMaxDownload(-1); // Your data, your bandwidth, your call.
+			fb.setTimeOut(config.esRequestTimeout); // 1 minute timeout
 			// e.g. HEAD
 			fb.setRequestMethod(req.method);
 			
