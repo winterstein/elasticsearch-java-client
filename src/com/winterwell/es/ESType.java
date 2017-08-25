@@ -1,11 +1,14 @@
 package com.winterwell.es;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.log.Log;
 
 /**
  * Helper for making ElasticSearch properties mappings. An ESType is just a map, 
@@ -28,17 +31,32 @@ public class ESType extends LinkedHashMap<String,Object> {
 	private static final long serialVersionUID = 1L;
 	
 	public static final ESType keyword = new ESType().keyword();
+
+	private transient boolean lock;
+	
+	public ESType copy() {
+		// deep copy
+		ESType copy = Utils.copy(this);
+		return copy;
+	}
 	
 	/**
-	 * Use to switch off norms for efficiency.
+	 * Use to switch off norms for efficiency. 
+	 * This is only valid for certain types! So ESType will ignore it where invalid.
 	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/norms.html
 	 * @param onOff
 	 * @return this
 	 */
 	public ESType norms(boolean onOff) {
+		if (NO_NORMS.contains(get("type"))) {
+			Log.w("ESType", "Skip: norms are not valid for type "+get("type")+" in "+this);
+			return this;
+		}
 		put("norms", onOff);
 		return this;
 	}
+	
+	static final List<String> NO_NORMS = Arrays.asList("date", "float", "double", "long", "float", "integer");
 	
 	/**
 	 * Often you'll want text indexing for keyword search, but exact keyword indexing for e.g. alphabetical sorting.
@@ -86,6 +104,12 @@ public class ESType extends LinkedHashMap<String,Object> {
 	public ESType keyword() {
 		put("type", "keyword");
 		return this;
+	}
+	
+	@Override
+	public Object put(String key, Object value) {
+		assert ! lock : "Lifecycle bug: This object has been used already - dont modify it";
+		return super.put(key, value);
 	}
 	
 	public ESType date() {
@@ -205,7 +229,8 @@ public class ESType extends LinkedHashMap<String,Object> {
 			props = new ArrayMap();
 			put("properties", props);
 		}
-		props.put(propertyName, propertyType);		
+		props.put(propertyName, propertyType);
+		propertyType.lock = true;
 		return this;
 	}
 	/**

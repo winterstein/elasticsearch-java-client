@@ -8,11 +8,13 @@ import com.winterwell.utils.web.IHasJson;
 
 public class Aggregation implements IHasJson {
 
+	
+	
 	@Override
 	public String toString() {
-		return name+": "+toJSONString();
+		return "Aggregation [name=" + name + ", field=" + field + ", type=" + type + ", props=" + props + "]";
 	}
-	
+
 	public final String name;
 	private String field;
 	private String type;
