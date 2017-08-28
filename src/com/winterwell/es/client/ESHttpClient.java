@@ -55,7 +55,8 @@ public class ESHttpClient {
 	 * You can optionally request a future.
 	 */
 	private static final ListeningExecutorService threads 
-							= MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(20));
+							= MoreExecutors.listeningDecorator(
+									Executors.newFixedThreadPool(20));
 
 
 
