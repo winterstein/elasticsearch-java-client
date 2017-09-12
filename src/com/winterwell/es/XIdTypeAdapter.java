@@ -21,6 +21,6 @@ public final class XIdTypeAdapter implements JsonSerializer<XId>, JsonDeserializ
 
 	@Override
 	public JsonElement serialize(XId src, Type typeOfSrc, JsonSerializationContext context) {
-		return new JsonPrimitive(src.toJSONString());
+		return new JsonPrimitive(src.toString());
 	}
 }

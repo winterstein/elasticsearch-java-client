@@ -13,7 +13,8 @@ public interface IESRouter {
 	 * @param type
 	 * @param id
 	 * @param status
+	 * @param dataspace Optional name-spacing -- often this maps to an index
 	 * @return
 	 */
-	ESPath getPath(Class type, String id, Object status);
+	ESPath getPath(String dataspace, Class type, String id, Object status);
 }
