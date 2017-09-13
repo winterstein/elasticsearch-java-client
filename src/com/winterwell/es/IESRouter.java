@@ -17,4 +17,12 @@ public interface IESRouter {
 	 * @return
 	 */
 	ESPath getPath(String dataspace, Class type, String id, Object status);
+	
+	default ESPath getPath(Class type, String id) {
+		return getPath(null, type, id, null);
+	}
+	
+	default ESPath getPath(Class type, String id, Object status) {
+		return getPath(null, type, id, status);
+	}
 }
