@@ -64,7 +64,7 @@ public class ESConfig {
 	 * TODO support per-index version numbers.
 	 */
 	@Option
-	private String indexAliasVersion = "1";
+	private String indexAliasVersion = "2";
 	
 	@Option(description="milliseconds for the http request to timeout")
 	public long esRequestTimeout = TUnit.MINUTE.millisecs;
