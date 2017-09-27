@@ -20,6 +20,7 @@ import com.winterwell.es.ESPath;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
+import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.Dep;
@@ -224,15 +225,21 @@ public class ESHttpClient {
 		} catch(WebEx ex) {
 			// Quite possibly a script error
 			// e.g. 40X
-			System.out.println(curl);
 			return new ESHttpResponse(req, ex);
 		} catch(Throwable ex) {
-//			System.out.println(curl);
-			throw Utils.runtime(ex);
+			throw wrapError(ex, req);
 		}	
 	}
 	
 	
+	/**
+	 * @param ex
+	 * @param req 
+	 * @return
+	 */
+	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {		
+		return new ESException(ex.getMessage()+" from "+req, ex);
+	}
 
 	@Override
 	public String toString() {
