@@ -1,12 +1,19 @@
 package com.winterwell.es.client.admin;
 
 import java.util.Map;
+import java.util.Set;
 
+import com.google.common.util.concurrent.ListenableFuture;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.ESHttpRequest;
+import com.winterwell.es.client.ESHttpResponse;
 import com.winterwell.es.client.IESResponse;
+import com.winterwell.es.fail.ESException;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.Containers;
+import com.winterwell.utils.log.Log;
 import com.winterwell.utils.web.SimpleJson;
+import com.winterwell.web.WebEx;
 
 /**
  * Create a new index!
@@ -16,13 +23,50 @@ import com.winterwell.utils.web.SimpleJson;
  */
 public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResponse> {
 
+	private boolean failIfAliasExists;
+
 	public CreateIndexRequest(ESHttpClient hClient, String index) {
 		super(hClient, null);
 		setIndex(index);
 //		endpoint; Just do a put to the index url
 		method = "PUT";
 	}
-
+	
+	@Override
+	protected ESHttpResponse doExecute(ESHttpClient esjc) {
+		ESHttpResponse r = super.doExecute(esjc);
+		if ( ! failIfAliasExists) return r;
+//		http://localhost:9200/dupefoo/_settings
+		Map aliases = (Map) body().get("aliases");
+		if (aliases==null || aliases.isEmpty()) {
+			Log.i("ES.CreateIndex", "failIfAliasExists was set, but no aliases were set");
+			return r;
+		}
+		String alias = (String) Containers.only(aliases.keySet());
+		IndexSettingsRequest req2 = esjc.admin().indices().indexSettings(alias);
+		IESResponse resp = req2.get().check();
+		Map<String,Object> settingsFromIndex = resp.getParsedJson();
+		if (settingsFromIndex.size() == 1) return r;
+		// Oh no! overlap -- was this the first in the race?
+		String thisIndex = getIndices()[0];
+		long cd = Long.valueOf(SimpleJson.get(settingsFromIndex, thisIndex, "settings", "index", "creation_date"));		
+		for(String idx : settingsFromIndex.keySet()) {
+			if (idx.equals(thisIndex)) continue;
+			long cd2 = Long.valueOf(SimpleJson.get(settingsFromIndex, idx, "settings", "index", "creation_date"));
+			if (cd2 < cd) {
+				// we lost :(
+				WebEx.E40X error = new WebEx.E400("index-alias "+alias+" already exists");
+				ESHttpResponse rfail = new ESHttpResponse(this, error);
+				DeleteIndexRequest del = esjc.admin().indices().prepareDelete(thisIndex);
+				del.execute();
+				return rfail;
+			}
+		}
+		// we won
+		return r;
+	}
+	
+	
 	/**
 	 * 
 	 * @param analyzer e.g. keyword See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/analysis-analyzers.html
@@ -144,6 +188,15 @@ See https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lan
 	public CreateIndexRequest setAlias(String index) {
 		body().put("aliases", new ArrayMap(index, new ArrayMap()));
 		return this;
+	}
+
+	/**
+	 * If set, test for a create-index-with-alias race.
+	 * If this create call loses the race, then the response  result is an error.
+	 * @param b
+	 */
+	public void setFailIfAliasExists(boolean b) {
+		failIfAliasExists = b;
 	}
 	
 }

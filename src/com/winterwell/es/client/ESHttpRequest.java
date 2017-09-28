@@ -10,6 +10,7 @@ import org.eclipse.jetty.util.ajax.JSON;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
+import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
@@ -20,9 +21,14 @@ import com.winterwell.gson.PlainGson;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.Printer;
 import com.winterwell.utils.StrUtils;
+import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
+import com.winterwell.utils.log.Log;
 import com.winterwell.utils.web.WebUtils;
+import com.winterwell.utils.web.WebUtils2;
+import com.winterwell.web.FakeBrowser;
+import com.winterwell.web.WebEx;
 
 public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
@@ -52,11 +58,20 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	String[] indices;
 	String type;
 	String id;
+	
+	protected String[] getIndices() {
+		return indices;
+	}
+	
 	/**
 	 * This becomes the body json. Can be String or Map
 	 */
 	protected Map<String,Object> body;
 	protected String bodyJson;
+	/**
+	 * This is added to the end of the url path.
+	 * e.g. the call might end up being /MyIndex/endpoint
+	 */
 	protected final String endpoint;
 	
 	protected Map<String, Object> body() {
@@ -74,6 +89,12 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	String bulkOpName;
 
 	int retries;
+
+	boolean debug;
+	
+	public void setDebug(boolean debug) {
+		this.debug = debug;
+	}
 	
 	/**
 	 * By default, if a request fails, it fails. You can set it to retry once or twice before giving up.
@@ -139,7 +160,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 	public ResponseSubClass get() {
 		get2_safetyCheck();
-		return processResponse(hClient.execute(this));
+		return processResponse(doExecute(hClient));
 	}
 	
 
@@ -203,6 +224,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 */
 	public ListenableFuture<ESHttpResponse> execute() {
 		return hClient.executeThreaded(this);
+		// NB this 4ends up at #doExecute(esjc)
 	}
 
 	StringBuilder getUrl(String server) {
@@ -251,6 +273,85 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 //		assert JSON.parse(srcJson) != null : srcJson;
 		return bodyJson;
 	}
+
+	
+	/**
+	 * Actually execute the call.
+	 * 
+	 * NB: this can be over-ridden, to allow for "complex" requests.
+	 * @param esHttpClient
+	 * @return 
+	 */
+	protected ESHttpResponse doExecute(ESHttpClient esjc) {		
+		Thread.currentThread().setName("ESHttpClient: "+this);
+		String curl = "";
+		try {
+			// random load balancing (if we have multiple servers setup)
+			String server = Utils.getRandomMember(esjc.servers);
+			StringBuilder url = getUrl(server);
+
+			// NB: FakeBrowser should close down the IO it uses
+			FakeBrowser fb = new FakeBrowser();			//.setDebug(true);
+			fb.setMaxDownload(-1); // Your data, your bandwidth, your call.
+			fb.setTimeOut(esjc.config.esRequestTimeout); // 1 minute timeout
+			// e.g. HEAD
+			fb.setRequestMethod(method);
+			
+			String jsonResult;
+			String srcJson = getBodyJson();
+			if (srcJson!=null) {
+				// add in the get params
+				WebUtils2.addQueryParameters(url, params);
+				// ?? encode the srcJson for url-encoding ??
+				
+				// DEBUG hack
+				// NB: pretty=true was doc-as-upsert
+				if (debug || esjc.debug) {
+					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"POST":method)+" '"+url+"' -d '"+srcJson+"'");
+					Log.d("ES.curl", curl);
+				}
+				
+				assert JSON.parse(srcJson) != null : srcJson;
+				
+				jsonResult = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
+								
+			} else {
+				assert body == null : body;
+				// NB: create index is a bodyless post
+//				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
+//				// DEBUG hack
+				if (debug || esjc.debug) {
+					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"GET":method)+" '"+url+"&pretty=true'");
+					Log.d("ES.curl", curl);
+				}
+
+				jsonResult = fb.getPage(url.toString(), (Map)params);
+			}
+			
+			ESHttpResponse r = new ESHttpResponse(this, jsonResult);
+			return r;
+		} catch(WebEx.E404 ex) {
+			// e.g. a get for an unstored object (a common case)
+			return new ESHttpResponse(this, ex);
+		} catch(WebEx ex) {
+			// Quite possibly a script error
+			// e.g. 40X
+			return new ESHttpResponse(this, ex);
+		} catch(Throwable ex) {
+			throw wrapError(ex, this);
+		}		
+	}
+	
+	
+	/**
+	 * @param ex
+	 * @param req 
+	 * @return
+	 */
+	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {		
+		return new ESException(ex.getMessage()+" from "+req, ex);
+	}
+
 
 
 }

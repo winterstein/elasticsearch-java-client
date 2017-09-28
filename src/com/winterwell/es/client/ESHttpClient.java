@@ -61,7 +61,7 @@ public class ESHttpClient {
 
 
 
-	private List<String> servers;
+	List<String> servers;
 
 
 	private boolean closed;
@@ -70,6 +70,7 @@ public class ESHttpClient {
 	final ESConfig config;
 
 
+	@Deprecated // set on requests
 	public static boolean debug = true;
 
 	public void setServer(String server) {
@@ -152,7 +153,7 @@ public class ESHttpClient {
 				assert req.retries+1 >= 1;
 				ESHttpResponse r = null;
 				for(int t=0; t<req.retries+1; t++) {
-					r = ESHttpClient.this.execute(req);
+					r = req.doExecute(ESHttpClient.this);
 					// success?
 					if (r.getError()==null) return r;
 					// micro-pause before a retry to allow whatever the problem was to clear
@@ -171,75 +172,6 @@ public class ESHttpClient {
 		}			
 	}
 	
-	ESHttpResponse execute(ESHttpRequest req) {
-		Thread.currentThread().setName("ESHttpClient: "+req);
-		String curl = "";
-		try {
-			// random load balancing (if we have multiple servers setup)
-			String server = Utils.getRandomMember(servers);
-			StringBuilder url = req.getUrl(server);
-
-			// NB: FakeBrowser should close down the IO it uses
-			FakeBrowser fb = new FakeBrowser();			//.setDebug(true);
-			fb.setMaxDownload(-1); // Your data, your bandwidth, your call.
-			fb.setTimeOut(config.esRequestTimeout); // 1 minute timeout
-			// e.g. HEAD
-			fb.setRequestMethod(req.method);
-			
-			String jsonResult;
-			String srcJson = req.getBodyJson();
-			if (srcJson!=null) {
-				// add in the get params
-				WebUtils2.addQueryParameters(url, req.params);
-				// ?? encode the srcJson for url-encoding ??
-				
-				// DEBUG hack
-				// NB: pretty=true was doc-as-upsert
-				if (debug) {
-					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"POST":req.method)+" '"+url+"' -d '"+srcJson+"'");
-					Log.d("ES.curl", curl);
-				}
-				
-				assert JSON.parse(srcJson) != null : srcJson;
-				
-				jsonResult = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
-								
-			} else {
-				assert req.body == null : req.body;
-				// NB: create index is a bodyless post
-//				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
-//				// DEBUG hack
-				if (debug) {
-					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"GET":req.method)+" '"+url+"&pretty=true'");
-					Log.d("ES.curl", curl);
-				}
-
-				jsonResult = fb.getPage(url.toString(), req.params);
-			}
-			
-			ESHttpResponse r = new ESHttpResponse(req, jsonResult);
-			return r;
-		} catch(WebEx.E404 ex) {
-			// e.g. a get for an unstored object (a common case)
-			return new ESHttpResponse(req, ex);
-		} catch(WebEx ex) {
-			// Quite possibly a script error
-			// e.g. 40X
-			return new ESHttpResponse(req, ex);
-		} catch(Throwable ex) {
-			throw wrapError(ex, req);
-		}	
-	}
-	
-	
-	/**
-	 * @param ex
-	 * @param req 
-	 * @return
-	 */
-	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {		
-		return new ESException(ex.getMessage()+" from "+req, ex);
-	}
 
 	@Override
 	public String toString() {

@@ -1,5 +1,7 @@
 package com.winterwell.es.client.admin;
 
+import org.elasticsearch.index.IndexSettings;
+
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.IESResponse;
 
@@ -75,6 +77,10 @@ public class IndicesAdminClient {
     public CreateIndexRequest prepareCreate(String index) {
     	return new CreateIndexRequest(hClient, index);
     }
+
+	public IndexSettingsRequest indexSettings(String alias) {
+		return new IndexSettingsRequest(hClient).setIndex(alias);
+	}
     
 
 }
