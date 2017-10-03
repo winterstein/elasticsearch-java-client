@@ -21,7 +21,8 @@ Because the http API is fairly stable, the same code usually works across a majo
 
 ## Alternatives
 
-JEST: https://github.com/searchbox-io/Jest/tree/master/jest
+The official Java client https://www.elastic.co/guide/en/elasticsearch/client/java-rest/current/java-rest-overview.html
 
+JEST: https://github.com/searchbox-io/Jest/tree/master/jest   
 Comparison: JEST has better coverage of features, whilst ESJC has better multi-thread and async handling, plus support for easier debugging of ES queries. JEST is available via Maven.
 
