@@ -16,6 +16,8 @@ import com.winterwell.utils.web.SimpleJson;
  */
 public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResponse> {
 
+	private boolean failIfAliasExists;
+
 	public CreateIndexRequest(ESHttpClient hClient, String index) {
 		super(hClient, null);
 		setIndex(index);
@@ -144,6 +146,17 @@ See https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lan
 	public CreateIndexRequest setAlias(String index) {
 		body().put("aliases", new ArrayMap(index, new ArrayMap()));
 		return this;
+	}
+	
+	/**
+	 * @deprecated Not implemented on this branch!
+	 * 
+	 * If set, test for a create-index-with-alias race.
+	 * If this create call loses the race, then the response  result is an error.
+	 * @param b
+	 */
+	public void setFailIfAliasExists(boolean b) {
+		failIfAliasExists = b;
 	}
 	
 }
