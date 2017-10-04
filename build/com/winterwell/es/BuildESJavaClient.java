@@ -23,9 +23,14 @@ import jobs.BuildWinterwellProject;
 
 public class BuildESJavaClient extends BuildWinterwellProject {
 
+	private String ESVERSION = "2";
+
 	public BuildESJavaClient() {
 		super(new File(FileUtils.getWinterwellDir(), "elasticsearch-java-client"));
 		setIncSrc(true);
+		if (ESVERSION != null) {
+			jarFile = new File(projectDir, projectDir.getName()+"-es"+ESVERSION+".jar");
+		}
 	}
 
 	@Override
