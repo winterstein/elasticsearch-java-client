@@ -33,27 +33,4 @@ extends org.elasticsearch.index.query.QueryBuilder {
 		}
 	}
 
-	@Override
-	public String getWriteableName() {
-		// TODO Auto-generated method stub
-		throw new TodoException();
-	}
-
-	@Override
-	protected void doWriteTo(StreamOutput out) throws IOException {
-		// TODO Auto-generated method stub
-		throw new TodoException();
-	}
-
-
-	@Override
-	protected boolean doEquals(MapQueryBuilder other) {
-		return this == other;
-	}
-
-	@Override
-	protected int doHashCode() {
-		return this.hashCode();
-	}
-
 }

@@ -12,5 +12,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.bob"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/flexi-gson"/>
+	<classpathentry kind="lib" path="lib/lucene-core-7.0.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

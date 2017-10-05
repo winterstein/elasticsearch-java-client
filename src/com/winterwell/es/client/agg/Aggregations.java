@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramAggregationBuilder;
 
 import com.winterwell.utils.containers.ArrayMap;
 

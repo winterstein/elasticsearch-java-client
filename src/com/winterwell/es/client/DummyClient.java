@@ -14,10 +14,15 @@ import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.count.CountRequest;
+import org.elasticsearch.action.count.CountRequestBuilder;
+import org.elasticsearch.action.count.CountResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
-
+import org.elasticsearch.action.exists.ExistsRequest;
+import org.elasticsearch.action.exists.ExistsRequestBuilder;
+import org.elasticsearch.action.exists.ExistsResponse;
 import org.elasticsearch.action.explain.ExplainRequest;
 import org.elasticsearch.action.explain.ExplainRequestBuilder;
 import org.elasticsearch.action.explain.ExplainResponse;
@@ -33,7 +38,21 @@ import org.elasticsearch.action.get.MultiGetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
-
+import org.elasticsearch.action.indexedscripts.delete.DeleteIndexedScriptRequest;
+import org.elasticsearch.action.indexedscripts.delete.DeleteIndexedScriptRequestBuilder;
+import org.elasticsearch.action.indexedscripts.delete.DeleteIndexedScriptResponse;
+import org.elasticsearch.action.indexedscripts.get.GetIndexedScriptRequest;
+import org.elasticsearch.action.indexedscripts.get.GetIndexedScriptRequestBuilder;
+import org.elasticsearch.action.indexedscripts.get.GetIndexedScriptResponse;
+import org.elasticsearch.action.indexedscripts.put.PutIndexedScriptRequest;
+import org.elasticsearch.action.indexedscripts.put.PutIndexedScriptRequestBuilder;
+import org.elasticsearch.action.indexedscripts.put.PutIndexedScriptResponse;
+import org.elasticsearch.action.percolate.MultiPercolateRequest;
+import org.elasticsearch.action.percolate.MultiPercolateRequestBuilder;
+import org.elasticsearch.action.percolate.MultiPercolateResponse;
+import org.elasticsearch.action.percolate.PercolateRequest;
+import org.elasticsearch.action.percolate.PercolateRequestBuilder;
+import org.elasticsearch.action.percolate.PercolateResponse;
 import org.elasticsearch.action.search.ClearScrollRequest;
 import org.elasticsearch.action.search.ClearScrollRequestBuilder;
 import org.elasticsearch.action.search.ClearScrollResponse;
@@ -45,6 +64,9 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.action.search.SearchScrollRequestBuilder;
+import org.elasticsearch.action.suggest.SuggestRequest;
+import org.elasticsearch.action.suggest.SuggestRequestBuilder;
+import org.elasticsearch.action.suggest.SuggestResponse;
 import org.elasticsearch.action.termvectors.MultiTermVectorsRequest;
 import org.elasticsearch.action.termvectors.MultiTermVectorsRequestBuilder;
 import org.elasticsearch.action.termvectors.MultiTermVectorsResponse;
@@ -56,7 +78,7 @@ import org.elasticsearch.action.update.UpdateRequestBuilder;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.AdminClient;
 import org.elasticsearch.client.Client;
-
+import org.elasticsearch.client.support.Headers;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.threadpool.ThreadPool;
 
@@ -490,9 +512,171 @@ public class DummyClient implements Client
 	}
 
 	@Override
-	public Client filterWithHeader(Map<String, String> headers) {
+	public ActionFuture<CountResponse> count(CountRequest arg0) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void count(CountRequest arg0, ActionListener<CountResponse> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ActionFuture<DeleteIndexedScriptResponse> deleteIndexedScript(DeleteIndexedScriptRequest arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteIndexedScript(DeleteIndexedScriptRequest arg0, ActionListener<DeleteIndexedScriptResponse> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ActionFuture<ExistsResponse> exists(ExistsRequest arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void exists(ExistsRequest arg0, ActionListener<ExistsResponse> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ActionFuture<GetIndexedScriptResponse> getIndexedScript(GetIndexedScriptRequest arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void getIndexedScript(GetIndexedScriptRequest arg0, ActionListener<GetIndexedScriptResponse> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Headers headers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<MultiPercolateResponse> multiPercolate(MultiPercolateRequest arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void multiPercolate(MultiPercolateRequest arg0, ActionListener<MultiPercolateResponse> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ActionFuture<PercolateResponse> percolate(PercolateRequest arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void percolate(PercolateRequest arg0, ActionListener<PercolateResponse> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public CountRequestBuilder prepareCount(String... arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DeleteIndexedScriptRequestBuilder prepareDeleteIndexedScript() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DeleteIndexedScriptRequestBuilder prepareDeleteIndexedScript(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ExistsRequestBuilder prepareExists(String... arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GetIndexedScriptRequestBuilder prepareGetIndexedScript() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GetIndexedScriptRequestBuilder prepareGetIndexedScript(String arg0, String arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MultiPercolateRequestBuilder prepareMultiPercolate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PercolateRequestBuilder preparePercolate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PutIndexedScriptRequestBuilder preparePutIndexedScript() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PutIndexedScriptRequestBuilder preparePutIndexedScript(String arg0, String arg1, String arg2) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SuggestRequestBuilder prepareSuggest(String... arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ActionFuture<PutIndexedScriptResponse> putIndexedScript(PutIndexedScriptRequest arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void putIndexedScript(PutIndexedScriptRequest arg0, ActionListener<PutIndexedScriptResponse> arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ActionFuture<SuggestResponse> suggest(SuggestRequest arg0) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void suggest(SuggestRequest arg0, ActionListener<SuggestResponse> arg1) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
