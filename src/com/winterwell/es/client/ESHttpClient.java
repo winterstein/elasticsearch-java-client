@@ -208,6 +208,11 @@ public class ESHttpClient {
 		return r.getSourceAsMap();
 	}
 	
+	/**
+	 * 
+	 * @param path
+	 * @return source-as-map, or null if not found
+	 */
 	public Map<String, Object> get(ESPath path) {
 		return get(path.index(), path.type, path.id);
 	}
