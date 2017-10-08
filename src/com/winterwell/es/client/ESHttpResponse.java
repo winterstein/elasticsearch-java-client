@@ -6,6 +6,7 @@ import java.util.Map;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.winterwell.es.client.agg.AggregationResults;
+import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.MathUtils;
@@ -23,7 +24,7 @@ import com.winterwell.web.WebEx;
 public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse {
 
 	private final String json;
-	private final WebEx error;
+	private final RuntimeException error;
 	private final ESHttpRequest req;
 	private Map parsed;
 
@@ -51,7 +52,12 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		this.error = null;
 	}
 
-	public ESHttpResponse(ESHttpRequest req, WebEx ex) {
+	/**
+	 * 
+	 * @param req
+	 * @param ex Should we standardise on {@link ESException}??
+	 */
+	public ESHttpResponse(ESHttpRequest req, RuntimeException ex) {
 		this.error = ex;
 		this.req = req;
 		this.json = null;
@@ -155,7 +161,7 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		return false;
 	}
 	
-	public WebEx getError() {
+	public RuntimeException getError() {
 		return error;
 	}
 	

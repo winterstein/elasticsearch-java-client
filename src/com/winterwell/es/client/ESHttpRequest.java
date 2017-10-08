@@ -336,7 +336,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		} catch(WebEx ex) {
 			// Quite possibly a script error
 			// e.g. 40X
-			return new ESHttpResponse(this, ex);
+			return new ESHttpResponse(this, wrapError(ex, this));
 		} catch(Throwable ex) {
 			throw wrapError(ex, this);
 		}		
