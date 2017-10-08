@@ -348,7 +348,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * @param req 
 	 * @return
 	 */
-	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {		
+	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {
+		if (ex instanceof ESException) return (RuntimeException) ex;
 		return new ESException(ex.getMessage()+" from "+req, ex);
 	}
 
