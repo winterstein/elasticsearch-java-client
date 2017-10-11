@@ -26,7 +26,10 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 	private String ESVERSION = "2";
 
 	public BuildESJavaClient() {
-		super(new File(FileUtils.getWinterwellDir(), "elasticsearch-java-client"));
+		super(
+			FileUtils.getWorkingDirectory()
+//			new File(FileUtils.getWinterwellDir(), "elasticsearch-java-client")
+			);
 		setIncSrc(true);
 		setVersion("esversion/"+ESVERSION); // this (the git branch name) will go into the manifest
 		if (ESVERSION != null) {
