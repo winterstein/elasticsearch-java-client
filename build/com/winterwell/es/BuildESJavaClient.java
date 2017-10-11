@@ -27,13 +27,14 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 
 	public BuildESJavaClient() {
 		super(
-			FileUtils.getWorkingDirectory()
+			FileUtils.getWorkingDirectory(),
+			"elasticsearch-java-client"
 //			new File(FileUtils.getWinterwellDir(), "elasticsearch-java-client")
 			);
 		setIncSrc(true);
 		setVersion("esversion/"+ESVERSION); // this (the git branch name) will go into the manifest
 		if (ESVERSION != null) {
-			jarFile = new File(projectDir, projectDir.getName()+"-es"+ESVERSION+".jar");
+			jarFile = new File(projectDir,  projectName+"-es"+ESVERSION+".jar");
 		}
 	}
 
