@@ -186,9 +186,16 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	}
 
 	@Override
-	public <X> List<X> getSearchResults() {
+	public List<Map<String, Object>> getSearchResults() {
 		List<Map> hits = getHits();
 		List results = Containers.apply(hits, hit -> hit.get("_source"));
+		return results;		
+	}
+	
+	@Override
+	public <X> List<X> getSearchResults(Class<? extends X> klass) {
+		List<Map<String, Object>> maps = getSearchResults();
+		List<X> results = Containers.apply(maps, map -> gson().convert(map, klass));
 		return results;
 	}
 

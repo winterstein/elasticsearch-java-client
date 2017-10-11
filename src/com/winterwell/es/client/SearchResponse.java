@@ -35,7 +35,9 @@ public interface SearchResponse extends IESResponse {
 
 	Map getAggregations();
 
-	<X> List<X> getSearchResults();
+	List<Map<String,Object>> getSearchResults();
+	
+	<X> List<X> getSearchResults(Class<? extends X> klass);
 
 	AggregationResults getAggregationResults(String name);
 
