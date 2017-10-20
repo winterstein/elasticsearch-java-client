@@ -28,6 +28,7 @@ public class Aggregations {
 	}
 
 	/**
+	 * ??TODO accuracy and coverage??
 	 * Stats on a numeric field
 	 * @param name
 	 * @param field This MUST be numeric
