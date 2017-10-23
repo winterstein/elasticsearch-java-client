@@ -60,8 +60,7 @@ public class ESConfig {
 	
 	/**
 	 * Bit of a hack. When creating indices, its nice to use a versioned-name + public-alias.
-	 * This is a convenient place for saying what version to use. 
-	 * TODO support per-index version numbers.
+	 * This is a convenient place for saying what version to use (and which can be altered by a config file). 
 	 */
 	@Option
 	private String indexAliasVersion = "2";

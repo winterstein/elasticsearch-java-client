@@ -92,8 +92,9 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 	boolean debug;
 	
-	public void setDebug(boolean debug) {
+	public SubClass setDebug(boolean debug) {
 		this.debug = debug;
+		return (SubClass) this;
 	}
 	
 	/**
