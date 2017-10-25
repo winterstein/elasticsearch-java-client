@@ -18,6 +18,7 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.agg.Aggregation;
+import com.winterwell.es.client.agg.Aggregations;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
@@ -210,17 +211,10 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 
 
 	/**
-	 * 
-	 * If you only want the aggregation results and not the documents, set size-0 with {@link #setSize(int)}.
-	 * @param aggResultName
-	 * @param aggType e.g. "stats", "sum"
-	 * @param field
+	 * See {@link Aggregations}
+	 * Note: If you only want the aggregation results and not the documents, set size-0 with {@link #setSize(int)}.
 	 * @return this
 	 */
-	public SearchRequestBuilder addAggregation(String aggResultName, String aggType, String field) {
-		return addAggregation(new Aggregation(aggResultName, aggType, field));
-	}
-	
 	public SearchRequestBuilder addAggregation(Aggregation dh) {
 		// NB: This is copy pasta Aggregation.subAggregation()
 		Map sorts = (Map) body().get("aggs");
