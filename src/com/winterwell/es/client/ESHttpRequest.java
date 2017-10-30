@@ -351,7 +351,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 */
 	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {
 		if (ex instanceof ESException) return (RuntimeException) ex;
-		return new ESException(ex.getMessage()+" from "+req, ex);
+		String msg = req==null? ex.getMessage() : req.getUrl("")+" "+ex.getMessage();
+		ESException esex = new ESException(msg, ex);
+		esex.request = req;
+		return esex;
 	}
 
 

@@ -1,5 +1,6 @@
 package com.winterwell.es.fail;
 
+import com.winterwell.es.client.ESHttpRequest;
 import com.winterwell.utils.WrappedException;
 
 /**
@@ -11,6 +12,8 @@ import com.winterwell.utils.WrappedException;
  *
  */
 public class ESException extends WrappedException {
+
+	public transient ESHttpRequest request;
 
 	public ESException(String msg, Throwable ex) {
 		super(msg, ex);
