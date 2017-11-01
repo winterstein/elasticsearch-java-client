@@ -45,6 +45,11 @@ public class Aggregation implements IHasJson {
 	 */
 	private transient boolean toJsond;
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This does NOT include the name, which is used by the parent search
+	 */
 	@Override
 	public Map toJson2() throws UnsupportedOperationException {
 		ArrayMap map = new ArrayMap(type, props);

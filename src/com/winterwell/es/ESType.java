@@ -277,5 +277,13 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html
+	 */
+	public ESType completion() {
+		put("type", "completion");
+		return this;
+	}
+
 	
 }

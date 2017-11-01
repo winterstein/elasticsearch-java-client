@@ -257,4 +257,16 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		Object sid = map.get("_scroll_id");
 		return (String) sid;
 	}
+
+	@Override
+	public List<Map> getSuggesterHits(String name) {
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getParsedJson();
+		Map suggesters = (Map) map.get("suggest");
+		List<Map> res = (List<Map>) suggesters.get(name);
+		//  Do num -> result -> options -> num -> _source to get a doc
+		List hits = Containers.flatten(Containers.apply(res, r -> r.get("options")));
+		return hits;
+	}
+	
 }

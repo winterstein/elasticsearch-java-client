@@ -41,5 +41,10 @@ public interface SearchResponse extends IESResponse {
 
 	AggregationResults getAggregationResults(String name);
 
+	/**
+	 * @param name the Suggester's name
+	 * @return similar to {@link #getHits()}, _source gives the documents
+	 */
+	List<Map> getSuggesterHits(String name);
 
 }

@@ -19,6 +19,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.agg.Aggregations;
+import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
@@ -227,4 +228,19 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;		
 	}
 	
+	/**
+	 * See {@link Suggesters}
+	 * @return this
+	 */
+	public SearchRequestBuilder addSuggester(Suggester suggester) {
+		// NB: This is copy pasta Aggregation.subAggregation()
+		Map sorts = (Map) body().get("suggest");
+		if (sorts==null) {
+			sorts = new ArrayMap();
+			body.put("suggest", sorts);
+		}
+		sorts.put(suggester.name, suggester); //.toJson2()); // TODO support late json conversion
+		// but caused a bug -- why is this behaving differently to Aggregation??
+		return this;		
+	}
 }

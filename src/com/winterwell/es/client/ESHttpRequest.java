@@ -10,6 +10,7 @@ import org.eclipse.jetty.util.ajax.JSON;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
+import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
@@ -18,6 +19,7 @@ import com.winterwell.gson.JsonElement;
 import com.winterwell.gson.JsonSerializationContext;
 import com.winterwell.gson.JsonSerializer;
 import com.winterwell.gson.PlainGson;
+import com.winterwell.gson.StandardAdapters;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.Printer;
 import com.winterwell.utils.StrUtils;
@@ -262,12 +264,9 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		// -- no @class in the maps and lists -- with handling of ES Client internal objects.
 		// This is DIFFERENT from #gson(), which is for handling the caller's objects.  
 		Gson gson = GsonBuilder.safe()
-				.registerTypeAdapter(Aggregation.class, new JsonSerializer<Aggregation>() {
-					@Override
-					public JsonElement serialize(Aggregation src, Type typeOfSrc, JsonSerializationContext context) {
-						return context.serialize(src.toJson2());
-					}
-				}).create();
+				.registerTypeAdapter(Aggregation.class, StandardAdapters.IHASJSONADAPTER)
+				.registerTypeAdapter(Suggester.class, StandardAdapters.IHASJSONADAPTER)
+				.create();
 		bodyJson = gson.toJson(body); 
 //				TODO gson().toJson(body);
 		// sanity check the json				
