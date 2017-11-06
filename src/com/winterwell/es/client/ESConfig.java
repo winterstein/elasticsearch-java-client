@@ -67,10 +67,12 @@ public class ESConfig {
 	
 	@Option(description="milliseconds for the http request to timeout")
 	public long esRequestTimeout = TUnit.MINUTE.millisecs;
-	
+		
 	public Gson getGson() {
-		if (gson==null) gson = Dep.has(Gson.class)? Dep.get(Gson.class) : new Gson(); 
-		return gson;
+		if (gson!=null) return gson;
+		// if Gson has not been setup yet, return a vanilla one for now (but don't set it)
+		gson = Dep.has(Gson.class)? Dep.get(Gson.class) : null;
+		return gson==null? new Gson() : gson;
 	}
 	
 	public ESConfig setGson(Gson gson) {

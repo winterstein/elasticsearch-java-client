@@ -91,7 +91,8 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	}
 	
 	public Map<String, Object> getParsedJson() {
-		if (parsed!=null) return parsed;
+		if (parsed!=null) return parsed;		
+//		String bugjson = json.replace("\"0.2\"", "0.2"); // HACK testing the Advert bug Nov 2017		
 		parsed = gson().fromJson(json, Map.class);
 		return parsed;
 	}
@@ -192,6 +193,11 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		return results;		
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Uses {@link #gson()} for the convertor.
+	 */
 	@Override
 	public <X> List<X> getSearchResults(Class<? extends X> klass) {
 		List<Map<String, Object>> maps = getSearchResults();
