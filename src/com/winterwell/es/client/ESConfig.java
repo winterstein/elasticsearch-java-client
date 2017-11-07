@@ -13,6 +13,7 @@ import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.io.Option;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.TUnit;
+import com.winterwell.utils.time.Time;
 
 public class ESConfig {
 
@@ -63,7 +64,7 @@ public class ESConfig {
 	 * This is a convenient place for saying what version to use (and which can be altered by a config file). 
 	 */
 	@Option
-	private String indexAliasVersion = "2";
+	private String indexAliasVersion = new Time().format("MMMyy");
 	
 	@Option(description="milliseconds for the http request to timeout")
 	public long esRequestTimeout = TUnit.MINUTE.millisecs;
