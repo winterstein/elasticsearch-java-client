@@ -64,7 +64,7 @@ public class ESConfig {
 	 * This is a convenient place for saying what version to use (and which can be altered by a config file). 
 	 */
 	@Option
-	private String indexAliasVersion = new Time().format("MMMyy");
+	private String indexAliasVersion = new Time().format("MMMyy").toLowerCase();
 	
 	@Option(description="milliseconds for the http request to timeout")
 	public long esRequestTimeout = TUnit.MINUTE.millisecs;
