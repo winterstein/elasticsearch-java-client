@@ -6,6 +6,11 @@ import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.web.IHasJson;
 
+/**
+ * Made via Aggregations
+ * @author daniel
+ *
+ */
 public class Aggregation implements IHasJson {
 
 	
@@ -20,6 +25,12 @@ public class Aggregation implements IHasJson {
 	private String type;
 	private final ArrayMap props;
 	
+	/**
+	 * See {@link Aggregations}
+	 * @param aggResultName
+	 * @param aggType
+	 * @param field
+	 */
 	public Aggregation(String aggResultName, String aggType, String field) {
 		Utils.check4null(aggResultName, aggType, field);
 		this.name = aggResultName;
@@ -34,6 +45,11 @@ public class Aggregation implements IHasJson {
 	 */
 	private transient boolean toJsond;
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * This does NOT include the name, which is used by the parent search
+	 */
 	@Override
 	public Map toJson2() throws UnsupportedOperationException {
 		ArrayMap map = new ArrayMap(type, props);
@@ -57,6 +73,16 @@ public class Aggregation implements IHasJson {
 		}
 		aggs.put(dh.name, dh); //.toJson2());
 		return this;		
+	}
+
+	/**
+	 * How many top terms to collect?
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-terms-aggregation.html
+	 * @param numTerms
+	 */
+	public void setSize(int numTerms) {
+		if ( ! "terms".equals(type)) throw new IllegalStateException("Wrong type of agg: "+this);
+		put("size", numTerms);
 	}
 
 }
