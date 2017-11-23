@@ -23,6 +23,8 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 		setIndex(index);
 //		endpoint; Just do a put to the index url
 		method = "PUT";
+		// some antivirus programs intercept HTTP PUT calls without bodies
+		setBodyJson("{}");
 	}
 
 	/**
