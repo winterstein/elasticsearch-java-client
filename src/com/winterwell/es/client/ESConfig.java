@@ -21,7 +21,7 @@ public class ESConfig {
 	
 	@Override
 	public String toString() {
-		return "ESConfig [port=" + port + ", server=" + server + "]";
+		return "ESConfig [" + getESUrl() + "]";
 	}
 
 	public ESConfig() {
