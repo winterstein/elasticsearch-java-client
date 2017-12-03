@@ -12,8 +12,10 @@ import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
+import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.log.Log;
+import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.WebEx;
 
 /**
@@ -21,7 +23,10 @@ import com.winterwell.web.WebEx;
  * @author daniel
  *
  */
-public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse {
+public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse, 
+// allow response to be sent as json over http 
+IHasJson 
+{
 
 	private final String json;
 	private final RuntimeException error;
@@ -273,6 +278,11 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		//  Do num -> result -> options -> num -> _source to get a doc
 		List hits = Containers.flatten(Containers.apply(res, r -> r.get("options")));
 		return hits;
+	}
+
+	@Override
+	public Object toJson2() throws UnsupportedOperationException {
+		return Containers.objectAsMap(this);
 	}
 	
 }
