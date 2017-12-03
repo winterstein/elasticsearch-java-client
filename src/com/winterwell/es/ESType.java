@@ -1,14 +1,20 @@
 package com.winterwell.es;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.omg.CORBA.SetOverrideType;
+
+import com.winterwell.utils.TodoException;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.log.Log;
+import com.winterwell.utils.time.Time;
 
 /**
  * Helper for making ElasticSearch properties mappings. An ESType is just a map, 
@@ -175,6 +181,45 @@ public class ESType extends LinkedHashMap<String,Object> {
 	public ESType() {
 	}
 	
+	/**
+	 * Convenience for setting one of the primitive types. 
+	 * Best practice is to use methods like {@link #DOUBLE()} or {@link #keyword()} instead,
+	 * unless you're doing reflection.
+	 * @param klass
+	 * @return this
+	 */
+	public ESType setType(Class klass) throws IllegalArgumentException {
+		String type = typeForClass(klass);
+		put("type", type);
+		return this;
+	}
+	
+	private String typeForClass(Class klass) {
+		if (klass==Long.class || klass==long.class) {
+			return "long";
+		}
+		if (klass==Double.class || klass==double.class) {
+			return "double";
+		}
+		if (klass==Float.class || klass==float.class) {
+			return "float";
+		}
+		if (klass==Integer.class || klass==int.class) {
+			return "integer";
+		}
+		if (klass==Boolean.class || klass==boolean.class) {
+			return "boolean";
+		}
+		if (klass==Date.class || klass==Time.class || klass == Calendar.class) {
+			return "date";
+		}
+		if (klass==String.class) {
+			Log.w("ESType", "String given type 'text' - but do you want keyword? Best practice is to set this type explicitly.");
+			return "text";
+		}
+		throw new IllegalArgumentException("This method only handles some types. Unrecognised: "+klass);
+	}
+
 	// NB: all-caps is a bit ugly, but we can't call this "long" or "Long", and "lng" is uglier still.
 	public ESType LONG() {
 		put("type", "long");
