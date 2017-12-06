@@ -142,7 +142,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		return (SubClass) this;
 	}
 
+
 	public SubClass setIndex(String idx) {
+		assert idx == null || idx.equals(idx.toLowerCase()) 
+				: "invalid_index_name_exception - ES requires lowercased index names: "+idx;
 		return setIndices(idx);
 	}
 

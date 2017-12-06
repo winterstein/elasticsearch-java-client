@@ -102,6 +102,10 @@ IHasJson
 		return parsed;
 	}
 	
+	/**
+	 * Uses a "plain" (inflexible) Gson, so nothing gets converted into "fancy" POJOs.
+	 * @return
+	 */
 	public Map<String, Object> getJsonMap() {
 		Map map = plainGson().fromJson(json, Map.class);
 		return map;
@@ -205,8 +209,9 @@ IHasJson
 	 */
 	@Override
 	public <X> List<X> getSearchResults(Class<? extends X> klass) {
-		List<Map<String, Object>> maps = getSearchResults();
-		List<X> results = Containers.apply(maps, map -> gson().convert(map, klass));
+		Map<String, Object> jobj = getJsonMap();
+		List<Map> hits = (List<Map>) ((Map)jobj.get("hits")).get("hits");
+		List<X> results = Containers.apply(hits, map -> gson().convert((Map)map.get("_source"), klass));
 		return results;
 	}
 

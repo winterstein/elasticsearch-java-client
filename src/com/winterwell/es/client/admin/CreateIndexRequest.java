@@ -36,13 +36,15 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 	protected ESHttpResponse doExecute(ESHttpClient esjc) {
 		ESHttpResponse r = super.doExecute(esjc);
 		if ( ! failIfAliasExists) return r;
-//		http://localhost:9200/dupefoo/_settings
+		// Before we check the alias, let's check the actual create call
+		if ( ! r.isSuccess()) return r;
 		Map aliases = (Map) body().get("aliases");
 		if (aliases==null || aliases.isEmpty()) {
 			Log.i("ES.CreateIndex", "failIfAliasExists was set, but no aliases were set");
 			return r;
 		}
 		String alias = (String) Containers.only(aliases.keySet());
+		// check this index
 		IndexSettingsRequest req2 = esjc.admin().indices().indexSettings(alias);
 		IESResponse resp = req2.get().check();
 		Map<String,Object> settingsFromIndex = resp.getParsedJson();

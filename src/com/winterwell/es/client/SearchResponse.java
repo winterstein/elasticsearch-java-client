@@ -35,6 +35,11 @@ public interface SearchResponse extends IESResponse {
 
 	Map getAggregations();
 
+	/**
+	 * Convenience for {@link #getHits()} then get _source
+	 * @return list of documents
+	 * @see #getSearchResults(Class)
+	 */
 	List<Map<String,Object>> getSearchResults();
 	
 	<X> List<X> getSearchResults(Class<? extends X> klass);
