@@ -27,7 +27,7 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 
 	public BuildESJavaClient() {
 		super(
-			FileUtils.getWorkingDirectory(),
+			FileUtils.getWorkingDirectory(), // FIXME how to handle two git checkouts in different directories??
 			"elasticsearch-java-client"
 //			new File(FileUtils.getWinterwellDir(), "elasticsearch-java-client")
 			);
