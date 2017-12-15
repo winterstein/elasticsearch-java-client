@@ -175,6 +175,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-index.html
 	 */
 	public ESType noIndex() {
+		if (true) return this; // FIXME this is breaking (seen Dec 17, ES 5.1)?! 
 		put("index", false);
 		return this;
 	}
