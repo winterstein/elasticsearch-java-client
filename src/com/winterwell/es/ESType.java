@@ -172,9 +172,10 @@ public class ESType extends LinkedHashMap<String,Object> {
 	
 	/**
 	 * Store but do not index this property (so you can't search on it).
+	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-index.html
 	 */
 	public ESType noIndex() {
-		put("index", "no");
+		put("index", false);
 		return this;
 	}
 
