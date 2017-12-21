@@ -342,7 +342,9 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 			return new ESHttpResponse(this, wrapError(ex, this));
 		} catch(Throwable ex) {
 			throw wrapError(ex, this);
-		}		
+		} finally {
+			Thread.currentThread().setName("...done: ESHttpClient: "+this);
+		}
 	}
 	
 	
