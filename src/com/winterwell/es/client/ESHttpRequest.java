@@ -57,6 +57,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 */
 	protected Map<String,Object> body;
 	protected String bodyJson;
+	/**
+	 * This is added to the end of the url path.
+	 * e.g. the call might end up being /MyIndex/endpoint
+	 */
 	protected final String endpoint;
 	
 	protected Map<String, Object> body() {
@@ -74,6 +78,13 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	String bulkOpName;
 
 	int retries;
+	
+	boolean debug;
+	
+	public SubClass setDebug(boolean debug) {
+		this.debug = debug;
+		return (SubClass) this;
+	}
 	
 	/**
 	 * By default, if a request fails, it fails. You can set it to retry once or twice before giving up.
@@ -119,6 +130,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 	public SubClass setIndex(String idx) {
+		assert idx == null || idx.equals(idx.toLowerCase()) 
+				: "invalid_index_name_exception - ES requires lowercased index names: "+idx;
 		return setIndices(idx);
 	}
 

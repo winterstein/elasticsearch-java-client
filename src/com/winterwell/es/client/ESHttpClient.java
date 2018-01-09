@@ -69,6 +69,7 @@ public class ESHttpClient {
 	final ESConfig config;
 
 
+	@Deprecated // set on requests
 	public static boolean debug = true;
 
 	public void setServer(String server) {
@@ -135,7 +136,7 @@ public class ESHttpClient {
 			assert req != null;
 			this.req=req;
 			// Keep the caller's stacktrace for reporting on errors
-			if (debug) {
+			if (debug || req.debug) {
 				try {
 					throw new Exception();
 				} catch (Exception e) {
@@ -194,7 +195,7 @@ public class ESHttpClient {
 				
 				// DEBUG hack
 				// NB: pretty=true was doc-as-upsert
-				if (debug) {
+				if (debug || req.debug) {
 					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"POST":req.method)+" '"+url+"' -d '"+srcJson+"'");
 					Log.d("ES.curl", curl);
 				}
@@ -269,6 +270,11 @@ public class ESHttpClient {
 		return r.getSourceAsMap();
 	}
 	
+	/**
+	 * 
+	 * @param path
+	 * @return source-as-map, or null if not found
+	 */
 	public Map<String, Object> get(ESPath path) {
 		return get(path.index(), path.type, path.id);
 	}
