@@ -1,6 +1,7 @@
 package com.winterwell.es.client;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +21,7 @@ import com.winterwell.es.ESPath;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
+import com.winterwell.es.client.admin.StatsRequest;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
@@ -35,6 +37,7 @@ import com.winterwell.utils.threads.AFuture;
 import com.winterwell.utils.threads.SafeExecutor;
 import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.web.WebUtils2;
+import com.winterwell.web.ConfigException;
 import com.winterwell.web.FakeBrowser;
 import com.winterwell.web.WebEx;
 
@@ -60,6 +63,28 @@ public class ESHttpClient {
 									Executors.newFixedThreadPool(20));
 
 
+	/**
+	 * Call ES to check the connection is alive and well.
+	 * @throws ConfigException
+	 */
+	public void checkConnection() {
+		// try 3 times
+		Throwable cause = null;
+		for(int i=0; i<3; i++) {
+			try {
+				StatsRequest listreq = admin().indices().listIndices();
+				ESHttpResponse listresponse = listreq.get().check();
+				// all fine :)
+				return;
+			} catch(Throwable ex) {
+				cause = ex;
+				Log.w("ES", ex);
+				Utils.sleep(100 + i*500);
+			}
+		}
+		// fail!
+		throw new ConfigException("Failed with settings: "+config, "ES", cause);
+	}
 
 	List<String> servers;
 
