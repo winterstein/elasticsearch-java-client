@@ -1,6 +1,7 @@
 package com.winterwell.es.client;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -20,12 +21,15 @@ import com.winterwell.es.ESPath;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
+import com.winterwell.es.client.admin.StatsRequest;
+import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
+import com.winterwell.utils.WrappedException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.io.ArgsParser;
 import com.winterwell.utils.log.Log;
@@ -34,6 +38,7 @@ import com.winterwell.utils.threads.AFuture;
 import com.winterwell.utils.threads.SafeExecutor;
 import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.web.WebUtils2;
+import com.winterwell.web.ConfigException;
 import com.winterwell.web.FakeBrowser;
 import com.winterwell.web.WebEx;
 
@@ -59,6 +64,29 @@ public class ESHttpClient {
 									Executors.newFixedThreadPool(20));
 
 
+	/**
+	 * Call ES to check the connection is alive and well.
+	 * @throws ConfigException
+	 */
+	public void checkConnection() {
+		// try 3 times
+		Throwable cause = null;
+		for(int i=0; i<3; i++) {
+			try {
+				StatsRequest listreq = admin().indices().listIndices();
+				ESHttpResponse listresponse = listreq.get().check();
+				// all fine :)
+				return;
+			} catch(Throwable ex) {
+				cause = ex;
+				Log.w("ES", ex);
+				Utils.sleep(100 + i*500);
+			}
+		}
+		// fail!
+		throw new ConfigException("Failed with settings: "+config, "ES", cause);
+	}
+	
 
 	private List<String> servers;
 
@@ -227,6 +255,13 @@ public class ESHttpClient {
 			// e.g. 40X
 			System.out.println(curl);
 			return new ESHttpResponse(req, ex);
+		} catch (WrappedException wex) {
+			// report what url failed
+			Throwable cause = wex.getCause();
+			if (cause instanceof IOException) {
+				throw new ESException(req.toString(), cause);
+			}
+			throw Utils.runtime(cause);
 		} catch(Throwable ex) {
 //			System.out.println(curl);
 			throw Utils.runtime(ex);
