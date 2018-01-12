@@ -17,7 +17,7 @@ import com.winterwell.utils.time.TUnit;
 public class ESConfig {
 
 	public static final String CLIENT_VERSION = "0.9";
-	public static final String ES_SUPPORTED_VERSION = "5.0";
+	public static final String ES_SUPPORTED_VERSION = "2.4";
 	
 	@Override
 	public String toString() {
