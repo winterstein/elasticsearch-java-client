@@ -97,13 +97,13 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 * @return this
 	 */
 	public ESType text() {
-		put("type", "text");
+		put("type", "string");
 		return this;
 	}
 	
 	public ESType keyword() {
-		put("type", "keyword");
-		return this;
+		put("type", "string");
+		return noAnalyzer();
 	}
 	
 	@Override
