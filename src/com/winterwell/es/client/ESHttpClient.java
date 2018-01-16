@@ -216,6 +216,12 @@ public class ESHttpClient {
 			
 			String jsonResult;
 			String srcJson = req.getBodyJson();
+			// Hack: some antivirus programs intercept HTTP PUT calls without bodies
+			// (seen with ZF 2017)
+			if (Utils.isBlank(srcJson) && "PUT".equals(req.method)) {
+				srcJson = "{}";
+			}
+			// get/post the request
 			if (srcJson!=null) {
 				// add in the get params
 				WebUtils2.addQueryParameters(url, req.params);
@@ -233,9 +239,9 @@ public class ESHttpClient {
 				jsonResult = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
 								
 			} else {
+				// get
 				assert req.body == null : req.body;
-				// NB: create index is a bodyless post
-//				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
+				// NB: a bodyless post, such as create index, does occur in ES
 //				// DEBUG hack
 				if (debug) {
 					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"GET":req.method)+" '"+url+"&pretty=true'");
