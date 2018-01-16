@@ -33,8 +33,10 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 	}
 	
 	@Override
-	protected ESHttpResponse doExecute(ESHttpClient esjc) {
+	protected ESHttpResponse doExecute(ESHttpClient esjc) {		
+		// call the super method to do the main work
 		ESHttpResponse r = super.doExecute(esjc);
+		// fail?
 		if ( ! failIfAliasExists) return r;
 		// Before we check the alias, let's check the actual create call
 		if ( ! r.isSuccess()) return r;

@@ -302,6 +302,12 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 			
 			String jsonResult;
 			String srcJson = getBodyJson();
+			// Hack: some antivirus programs intercept HTTP PUT calls without bodies
+			// (seen with ZF 2017)
+			if (Utils.isBlank(srcJson) && "PUT".equals(method)) {
+				srcJson = "{}";
+			}
+			// get/post the request
 			if (srcJson!=null) {
 				// add in the get params
 				WebUtils2.addQueryParameters(url, params);
