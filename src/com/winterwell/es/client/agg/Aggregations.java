@@ -13,6 +13,7 @@ import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramAggre
 import com.winterwell.utils.containers.ArrayMap;
 
 /**
+ * Builder methods for making {@link Aggregation}s
  * @author daniel
  *
  */

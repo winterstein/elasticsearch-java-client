@@ -17,13 +17,37 @@ public class Aggregation implements IHasJson {
 	
 	@Override
 	public String toString() {
-		return "Aggregation [name=" + name + ", field=" + field + ", type=" + type + ", props=" + props + "]";
+		return "Aggregation [name=" + name + ", field=" + getField() + ", type=" + type + ", props=" + props + "]";
+	}
+
+	private String getField() {
+		return (String) props.get("field");
 	}
 
 	public final String name;
-	private String field;
 	private String type;
 	private final ArrayMap props;
+	
+	/**
+	 * The missing parameter defines how documents that are missing a value should be treated. 
+	 * By default they will be ignored. Setting this treats them as if they had a value.
+	 * 
+	 * see e.g. https://www.elastic.co/guide/en/elasticsearch/reference/6.1/search-aggregations-metrics-stats-aggregation.html#_missing_value_8
+	 * or https://www.elastic.co/guide/en/elasticsearch/reference/6.1/search-aggregations-bucket-terms-aggregation.html#_missing_value_12
+	 * 
+	 * @param missing
+	 * @return
+	 */
+	public Aggregation setMissing(Object missing) {
+		props.put("missing", missing);
+
+		// safety check on type: string in stats is an error
+		if (missing != null) {
+			if ("stats".equals(getField())) assert missing instanceof Number;
+		}
+			
+		return this;
+	}
 	
 	/**
 	 * See {@link Aggregations}
@@ -35,7 +59,6 @@ public class Aggregation implements IHasJson {
 		Utils.check4null(aggResultName, aggType, field);
 		this.name = aggResultName;
 		this.type = aggType;
-		this.field = field;
 		this.props = new ArrayMap("field", field);
 	}
 
