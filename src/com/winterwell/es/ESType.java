@@ -30,13 +30,24 @@ import com.winterwell.utils.log.Log;
 public class ESType extends LinkedHashMap<String,Object> {	
 	private static final long serialVersionUID = 1L;
 	
-	public static final ESType keyword = new ESType().keyword();
+	public static final ESType keyword = new ESType().keyword().lock();
 
 	private transient boolean lock;
+	
+	/**
+	 * Once a type is locked, it cannot be modified. This makes it safe to reuse and share ESType objects in your code.
+	 * NB: You can copy() a locked object, then modify the copy.
+	 * @return this
+	 */
+	public ESType lock() {
+		lock = true;
+		return this;
+	}
 	
 	public ESType copy() {
 		// deep copy
 		ESType copy = Utils.copy(this);
+		copy.lock = false; // make sure it is unlocked
 		return copy;
 	}
 	
@@ -83,6 +94,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 * @return
 	 */
 	public ESType field(String name, ESType field) {
+		lockCheck();
 		Map fields = (Map) get("fields");
 		if (fields==null) {
 			fields = new ArrayMap();
@@ -92,6 +104,10 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 	
+	private void lockCheck() {
+		if (lock) throw new IllegalStateException("Lifecycle bug: Cannot modify locked type.");
+	}
+
 	/**
 	 * Analysed "body" text
 	 * @return this
@@ -108,7 +124,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	
 	@Override
 	public Object put(String key, Object value) {
-		assert ! lock : "Lifecycle bug: This object has been used already - dont modify it";
+		lockCheck();
 		return super.put(key, value);
 	}
 	
@@ -230,7 +246,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 			put("properties", props);
 		}
 		props.put(propertyName, propertyType);
-		propertyType.lock = true;
+		propertyType.lock();
 		return this;
 	}
 	/**

@@ -85,4 +85,9 @@ public class Aggregation implements IHasJson {
 		put("size", numTerms);
 	}
 
+	public void setMissing(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
