@@ -104,22 +104,10 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 	
 	public SearchRequestBuilder setFilter(QueryBuilder qb) {
-		SimpleJson.set(body(), ESUtils.jobj(qb), "query", "bool", "filter");
+		Map jobj = ESUtils.jobj(qb);
+		SimpleJson.set(body(), jobj, "query", "bool", "filter");
 		return this;
 	}
-	
-//	/**
-//	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html#_filtering_without_a_query
-//	 * @param fb
-//	 */
-//	public SearchRequestBuilder setQuery(Object FilterBuilderfb) {
-////		filtered = "filtered: {filter: "+fb.toString()+"}";
-//		BoolQueryBuilder q = QueryBuilders.boolQuery().m filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilderfb);
-////		body.put("query", filtered);
-//		setQuery(q);
-//		return this;
-//	}
-
 
 	public SearchRequestBuilder setFrom(int i) {
 		params.put("from", i);
@@ -166,19 +154,6 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		sorts.add("\""+sort+"\"");
 		return this;
 	}
-
-//	public SearchRequestBuilder addFacet(FacetBuilder field) {
-//		// TOTAL HACK
-//		org.elasticsearch.action.search.SearchRequestBuilder srb = new org.elasticsearch.action.search.SearchRequestBuilder(new DummyClient());
-//		srb.addFacet(field);
-//		String srbs = srb.toString();
-//		Map map = hClient.gson.fromJson(srbs, Map.class);
-//		Object facets = map.get("facets");
-//		body.put("facets", hClient.gson.toJson(facets));
-//		return this;
-//	}
-
-
 
 	public void addSort(String field, SortOrder order) {
 		addSort(SortBuilders.fieldSort(field).order(order));
