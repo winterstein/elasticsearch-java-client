@@ -9,6 +9,11 @@ import com.winterwell.utils.web.IHasJson;
 
 public class ESQueryBuilder implements IHasJson {
 
+	@Override
+	public String toString() {	
+		return "ESQueryBuilder"+toJSONString();
+	}
+	
 	Map jobj;
 
 	public ESQueryBuilder(Map query) {
