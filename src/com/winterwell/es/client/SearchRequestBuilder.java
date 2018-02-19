@@ -19,11 +19,14 @@ import org.elasticsearch.search.sort.SortOrder;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.agg.Aggregations;
+import com.winterwell.es.client.query.ESQueryBuilder;
+import com.winterwell.es.client.query.ESQueryBuilders;
 import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.time.Time;
@@ -93,7 +96,11 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 
-
+	/**
+	 * 
+	 * @param qb WARNING: This will make a copy, so any subsequent edits will not be used!
+	 * @return
+	 */
 	public SearchRequestBuilder setQuery(QueryBuilder qb) {
 		return setQuery(ESUtils.jobj(qb));
 	}
@@ -218,4 +225,29 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		// but caused a bug -- why is this behaving differently to Aggregation??
 		return this;		
 	}
+	
+	/**
+	 * Convenience method for building up AND queries.
+	 * This will set the query if null, or combine with bool-query *must* if not null.
+	 * @param qb
+	 * @return 
+	 */
+	public SearchRequestBuilder addQuery(QueryBuilder qb) {
+		Map query = (Map) body().get("query");
+		if (query==null) {
+			setQuery(qb);
+			return this;
+		}
+		// Add to it
+		// Is it a boolean?
+//		String qtype = (String) Containers.first(query.keySet());
+//		if (qtype != "bool") {
+			ESQueryBuilder qand = ESQueryBuilders.must(query, ESUtils.jobj(qb));
+			setQuery(qand.toJson2());
+//		} else {
+			// TODO merge!			
+//		}
+		return this;
+	}
+	
 }
