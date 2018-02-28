@@ -19,15 +19,27 @@ public class ESQueryBuilder implements IHasJson {
 	public ESQueryBuilder(Map query) {
 		this.jobj = query;
 	}
+	
+	public ESQueryBuilder(QueryBuilder query) {
+		this.jobj = ESUtils.jobj(query);
+	}
 
+	/**
+	 * Construct an ESQueryBuilder from a QueryBuilder, ESQueryBuilder, or Map.
+	 * 
+	 * Note: the input object should not be modified afterwards!
+	 *  
+	 * @param query_mapOrQueryBuilder
+	 * @return
+	 */
 	public static ESQueryBuilder make(Object query_mapOrQueryBuilder) {
 		if (query_mapOrQueryBuilder instanceof ESQueryBuilder) {
 			return (ESQueryBuilder) query_mapOrQueryBuilder;
 		}
 		if (query_mapOrQueryBuilder instanceof QueryBuilder) {
-			query_mapOrQueryBuilder = ESUtils.jobj((QueryBuilder)query_mapOrQueryBuilder);
+			return new ESQueryBuilder((QueryBuilder)query_mapOrQueryBuilder);
 		}
-		return new ESQueryBuilder((Map)query_mapOrQueryBuilder);		
+		return new ESQueryBuilder((Map)query_mapOrQueryBuilder);
 	}
 
 	@Override

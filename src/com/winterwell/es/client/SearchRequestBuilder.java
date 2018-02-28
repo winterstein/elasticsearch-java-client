@@ -104,6 +104,10 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	public SearchRequestBuilder setQuery(QueryBuilder qb) {
 		return setQuery(ESUtils.jobj(qb));
 	}
+	
+	public SearchRequestBuilder setQuery(ESQueryBuilder qb) {
+		return setQuery(qb.toJson2());
+	}
 
 	public SearchRequestBuilder setQuery(Map queryJson) {
 		body().put("query", queryJson);
