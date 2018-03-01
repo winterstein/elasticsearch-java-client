@@ -10,6 +10,11 @@ import com.winterwell.utils.containers.Containers;
 
 public class ESQueryBuilders {
 
+	/**
+	 * Convenience for a shared value that indicates unset/undefined. This is NOT part of the ElasticSearch API itself.
+	 */
+	public static final String UNSET = "unset";
+
 	public static Map queryStringQuery(String q) {
 		// TODO Auto-generated method stub
 		throw new TodoException();
@@ -17,8 +22,8 @@ public class ESQueryBuilders {
 
 	/**
 	 * Combine several ES queries via bool.must (i.e. AND).
-	 * @param queries Can be Maps, QueryBuilder objects, or ESQueryBuilder objects. Can contain nulls
-	 * If this is a single query, the same query will be returned.
+	 * @param queries Can be Maps, QueryBuilder objects, or ESQueryBuilder objects. Can contain nulls.
+	 * If there is a single non-null query, the same query will be returned (i.e. no superfluous bool wrapper is added).
 	 * @return and all the input queries. null if all inputs were null.
 	 */
 	public static ESQueryBuilder must(Object... queries) {
@@ -29,7 +34,10 @@ public class ESQueryBuilders {
 		}
 		// standardise
 		List<ESQueryBuilder> esqs = Containers.apply(queryList, ESQueryBuilder::make);
-		if (queryList.size()==1) return esqs.get(0);
+		// just one?
+		if (queryList.size()==1) {
+			return esqs.get(0);
+		}
 		// combine
 		List<Map> maps = Containers.apply(esqs, esq -> esq.toJson2());
 		Map must = new ArrayMap("bool", new ArrayMap("must", maps));
