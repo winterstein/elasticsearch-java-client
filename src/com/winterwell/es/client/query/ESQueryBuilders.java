@@ -63,4 +63,16 @@ public class ESQueryBuilders {
 		return new BoolQueryBuilder();
 	}
 
+	/**
+	 * 
+	 * Note: to test for a missing field, use this inside {@link BoolQueryBuilder#mustNot(ESQueryBuilder)}
+	 * 
+	 * @param field
+	 * @return true if one or more non-null values are present for this field
+	 */
+	public static ESQueryBuilder existsQuery(String field) {
+		Map must = new ArrayMap("exists", new ArrayMap("field", field));
+		return new ESQueryBuilder(must);
+	}
+
 }

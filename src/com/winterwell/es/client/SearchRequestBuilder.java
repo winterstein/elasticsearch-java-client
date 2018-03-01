@@ -150,21 +150,22 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 	
-	/**
-	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
-	 * @param sort
-	 * @return
-	 */
-	public SearchRequestBuilder setSort(String sort) {
-		List sorts = (List) body().get("sort");
-		if (sorts==null) {
-			sorts = new ArrayList();
-			body().put("sort", sorts);
-		}
-		sorts.clear();
-		sorts.add("\""+sort+"\"");
-		return this;
-	}
+//	/**
+//	 * @deprecated Use {@link #addSort(SortBuilder)}
+//	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
+//	 * @param sort
+//	 * @return
+//	 */
+//	public SearchRequestBuilder setSort(String sort) {
+//		List sorts = (List) body().get("sort");
+//		if (sorts==null) {
+//			sorts = new ArrayList();
+//			body().put("sort", sorts);
+//		}
+//		sorts.clear();
+//		sorts.add("\""+sort+"\"");
+//		return this;
+//	}
 
 	public void addSort(String field, SortOrder order) {
 		addSort(SortBuilders.fieldSort(field).order(order));
