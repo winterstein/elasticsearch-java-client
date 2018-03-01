@@ -10,6 +10,7 @@ import org.eclipse.jetty.util.ajax.JSON;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
+import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.FlexiGson;
@@ -267,8 +268,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		// -- no @class in the maps and lists -- with handling of ES Client internal objects.
 		// This is DIFFERENT from #gson(), which is for handling the caller's objects.  
 		Gson gson = GsonBuilder.safe()
+				// cautious approach - only do IHasJson for "our" local classes
 				.registerTypeAdapter(Aggregation.class, StandardAdapters.IHASJSONADAPTER)
 				.registerTypeAdapter(Suggester.class, StandardAdapters.IHASJSONADAPTER)
+				.registerTypeAdapter(ESQueryBuilder.class, StandardAdapters.IHASJSONADAPTER)
 				.create();
 		bodyJson = gson.toJson(body); 
 //				TODO gson().toJson(body);
