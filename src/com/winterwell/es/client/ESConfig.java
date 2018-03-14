@@ -19,6 +19,14 @@ public class ESConfig {
 	public static final String CLIENT_VERSION = "0.9";
 	public static final String ES_SUPPORTED_VERSION = "2.4";
 	
+	/**
+	 * This is for code that wishes to dynamically change based on the ES version its connecting to.
+	 * It is NOT auto-set!
+	 * e.g. 2.4 for older ES or 6.2 for the latest (at time of writing).
+	 */
+	@Option
+	public double esVersion;
+	
 	@Override
 	public String toString() {
 		return "ESConfig [" + getESUrl() + "]";
