@@ -3,10 +3,15 @@ package com.winterwell.es.client;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.util.concurrent.EsRejectedExecutionException;
 
+import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
+import com.winterwell.utils.web.WebUtils;
 
 /**
+ * 
+ * https://www.elastic.co/guide/en/elasticsearch/reference/6.2/search-request-scroll.html
+ * 
  * @see org.elasticsearch.action.search.SearchScrollRequestBuilder
  * @author daniel
  *
@@ -26,6 +31,16 @@ public class SearchScrollRequestBuilder extends ESHttpRequest<SearchScrollReques
 		// You must keep setting a scroll window to keep the scroll alive.
 		// This is such a gotcha, that we'll make the user set it here.
 		setScroll(scrollWindow);
+		method = "POST";
+		setIndices(); // no index - it comes from the scroll id
+	}
+	
+	@Override
+	StringBuilder getUrl(String server) {
+		// no indices
+		StringBuilder url = new StringBuilder(server);
+		url.append("/"+endpoint);				
+		return url;
 	}
 	
 	/**

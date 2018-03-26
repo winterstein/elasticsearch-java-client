@@ -14,6 +14,9 @@ import com.winterwell.utils.containers.ArrayMap;
 public class BulkRequestBuilderTest {
 
 
+	final String INDEX = "testbulk";
+
+
 	@Test
 	public void testBulkIndexKids() {
 		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
@@ -25,7 +28,7 @@ public class BulkRequestBuilderTest {
 
 		{
 			BulkRequestBuilder bulk = esc.prepareBulk();
-			IndexRequestBuilder pi = esc.prepareIndex("testbulk", "parent", "p2");
+			IndexRequestBuilder pi = esc.prepareIndex(INDEX, "parent", "p2");
 			pi.setBodyMap(new ArrayMap("name", "Becca"));
 			bulk.add(pi);
 			bulk.get();
@@ -33,7 +36,7 @@ public class BulkRequestBuilderTest {
 		Utils.sleep(1500);
 		
 		BulkRequestBuilder bulk = esc.prepareBulk();
-		IndexRequestBuilder pik = esc.prepareIndex("testbulk", "kid", "k2");
+		IndexRequestBuilder pik = esc.prepareIndex(INDEX, "kid", "k2");
 		pik.setBodyMap(new ArrayMap("name", "Joshi"));
 		pik.setParent("p2");
 		pik.get();
@@ -43,10 +46,9 @@ public class BulkRequestBuilderTest {
 		System.out.println(br.getJson());
 		Utils.sleep(1500);
 		
-		Map<String, Object> got = esc.get("testbulk", "kid", "k1");
+		Map<String, Object> got = esc.get(INDEX, "kid", "k1");
 		System.out.println(got);
 	}
-
 	
 	@Test
 	public void testBulkIndex1() {
@@ -58,7 +60,7 @@ public class BulkRequestBuilderTest {
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 
 		BulkRequestBuilder bulk = esc.prepareBulk();
-		IndexRequestBuilder pi = esc.prepareIndex("testbulk", "simple", "s1");
+		IndexRequestBuilder pi = esc.prepareIndex(INDEX, "simple", "s1");
 		pi.setBodyMap(new ArrayMap("one", "a"));
 		bulk.add(pi);
 		
@@ -67,7 +69,7 @@ public class BulkRequestBuilderTest {
 		
 		Utils.sleep(1500);
 		
-		Map<String, Object> got = esc.get("testbulk", "simple", "s1");
+		Map<String, Object> got = esc.get(INDEX, "simple", "s1");
 		System.out.println(got);
 	}
 
@@ -83,7 +85,7 @@ public class BulkRequestBuilderTest {
 
 		BulkRequestBuilder bulk = esc.prepareBulk();
 		for(int i=0; i<100; i++) {
-			IndexRequestBuilder pi = esc.prepareIndex("testbulk", "simple", "s_"+i);
+			IndexRequestBuilder pi = esc.prepareIndex(INDEX, "simple", "s_"+i);
 			pi.setBodyMap(new ArrayMap("k", ""+i));
 			bulk.add(pi);
 		}		
@@ -92,16 +94,16 @@ public class BulkRequestBuilderTest {
 		
 		Utils.sleep(1500);
 		
-		Map<String, Object> got = esc.get("testbulk", "simple", "s_22");
+		Map<String, Object> got = esc.get(INDEX, "simple", "s_22");
 		System.out.println(got);
 	}
 
 	
 	private void init() {
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
-		esc.admin().indices().prepareCreate("testbulk").get();
+		esc.admin().indices().prepareCreate(INDEX).get();
 		
-		PutMappingRequestBuilder pm = esc.admin().indices().preparePutMapping("testbulk", "kid");
+		PutMappingRequestBuilder pm = esc.admin().indices().preparePutMapping(INDEX, "kid");
 		pm.setBodyMap(new ESType().setParentType("parent"));
 		pm.get();
 		

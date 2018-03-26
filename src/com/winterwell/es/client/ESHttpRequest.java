@@ -333,7 +333,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 //				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
 //				// DEBUG hack
 				if (debug || esjc.debug) {
-					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"GET":method)+" '"+url+"&pretty=true'");
+					String fullurl = WebUtils2.addQueryParameters(url.toString(), params);
+					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"GET":method)+" '"+fullurl+"&pretty=true'");
 					Log.d("ES.curl", curl);
 				}
 
