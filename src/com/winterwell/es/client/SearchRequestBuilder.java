@@ -194,7 +194,7 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	 */
 	public void setScroll(Dt keepAlive) {
 		int s = (int) keepAlive.convertTo(TUnit.SECOND).getValue();
-		setScroll(TimeValue.timeValueSeconds(s));
+		params.put("scroll", s+"s");
 	}
 
 
