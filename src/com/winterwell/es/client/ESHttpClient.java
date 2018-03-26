@@ -244,7 +244,8 @@ public class ESHttpClient {
 				// NB: a bodyless post, such as create index, does occur in ES
 //				// DEBUG hack
 				if (debug) {
-					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"GET":req.method)+" '"+url+"&pretty=true'");
+					String fullurl = WebUtils2.addQueryParameters(url.toString(), req.params);
+					curl = StrUtils.compactWhitespace("curl -X"+(req.method==null?"GET":req.method)+" '"+fullurl+"&pretty=true'");
 					Log.d("ES.curl", curl);
 				}
 
