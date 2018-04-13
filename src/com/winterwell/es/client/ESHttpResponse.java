@@ -30,8 +30,9 @@ IHasJson
 
 	private final String json;
 	private final RuntimeException error;
-	private final ESHttpRequest req;
+	private final transient ESHttpRequest req;
 	private Map parsed;
+	private boolean sourceOnly;
 
 	/* (non-Javadoc)
 	 * @see com.winterwell.es.client.IESResponse#toString()
@@ -46,15 +47,11 @@ IHasJson
 	 * @param response
 	 */
 	protected ESHttpResponse(ESHttpResponse response) {
-		this.req = response.req;
-		this.json = response.json;
-		this.error = response.error;
+		this(response.req, response.json, response.error);
 	}
 	
 	public ESHttpResponse(ESHttpRequest req, String json) {
-		this.req = req;
-		this.json = json;
-		this.error = null;
+		this(req, json, null);
 	}
 
 	/**
@@ -63,11 +60,20 @@ IHasJson
 	 * @param ex Should we standardise on {@link ESException}??
 	 */
 	public ESHttpResponse(ESHttpRequest req, RuntimeException ex) {
-		this.error = ex;
-		this.req = req;
-		this.json = null;
+		this(req, null, ex);
 	}
 
+	ESHttpResponse(ESHttpRequest req, String json, RuntimeException ex) {
+		this.req = req;
+		this.json = json;
+		this.error = ex;
+		// source only?
+		if (req instanceof GetRequestBuilder && ((GetRequestBuilder) req).sourceOnly) {			
+			sourceOnly = true;
+		}
+	}
+	
+	
 	/* (non-Javadoc)
 	 * @see com.winterwell.es.client.IESResponse#isSuccess()
 	 */
@@ -80,7 +86,7 @@ IHasJson
 	public Map<String, Object> getSourceAsMap() {
 		Map<String, Object> map = getParsedJson();
 		// is it just the source?
-		if (req instanceof GetRequestBuilder && ((GetRequestBuilder)req).sourceOnly) {
+		if (sourceOnly) {
 			return map;
 		}
 		Object source = map.get("_source");
@@ -128,6 +134,7 @@ IHasJson
 	}
 	
 	private Gson gson() {
+		// req should never be null -- unless its been serialised and back
 		return req.hClient.config.getGson();
 	}
 
@@ -149,7 +156,7 @@ IHasJson
 	@Override
 	public String getSourceAsString() {
 		// is it just the source?
-		if (req instanceof GetRequestBuilder && ((GetRequestBuilder)req).sourceOnly) {
+		if (sourceOnly) {
 			return json;
 		}
 		Map<String, Object> map = getParsedJson();

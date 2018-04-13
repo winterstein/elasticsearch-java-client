@@ -57,7 +57,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 	protected String method;
 
-	final ESHttpClient hClient;
+	final transient ESHttpClient hClient;
 	String[] indices;
 	String type;
 	String id;
