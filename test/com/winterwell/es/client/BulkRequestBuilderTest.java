@@ -1,5 +1,7 @@
 package com.winterwell.es.client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -75,7 +77,7 @@ public class BulkRequestBuilderTest {
 
 
 	@Test
-	public void testBulkIndex100() {
+	public List<String> testBulkIndex100() {
 		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
 		ESConfig esconfig = Dep.get(ESConfig.class);
@@ -83,11 +85,13 @@ public class BulkRequestBuilderTest {
 		init();
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 
+		List<String> ids = new ArrayList();
 		BulkRequestBuilder bulk = esc.prepareBulk();
 		for(int i=0; i<100; i++) {
-			IndexRequestBuilder pi = esc.prepareIndex(INDEX, "simple", "s_"+i);
+			IndexRequestBuilder pi = esc.prepareIndex(INDEX, "simple", "s_"+i);			
 			pi.setBodyMap(new ArrayMap("k", ""+i));
 			bulk.add(pi);
+			ids.add("s_"+i);
 		}		
 		BulkResponse br = bulk.get();
 		assert ! br.hasErrors();
@@ -96,6 +100,7 @@ public class BulkRequestBuilderTest {
 		
 		Map<String, Object> got = esc.get(INDEX, "simple", "s_22");
 		System.out.println(got);
+		return ids;
 	}
 
 	

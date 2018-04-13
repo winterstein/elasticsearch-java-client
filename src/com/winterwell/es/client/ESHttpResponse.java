@@ -28,6 +28,14 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 IHasJson 
 {
 
+	
+	@Override
+	public Long getVersion() {
+		Map<String, Object> jmap = getJsonMap();
+		Number v = (Number) jmap.get("_version");
+		return v==null? null : v.longValue();
+	}
+	
 	private final String json;
 	private final RuntimeException error;
 	private final transient ESHttpRequest req;
