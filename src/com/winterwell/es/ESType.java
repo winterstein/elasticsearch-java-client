@@ -41,7 +41,9 @@ public class ESType extends LinkedHashMap<String,Object> {
 	private transient boolean lock;
 	
 	/**
-	 * Once a type is locked, it cannot be modified. This makes it safe to reuse and share ESType objects in your code.
+	 * Once a type object is locked, the Java object cannot be modified 
+	 * (this has no effect on the ES server). 
+	 * This makes it safe to reuse and share ESType objects in your code.
 	 * NB: You can copy() a locked object, then modify the copy.
 	 * @return this
 	 */
