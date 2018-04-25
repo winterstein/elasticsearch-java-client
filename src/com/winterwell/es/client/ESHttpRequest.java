@@ -288,7 +288,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * @param esHttpClient
 	 * @return 
 	 */
-	protected ESHttpResponse doExecute(ESHttpClient esjc) {		
+	protected ESHttpResponse doExecute(ESHttpClient esjc) {
+		final String threadName = Thread.currentThread().getName();
 		Thread.currentThread().setName("ESHttpClient: "+this);
 		String curl = "";
 		try {
@@ -340,7 +341,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 				jsonResult = fb.getPage(url.toString(), (Map)params);
 			}
-			
+			// wrap and return
 			ESHttpResponse r = new ESHttpResponse(this, jsonResult);
 			return r;
 		} catch(WebEx.E404 ex) {
@@ -353,7 +354,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		} catch(Throwable ex) {
 			throw wrapError(ex, this);
 		} finally {
-			Thread.currentThread().setName("...done: ESHttpClient: "+this);
+			Thread.currentThread().setName(threadName);
 		}
 	}
 	
