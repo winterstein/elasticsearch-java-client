@@ -22,6 +22,14 @@ import com.winterwell.web.WebEx;
  */
 public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse {
 
+	
+	@Override
+	public Long getVersion() {
+		Map<String, Object> jmap = getJsonMap();
+		Number v = (Number) jmap.get("_version");
+		return v==null? null : v.longValue();
+	}
+	
 	private final String json;
 	private final WebEx error;
 	private final ESHttpRequest req;

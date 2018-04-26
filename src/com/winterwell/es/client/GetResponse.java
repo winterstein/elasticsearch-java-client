@@ -15,4 +15,6 @@ public interface GetResponse extends IESResponse {
 	 * NB: This is aware of the just-the-source GetRequestBuilder option 
 	 */
 	String getSourceAsString();
+
+	Long getVersion();
 }

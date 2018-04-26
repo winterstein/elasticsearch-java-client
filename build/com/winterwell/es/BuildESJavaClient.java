@@ -34,7 +34,7 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 		setIncSrc(true);
 		setVersion("esversion/"+ESVERSION); // this (the git branch name) will go into the manifest
 		if (ESVERSION != null) {
-			jarFile = new File(projectDir,  projectName+"-es"+ESVERSION+".jar");
+			setJar(new File(projectDir,  projectName+"-es"+ESVERSION+".jar"));
 		}
 	}
 
