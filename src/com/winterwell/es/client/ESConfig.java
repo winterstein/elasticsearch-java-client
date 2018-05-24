@@ -83,10 +83,10 @@ public class ESConfig {
 	}
 
 	/**
-	 * Convenience hack: It's handy to make an index with a version name (e.g. "foo_1")
+	 * Convenience hack: It's handy to make an index with a version name (e.g. "foo_jun18")
 	 * and an alias with a public name (e.g. "foo"). This provides a convenient place
 	 * to set which "version" to use for new indices.
-	 * It is not directly used in the ES client itself, though it is loaded from the
+	 * It is not directly used in the ES client itself, though it can be loaded from the
 	 * .properties file.
 	 */
 	public String getIndexAliasVersion() {
