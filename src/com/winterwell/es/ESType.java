@@ -63,7 +63,8 @@ public class ESType extends LinkedHashMap<String,Object> {
 			Log.w("ESType", "Skip: norms are not valid for type "+get("type")+" in "+this);
 			return this;
 		}
-		put("norms", onOff);
+		// see https://www.elastic.co/guide/en/elasticsearch/reference/2.4/norms.html
+		put("norms", new ArrayMap("enabled", onOff));
 		return this;
 	}
 	
