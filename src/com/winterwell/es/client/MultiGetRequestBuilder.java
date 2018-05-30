@@ -10,6 +10,16 @@ import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.web.WebUtils;
 
+/**
+ * 
+ * See https://www.elastic.co/guide/en/elasticsearch/guide/current/_retrieving_multiple_documents.html 
+ * 
+ * result:
+ * docs: [{found: Boolean, _index, _type, _id, _version, _source}]
+ * 
+ * @author daniel
+ *
+ */
 public class MultiGetRequestBuilder extends ESHttpRequest<MultiGetRequestBuilder, IESResponse> {
 	
 	boolean sourceOnly;
