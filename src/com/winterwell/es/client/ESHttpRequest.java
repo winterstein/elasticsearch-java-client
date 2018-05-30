@@ -124,7 +124,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * 
 	 * @param hClient
 	 * @param endpoint Can be null -- a lot of operations, e.g. index,  use the http method (PUT/DELETE etc)
-	 * as a marker without having their own endpoint per se.
+	 * as a marker without having their own endpoint per se. e.g. "_search"
 	 */
 	public ESHttpRequest(ESHttpClient hClient, String endpoint) {
 		this.hClient = hClient;

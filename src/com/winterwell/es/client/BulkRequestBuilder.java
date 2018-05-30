@@ -11,7 +11,7 @@ import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 
 /**
- * Make a bulk request from several other requests - see {@link #add(ESHttpRequest)}.
+ * Make a bulk update / insert request from several other requests - see {@link #add(ESHttpRequest)}.
  * 
  * @author Daniel
  * @testedby {@link BulkRequestBuilderTest}

@@ -36,9 +36,10 @@ public class GetRequestBuilder extends ESHttpRequest<GetRequestBuilder,GetRespon
      * Sets the preference to execute the search. Defaults to randomize across shards. Can be set to
      * <tt>_local</tt> to prefer local shards, <tt>_primary</tt> to execute only on primary shards, or
      * a custom value, which guarantees that the same order will be used across different requests.
+     * @param preference e.g. "_local"
      */
     public GetRequestBuilder setPreference(String preference) {
-    	params.put("preference", "_local");
+    	params.put("preference", preference);
         return this;
     }
     
