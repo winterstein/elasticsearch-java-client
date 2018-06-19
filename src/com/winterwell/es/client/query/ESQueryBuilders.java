@@ -7,7 +7,13 @@ import java.util.Map;
 import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
+import com.winterwell.utils.time.Time;
 
+/**
+ * Convenience utils
+ * @author daniel
+ *
+ */
 public class ESQueryBuilders {
 
 	/**
@@ -56,6 +62,21 @@ public class ESQueryBuilders {
 	 */
 	public static ESQueryBuilder termQuery(String field, String value) {
 		Map must = new ArrayMap("term", new ArrayMap(field, value));
+		return new ESQueryBuilder(must);
+	}
+	
+	public static ESQueryBuilder dateRangeQuery(String field, Time start, Time end) {
+		Map rq = new ArrayMap();
+		if (start!=null) {
+			rq.put("from", start.toISOString());
+			rq.put("include_lower", true);
+		}
+		if (end!=null) {
+			rq.put("to", start.toISOString());
+			rq.put("include_upper", true);
+		}
+		Map must = new ArrayMap("range", 
+				new ArrayMap(field, rq));
 		return new ESQueryBuilder(must);
 	}
 

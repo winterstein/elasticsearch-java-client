@@ -7,6 +7,11 @@ import org.elasticsearch.index.query.QueryBuilder;
 import com.winterwell.es.ESUtils;
 import com.winterwell.utils.web.IHasJson;
 
+/**
+ * Base class for query-builders. For common cases use the convenience methods in {@link ESQueryBuilders}
+ * @author daniel
+ *
+ */
 public class ESQueryBuilder implements IHasJson {
 
 	@Override
