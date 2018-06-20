@@ -66,6 +66,11 @@ public class ESQueryBuilders {
 	}
 	
 	public static ESQueryBuilder dateRangeQuery(String field, Time start, Time end) {
+		assert field != null;
+		if (start==null && end==null) throw new NullPointerException("Must provide one of start/end");
+		if (start !=null && end !=null && ! end.isAfter(start)) {
+			throw new IllegalArgumentException("Empty range :"+start+" to "+end);
+		}
 		Map rq = new ArrayMap();
 		if (start!=null) {
 			rq.put("from", start.toISOString());
