@@ -72,7 +72,7 @@ public class ESQueryBuilders {
 			rq.put("include_lower", true);
 		}
 		if (end!=null) {
-			rq.put("to", start.toISOString());
+			rq.put("to", end.toISOString());
 			rq.put("include_upper", true);
 		}
 		Map must = new ArrayMap("range", 
