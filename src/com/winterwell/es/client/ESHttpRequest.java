@@ -102,7 +102,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	
 	/**
 	 * By default, if a request fails, it fails. You can set it to retry once or twice before giving up.
-	 * @param retries
+	 * @param retries 0 = no retries
 	 */
 	public void setRetries(int retries) {
 		assert retries >= 0;
@@ -165,6 +165,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 
+	/**
+	 * Convenience for synchronous execute -> (wait) -> get results.
+	 * @return response (never null)
+	 */
 	public ResponseSubClass get() {
 		get2_safetyCheck();
 		return processResponse(doExecute(hClient));
@@ -239,7 +243,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		StringBuilder url = new StringBuilder(server);
 		if (indices==null) {
 			url.append("/_all");
+		} else if (indices.length==1 && indices[0] == null) {
+			// some operations dont target an index, e.g. IndexAliasRequest
 		} else {
+			// normal case: target some indices
 			url.append("/");
 			for(String idx : indices) {
 				url.append(WebUtils.urlEncode(idx));

@@ -18,6 +18,14 @@ import com.winterwell.utils.containers.ArrayMap;
  */
 public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkResponse> {
 
+	/**
+	 * @return true if this is a no-op
+	 */
+	public boolean isEmpty() {
+		return actions.isEmpty();
+	}
+	
+	
 	public List<ESHttpRequest> getActions() {
 		return actions;
 	}

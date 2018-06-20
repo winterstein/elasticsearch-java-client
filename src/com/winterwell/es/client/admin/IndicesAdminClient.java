@@ -3,6 +3,7 @@ package com.winterwell.es.client.admin;
 import org.elasticsearch.index.IndexSettings;
 
 import com.winterwell.es.client.ESHttpClient;
+import com.winterwell.es.client.ESHttpRequest;
 import com.winterwell.es.client.IESResponse;
 
 
@@ -80,6 +81,10 @@ public class IndicesAdminClient {
 
 	public IndexSettingsRequest indexSettings(String alias) {
 		return new IndexSettingsRequest(hClient).setIndex(alias);
+	}
+
+	public GetAliasesRequest getAliases(String indexOrAlias) {
+		return new GetAliasesRequest(hClient).setIndex(indexOrAlias);
 	}
     
 

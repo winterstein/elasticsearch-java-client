@@ -1,5 +1,7 @@
 package com.winterwell.es.client.admin;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -186,11 +188,19 @@ See https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lan
 	 * BUT an index request (i.e. "put this doc into alias") will fail.
 	 * 
 	 * See https://www.elastic.co/guide/en/elasticsearch/reference/5.5/indices-create-index.html#create-index-aliases
-	 * @param index
+	 * @param alias Another name which can be used for this index. The alias if a proxy.
 	 * @return 
 	 */
-	public CreateIndexRequest setAlias(String index) {
-		body().put("aliases", new ArrayMap(index, new ArrayMap()));
+	public CreateIndexRequest setAlias(String alias) {		
+		return setAliases(Arrays.asList(alias));
+	}
+	
+	public CreateIndexRequest setAliases(List<String> aliases) {
+		ArrayMap as = new ArrayMap();
+		for (String alias : aliases) {
+			as.put(alias, new ArrayMap());
+		}
+		body().put("aliases", as);
 		return this;
 	}
 
