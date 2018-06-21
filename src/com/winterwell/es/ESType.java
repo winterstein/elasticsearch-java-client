@@ -8,10 +8,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.util.automaton.MinimizationOperations;
 import org.omg.CORBA.SetOverrideType;
 
 import com.winterwell.utils.TodoException;
 import com.winterwell.utils.Utils;
+import com.winterwell.utils.Warning;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.Time;
@@ -199,12 +201,18 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 */
 	public ESType noIndex() {
 //		put("index", false); // FIXME this is breaking (seen Dec 17, ES 5.1)?!
+		if (get("type")!=null && ! get("type").equals("object")) {
+			Log.w("ESType", new Warning("noIndex / enabled:false is only available for type:object. Not "+this));
+			return this;
+		}
 		put("enabled", false);
 		return this;
 	}
 
 	public ESType() {
 	}
+	
+	
 	
 	/**
 	 * Convenience for setting one of the primitive types. 
