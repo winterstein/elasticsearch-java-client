@@ -38,6 +38,11 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	}
 
 	public BoolQueryBuilder must(ESQueryBuilder q) {
+		// avoid pointless wrapping
+		Map bool = (Map) jobj.get("bool");
+		if (q instanceof BoolQueryBuilder && bool.isEmpty()) {
+			return (BoolQueryBuilder) q;
+		}
 		add("must", q);
 		return this;
 	}

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
@@ -93,11 +94,39 @@ public class ESQueryBuilders {
 	 * 
 	 * Note: to test for a missing field, use this inside {@link BoolQueryBuilder#mustNot(ESQueryBuilder)}
 	 * 
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-range-query.html
+	 * 
 	 * @param field
 	 * @return true if one or more non-null values are present for this field
 	 */
 	public static ESQueryBuilder existsQuery(String field) {
 		Map must = new ArrayMap("exists", new ArrayMap("field", field));
+		return new ESQueryBuilder(must);
+	}
+
+	/**
+	 * @param field
+	 * @param min Can be null if max is set.
+	 * @param max Can be null if min is set.
+	 * @return
+	 */
+	public static ESQueryBuilder rangeQuery(String field, Number min, Number max) {
+		assert field != null;
+		if (min==null && max==null) throw new NullPointerException("Must provide one of min/max");
+		if (min !=null && max !=null && MathUtils.compare(min, max) != -1) {
+			throw new IllegalArgumentException("Empty range for "+field+": "+min+" to "+max);
+		}
+		Map rq = new ArrayMap();
+		if (min!=null) {
+			rq.put("gt", min); // or gte??
+//			rq.put("include_lower", true);
+		}
+		if (max!=null) {
+			rq.put("lt", max); // or lte??
+//			rq.put("include_upper", true);
+		}
+		Map must = new ArrayMap("range", 
+				new ArrayMap(field, rq));
 		return new ESQueryBuilder(must);
 	}
 

@@ -224,6 +224,7 @@ IHasJson
 	 */
 	@Override
 	public <X> List<X> getSearchResults(Class<? extends X> klass) {
+		check();
 		Map<String, Object> jobj = getJsonMap();
 		List<Map> hits = (List<Map>) ((Map)jobj.get("hits")).get("hits");
 		List<X> results = Containers.apply(hits, map -> gson().convert((Map)map.get("_source"), klass));
