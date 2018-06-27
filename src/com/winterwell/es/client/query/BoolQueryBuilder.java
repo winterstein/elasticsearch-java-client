@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.elasticsearch.index.query.TermQueryBuilder;
 
+import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.log.Log;
 
 /**
  * See https://www.elastic.co/guide/en/elasticsearch/reference/6.2/query-dsl-bool-query.html
@@ -28,6 +30,10 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		return this;
 	}
 	private void add(String cond, ESQueryBuilder q) {
+		// check for adding non clauses
+		if (q instanceof BoolQueryBuilder && ((BoolQueryBuilder) q).isEmpty()) {
+			Log.w("ES.bool", "Added non-clause to "+this+" "+ReflectionUtils.getSomeStack(8));
+		}
 		Map bool = (Map) jobj.get("bool");
 		List qs = (List) bool.get(cond);
 		if (qs==null) {
@@ -38,10 +44,12 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	}
 
 	public BoolQueryBuilder must(ESQueryBuilder q) {
-		// avoid pointless wrapping
 		Map bool = (Map) jobj.get("bool");
-		if (q instanceof BoolQueryBuilder && bool.isEmpty()) {
-			return (BoolQueryBuilder) q;
+		if (q instanceof BoolQueryBuilder) {
+			// avoid pointless wrapping
+			if (bool.isEmpty()) {
+				return (BoolQueryBuilder) q;
+			}			
 		}
 		add("must", q);
 		return this;
@@ -67,5 +75,10 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		Map bool = (Map) jobj.get("bool");
 		bool.put("minimum_should_match", n);
 		return this;
+	}
+
+	public boolean isEmpty() {
+		Map bool = (Map) jobj.get("bool");		
+		return bool.isEmpty();
 	}
 }

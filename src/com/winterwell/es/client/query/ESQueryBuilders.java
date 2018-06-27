@@ -28,6 +28,15 @@ public class ESQueryBuilders {
 	}
 
 	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html
+	 * @return
+	 */
+	public static ESQueryBuilder matchAll() {
+//		match_all
+		throw new TodoException();
+	}
+	
+	/**
 	 * Combine several ES queries via bool.must (i.e. AND).
 	 * @param queries Can be Maps, QueryBuilder objects, or ESQueryBuilder objects. Can contain nulls.
 	 * If there is a single non-null query, the same query will be returned (i.e. no superfluous bool wrapper is added).
