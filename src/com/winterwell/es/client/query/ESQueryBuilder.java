@@ -20,6 +20,7 @@ public class ESQueryBuilder implements IHasJson {
 	}
 	
 	Map jobj;
+	protected transient boolean lock;
 
 	public ESQueryBuilder(Map query) {
 		this.jobj = query;
@@ -28,7 +29,11 @@ public class ESQueryBuilder implements IHasJson {
 	public ESQueryBuilder(QueryBuilder query) {
 		this.jobj = ESUtils.jobj(query);
 	}
-
+	protected void lockCheck() throws IllegalStateException {
+		if (lock) {
+			throw new IllegalStateException("modified after toJson2() was used -- not allowed ('cos: risk of losing edits)");
+		}
+	}
 	/**
 	 * Construct an ESQueryBuilder from a QueryBuilder, ESQueryBuilder, or Map.
 	 * 
@@ -49,6 +54,7 @@ public class ESQueryBuilder implements IHasJson {
 
 	@Override
 	public Map<String,Object> toJson2() throws UnsupportedOperationException {
+		lock = true;
 		return jobj;
 	}
 }

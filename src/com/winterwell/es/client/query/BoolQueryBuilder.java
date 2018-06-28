@@ -30,6 +30,7 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		return this;
 	}
 	private void add(String cond, ESQueryBuilder q) {
+		lockCheck();
 		// check for adding non clauses
 		if (q instanceof BoolQueryBuilder && ((BoolQueryBuilder) q).isEmpty()) {
 			Log.w("ES.bool", "Added non-clause to "+this+" "+ReflectionUtils.getSomeStack(8));
@@ -40,8 +41,9 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 			qs = new ArrayList();		
 			bool.put(cond, qs);
 		}
-		qs.add(q);
-	}
+		// add in json form to avoid mysterious serialisation bugs later
+		qs.add(q.toJson2());
+	}	
 
 	public BoolQueryBuilder must(ESQueryBuilder q) {
 		Map bool = (Map) jobj.get("bool");
@@ -60,8 +62,9 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		return this;
 	}
 	/**
-	 * The clause (query) must appear in matching documents. However unlike must the score of the query will be ignored. 
+	 * TODO The clause (query) must appear in matching documents. However unlike must the score of the query will be ignored. 
 	 * Filter clauses are executed in filter context, meaning that scoring is ignored and clauses are considered for caching.
+	 * ref??
 	 * 
 	 * @param q
 	 * @return
@@ -72,6 +75,7 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	}
 
 	public ESQueryBuilder minimumNumberShouldMatch(int n) {
+		lockCheck();
 		Map bool = (Map) jobj.get("bool");
 		bool.put("minimum_should_match", n);
 		return this;
