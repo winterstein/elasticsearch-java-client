@@ -17,7 +17,7 @@ public class SearchScrollRequestBuilderTest {
 	@Test
 	public void testGet() {
 		BulkRequestBuilderTest brbt = new BulkRequestBuilderTest();
-		brbt.testBulkIndex100();
+		brbt.testBulkIndexMany2();
 		
 		// now search them
 		ESHttpClient esc = Dep.get(ESHttpClient.class);

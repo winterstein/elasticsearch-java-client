@@ -12,6 +12,7 @@ import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.es.client.suggest.Suggester;
+import com.winterwell.es.fail.DocNotFoundException;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
@@ -294,6 +295,11 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * NB: this can be over-ridden, to allow for "complex" requests.
 	 * @param esHttpClient
 	 * @return 
+	 * 
+	 * Exceptions are usually caught and put in the response object
+	 * (to fit with async handling). 
+	 * 
+	 * @exception DocNotFoundException
 	 */
 	protected ESHttpResponse doExecute(ESHttpClient esjc) {
 		final String threadName = Thread.currentThread().getName();
@@ -353,7 +359,8 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 			return r;
 		} catch(WebEx.E404 ex) {
 			// e.g. a get for an unstored object (a common case)
-			return new ESHttpResponse(this, ex);
+			DocNotFoundException err = new DocNotFoundException(getESPath());
+			return new ESHttpResponse(this, err);
 		} catch(WebEx ex) {
 			// Quite possibly a script error
 			// e.g. 40X
@@ -366,6 +373,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 	
 	
+	private ESPath getESPath() {
+		return new ESPath(indices, type, id);
+	}
+
 	/**
 	 * @param ex
 	 * @param req 

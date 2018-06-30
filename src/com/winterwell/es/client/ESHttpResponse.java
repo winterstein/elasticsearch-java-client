@@ -92,6 +92,7 @@ IHasJson
 
 	@Override
 	public Map<String, Object> getSourceAsMap() {
+		check();
 		Map<String, Object> map = getParsedJson();
 		// is it just the source?
 		if (sourceOnly) {
@@ -163,6 +164,7 @@ IHasJson
 	
 	@Override
 	public String getSourceAsString() {
+		check();
 		// is it just the source?
 		if (sourceOnly) {
 			return json;

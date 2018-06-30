@@ -17,7 +17,7 @@ public class MultiGetRequestBuilderTest {
 	@Test
 	public void testGet() {
 		BulkRequestBuilderTest brbt = new BulkRequestBuilderTest();
-		List<String> ids = brbt.testBulkIndex100();
+		List<String> ids = brbt.testBulkIndexMany2();
 		
 		// now get two
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
@@ -34,7 +34,7 @@ public class MultiGetRequestBuilderTest {
 	@Test
 	public void testGetBadId() {
 		BulkRequestBuilderTest brbt = new BulkRequestBuilderTest();
-		List<String> ids = brbt.testBulkIndex100(); // cos: init
+		List<String> ids = brbt.testBulkIndexMany2(); // cos: init
 		
 		// now get two
 		ESHttpClient esc = Dep.get(ESHttpClient.class);

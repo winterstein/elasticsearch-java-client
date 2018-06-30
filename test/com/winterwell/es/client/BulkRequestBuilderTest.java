@@ -21,10 +21,6 @@ public class BulkRequestBuilderTest {
 
 	@Test
 	public void testBulkIndexKids() {
-		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
-		Dep.setIfAbsent(ESConfig.class, new ESConfig());
-		ESConfig esconfig = Dep.get(ESConfig.class);
-		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
 		init();
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 
@@ -77,7 +73,12 @@ public class BulkRequestBuilderTest {
 
 
 	@Test
-	public List<String> testBulkIndex100() {
+	public void testBulkIndexMany() {
+		// NB: tests must return void
+		testBulkIndexMany2();
+	}
+	
+	public List<String> testBulkIndexMany2() {
 		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
 		ESConfig esconfig = Dep.get(ESConfig.class);
@@ -104,17 +105,17 @@ public class BulkRequestBuilderTest {
 	}
 
 	
-	private void init() {
+	void init() {
+		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
+		Dep.setIfAbsent(ESConfig.class, new ESConfig());
+		ESConfig esconfig = Dep.get(ESConfig.class);
+		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
+		
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 		esc.admin().indices().prepareCreate(INDEX).get();
 		
 		PutMappingRequestBuilder pm = esc.admin().indices().preparePutMapping(INDEX, "kid");
 		pm.setBodyMap(new ESType().setParentType("parent"));
-		pm.get();
-		
-//		PutMappingRequestBuilder pm = esc.admin().indices().preparePutMapping("testbulk", "parent");
-//		pm.setBodyMap(msrc);
-//		pm.get();
-		
+		pm.get();	
 	}
 }
