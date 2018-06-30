@@ -1,5 +1,7 @@
 package com.winterwell.es.client.admin;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,16 +35,20 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 	}
 	
 	@Override
-	protected ESHttpResponse doExecute(ESHttpClient esjc) {
+	protected ESHttpResponse doExecute(ESHttpClient esjc) {		
+		// call the super method to do the main work
 		ESHttpResponse r = super.doExecute(esjc);
+		// fail?
 		if ( ! failIfAliasExists) return r;
-//		http://localhost:9200/dupefoo/_settings
+		// Before we check the alias, let's check the actual create call
+		if ( ! r.isSuccess()) return r;
 		Map aliases = (Map) body().get("aliases");
 		if (aliases==null || aliases.isEmpty()) {
 			Log.i("ES.CreateIndex", "failIfAliasExists was set, but no aliases were set");
 			return r;
 		}
 		String alias = (String) Containers.only(aliases.keySet());
+		// check this index
 		IndexSettingsRequest req2 = esjc.admin().indices().indexSettings(alias);
 		IESResponse resp = req2.get().check();
 		Map<String,Object> settingsFromIndex = resp.getParsedJson();
@@ -182,11 +188,19 @@ See https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-lan
 	 * BUT an index request (i.e. "put this doc into alias") will fail.
 	 * 
 	 * See https://www.elastic.co/guide/en/elasticsearch/reference/5.5/indices-create-index.html#create-index-aliases
-	 * @param index
+	 * @param alias Another name which can be used for this index. The alias if a proxy.
 	 * @return 
 	 */
-	public CreateIndexRequest setAlias(String index) {
-		body().put("aliases", new ArrayMap(index, new ArrayMap()));
+	public CreateIndexRequest setAlias(String alias) {		
+		return setAliases(Arrays.asList(alias));
+	}
+	
+	public CreateIndexRequest setAliases(List<String> aliases) {
+		ArrayMap as = new ArrayMap();
+		for (String alias : aliases) {
+			as.put(alias, new ArrayMap());
+		}
+		body().put("aliases", as);
 		return this;
 	}
 

@@ -3,7 +3,10 @@ package com.winterwell.es.client;
 import java.util.List;
 import java.util.Map;
 
-public interface IESResponse {
+public interface IESResponse
+// not possible 'cos ESHttpresponse implements several sub-types
+//<ResponseSubClass extends IESResponse> 
+{
 
 	boolean isSuccess();
 
@@ -28,6 +31,7 @@ public interface IESResponse {
 	 * a runtime-exception if there was an error.
 	 * @return this
 	 */
+	// NB: sadly we can't give a sub-class here -- see notes above
 	IESResponse check();
 
 }

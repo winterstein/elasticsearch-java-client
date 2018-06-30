@@ -13,6 +13,7 @@ import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.io.Option;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.TUnit;
+import com.winterwell.utils.time.Time;
 
 public class ESConfig {
 
@@ -68,18 +69,19 @@ public class ESConfig {
 	
 	/**
 	 * Bit of a hack. When creating indices, its nice to use a versioned-name + public-alias.
-	 * This is a convenient place for saying what version to use. 
-	 * TODO support per-index version numbers.
+	 * This is a convenient place for saying what version to use (and which can be altered by a config file). 
 	 */
 	@Option
-	private String indexAliasVersion = "2";
+	private String indexAliasVersion = new Time().format("MMMyy").toLowerCase();
 	
 	@Option(description="milliseconds for the http request to timeout")
 	public long esRequestTimeout = TUnit.MINUTE.millisecs;
-	
+		
 	public Gson getGson() {
-		if (gson==null) gson = Dep.has(Gson.class)? Dep.get(Gson.class) : new Gson(); 
-		return gson;
+		if (gson!=null) return gson;
+		// if Gson has not been setup yet, return a vanilla one for now (but don't set it)
+		gson = Dep.has(Gson.class)? Dep.get(Gson.class) : null;
+		return gson==null? new Gson() : gson;
 	}
 	
 	public ESConfig setGson(Gson gson) {
@@ -89,10 +91,10 @@ public class ESConfig {
 	}
 
 	/**
-	 * Convenience hack: It's handy to make an index with a version name (e.g. "foo_1")
+	 * Convenience hack: It's handy to make an index with a version name (e.g. "foo_jun18")
 	 * and an alias with a public name (e.g. "foo"). This provides a convenient place
 	 * to set which "version" to use for new indices.
-	 * It is not directly used in the ES client itself, though it is loaded from the
+	 * It is not directly used in the ES client itself, though it can be loaded from the
 	 * .properties file.
 	 */
 	public String getIndexAliasVersion() {

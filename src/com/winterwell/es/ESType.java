@@ -1,14 +1,22 @@
 package com.winterwell.es;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.util.automaton.MinimizationOperations;
+import org.omg.CORBA.SetOverrideType;
+
+import com.winterwell.utils.TodoException;
 import com.winterwell.utils.Utils;
+import com.winterwell.utils.Warning;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.log.Log;
+import com.winterwell.utils.time.Time;
 
 /**
  * Helper for making ElasticSearch properties mappings. An ESType is just a map, 
@@ -30,13 +38,26 @@ import com.winterwell.utils.log.Log;
 public class ESType extends LinkedHashMap<String,Object> {	
 	private static final long serialVersionUID = 1L;
 	
-	public static final ESType keyword = new ESType().keyword();
+	public static final ESType keyword = new ESType().keyword().lock();
 
 	private transient boolean lock;
+	
+	/**
+	 * Once a type object is locked, the Java object cannot be modified 
+	 * (this has no effect on the ES server). 
+	 * This makes it safe to reuse and share ESType objects in your code.
+	 * NB: You can copy() a locked object, then modify the copy.
+	 * @return this
+	 */
+	public ESType lock() {
+		lock = true;
+		return this;
+	}
 	
 	public ESType copy() {
 		// deep copy
 		ESType copy = Utils.copy(this);
+		copy.lock = false; // make sure it is unlocked
 		return copy;
 	}
 	
@@ -83,6 +104,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 * @return
 	 */
 	public ESType field(String name, ESType field) {
+		lockCheck();
 		Map fields = (Map) get("fields");
 		if (fields==null) {
 			fields = new ArrayMap();
@@ -92,6 +114,10 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 	
+	private void lockCheck() {
+		if (lock) throw new IllegalStateException("Lifecycle bug: Cannot modify locked type.");
+	}
+
 	/**
 	 * Analysed "body" text
 	 * @return this
@@ -108,7 +134,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	
 	@Override
 	public Object put(String key, Object value) {
-		assert ! lock : "Lifecycle bug: This object has been used already - dont modify it";
+		lockCheck();
 		return super.put(key, value);
 	}
 	
@@ -166,15 +192,67 @@ public class ESType extends LinkedHashMap<String,Object> {
 	
 	/**
 	 * Store but do not index this property (so you can't search on it).
+	 * 
+	 * This seems to be broken! But enabled:false works?
+	 * It's not clear what versions of ES support what! Tested on ES 5.1
+	 * 
+	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-index.html
+	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/enabled.html
 	 */
 	public ESType noIndex() {
-		put("index", "no");
+//		put("index", false); // FIXME this is breaking (seen Dec 17, ES 5.1)?!
+		if (get("type")!=null && ! get("type").equals("object")) {
+			Log.w("ESType", new Warning("noIndex / enabled:false is only available for type:object. Not "+this));
+			return this;
+		}
+		put("enabled", false);
 		return this;
 	}
 
 	public ESType() {
 	}
 	
+	
+	
+	/**
+	 * Convenience for setting one of the primitive types. 
+	 * Best practice is to use methods like {@link #DOUBLE()} or {@link #keyword()} instead,
+	 * unless you're doing reflection.
+	 * @param klass
+	 * @return this
+	 */
+	public ESType setType(Class klass) throws IllegalArgumentException {
+		String type = typeForClass(klass);
+		put("type", type);
+		return this;
+	}
+	
+	private String typeForClass(Class klass) {
+		if (klass==Long.class || klass==long.class) {
+			return "long";
+		}
+		if (klass==Double.class || klass==double.class) {
+			return "double";
+		}
+		if (klass==Float.class || klass==float.class) {
+			return "float";
+		}
+		if (klass==Integer.class || klass==int.class) {
+			return "integer";
+		}
+		if (klass==Boolean.class || klass==boolean.class) {
+			return "boolean";
+		}
+		if (klass==Date.class || klass==Time.class || klass == Calendar.class) {
+			return "date";
+		}
+		if (klass==String.class) {
+			Log.w("ESType", "String given type 'text' - but do you want keyword? Best practice is to set this type explicitly.");
+			return "text";
+		}
+		throw new IllegalArgumentException("This method only handles some types. Unrecognised: "+klass);
+	}
+
 	// NB: all-caps is a bit ugly, but we can't call this "long" or "Long", and "lng" is uglier still.
 	public ESType LONG() {
 		put("type", "long");
@@ -230,7 +308,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 			put("properties", props);
 		}
 		props.put(propertyName, propertyType);
-		propertyType.lock = true;
+		propertyType.lock();
 		return this;
 	}
 	/**
@@ -274,6 +352,14 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 */
 	public ESType geo_point() {
 		put("type", "geo_point");
+		return this;
+	}
+
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html
+	 */
+	public ESType completion() {
+		put("type", "completion");
 		return this;
 	}
 

@@ -11,13 +11,21 @@ import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 
 /**
- * Make a bulk request from several other requests - see {@link #add(ESHttpRequest)}.
+ * Make a bulk update / insert request from several other requests - see {@link #add(ESHttpRequest)}.
  * 
  * @author Daniel
  * @testedby {@link BulkRequestBuilderTest}
  */
 public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkResponse> {
 
+	/**
+	 * @return true if this is a no-op
+	 */
+	public boolean isEmpty() {
+		return actions.isEmpty();
+	}
+	
+	
 	public List<ESHttpRequest> getActions() {
 		return actions;
 	}

@@ -54,48 +54,6 @@ import org.elasticsearch.client.Client;
 public class ESUtils {
 
 	
-//	public static Node startLocalES() {
-//		return startLocalES(9200, false, new File("tmp-data"));
-//	}
-//	
-//	public static Node startLocalES(int port, boolean persistToDisk, File dataDir) {
-//		// broken in 5.1 :(
-//		Settings.Builder esSettings = Settings.builder()
-//				.put("http.enabled", "true")
-//				.put("http.port", port)
-//				
-//				// what is needed here??
-//				.put("http.type", "local")	
-//				
-//				// not allowed in v5.1?!
-////				.put("index.store.type", persistToDisk? "fs" : "memory")
-////				.put("index.number_of_shards", 1)
-////				.put("index.number_of_replicas", 0)
-//
-//				.put("transport.type","local")
-////				.put("discovery.zen.ping.multicast.enabled", "false")
-//
-////				.put("store.compress.stored", "true")
-//
-//				.put("path.home", dataDir.toString())
-//				.put("path.data", dataDir.toString())
-//				;
-//		try {
-//			File logFile = File.createTempFile("elasticsearch", ".log");
-//			esSettings = esSettings.put("path.logs", logFile.toString());
-//			Log.d("ES", "local node with log-file: "+logFile.getAbsolutePath()+" data-dir: "+dataDir.getAbsolutePath());
-//		} catch (IOException e) {
-//			throw Utils.runtime(e);
-//		}				
-//		if ( ! persistToDisk) {
-//			esSettings = esSettings.put("gateway.type", "none");
-//		}
-//		
-//		Settings esSet = esSettings.build();
-//		Node node = new Node(esSet);
-//		return node;
-//	}
-	
 	/**
 	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/1.x/
 	 * mapping-core-types.html

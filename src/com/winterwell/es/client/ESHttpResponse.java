@@ -6,13 +6,16 @@ import java.util.Map;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.winterwell.es.client.agg.AggregationResults;
+import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
+import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.log.Log;
+import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.WebEx;
 
 /**
@@ -20,12 +23,24 @@ import com.winterwell.web.WebEx;
  * @author daniel
  *
  */
-public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse {
+public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse, GetResponse, 
+// allow response to be sent as json over http 
+IHasJson 
+{
 
+	
+	@Override
+	public Long getVersion() {
+		Map<String, Object> jmap = getJsonMap();
+		Number v = (Number) jmap.get("_version");
+		return v==null? null : v.longValue();
+	}
+	
 	private final String json;
-	private final WebEx error;
-	private final ESHttpRequest req;
+	private final RuntimeException error;
+	private final transient ESHttpRequest req;
 	private Map parsed;
+	private boolean sourceOnly;
 
 	/* (non-Javadoc)
 	 * @see com.winterwell.es.client.IESResponse#toString()
@@ -40,23 +55,33 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	 * @param response
 	 */
 	protected ESHttpResponse(ESHttpResponse response) {
-		this.req = response.req;
-		this.json = response.json;
-		this.error = response.error;
+		this(response.req, response.json, response.error);
 	}
 	
 	public ESHttpResponse(ESHttpRequest req, String json) {
+		this(req, json, null);
+	}
+
+	/**
+	 * 
+	 * @param req
+	 * @param ex Should we standardise on {@link ESException}??
+	 */
+	public ESHttpResponse(ESHttpRequest req, RuntimeException ex) {
+		this(req, null, ex);
+	}
+
+	ESHttpResponse(ESHttpRequest req, String json, RuntimeException ex) {
 		this.req = req;
 		this.json = json;
-		this.error = null;
-	}
-
-	public ESHttpResponse(ESHttpRequest req, WebEx ex) {
 		this.error = ex;
-		this.req = req;
-		this.json = null;
+		// source only?
+		if (req instanceof GetRequestBuilder && ((GetRequestBuilder) req).sourceOnly) {			
+			sourceOnly = true;
+		}
 	}
-
+	
+	
 	/* (non-Javadoc)
 	 * @see com.winterwell.es.client.IESResponse#isSuccess()
 	 */
@@ -67,9 +92,10 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 
 	@Override
 	public Map<String, Object> getSourceAsMap() {
+		check();
 		Map<String, Object> map = getParsedJson();
 		// is it just the source?
-		if (req instanceof GetRequestBuilder && ((GetRequestBuilder)req).sourceOnly) {
+		if (sourceOnly) {
 			return map;
 		}
 		Object source = map.get("_source");
@@ -85,11 +111,16 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	}
 	
 	public Map<String, Object> getParsedJson() {
-		if (parsed!=null) return parsed;
+		if (parsed!=null) return parsed;		
+//		String bugjson = json.replace("\"0.2\"", "0.2"); // HACK testing the Advert bug Nov 2017		
 		parsed = gson().fromJson(json, Map.class);
 		return parsed;
 	}
 	
+	/**
+	 * Uses a "plain" (inflexible) Gson, so nothing gets converted into "fancy" POJOs.
+	 * @return
+	 */
 	public Map<String, Object> getJsonMap() {
 		Map map = plainGson().fromJson(json, Map.class);
 		return map;
@@ -112,6 +143,7 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	}
 	
 	private Gson gson() {
+		// req should never be null -- unless its been serialised and back
 		return req.hClient.config.getGson();
 	}
 
@@ -132,8 +164,9 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	
 	@Override
 	public String getSourceAsString() {
+		check();
 		// is it just the source?
-		if (req instanceof GetRequestBuilder && ((GetRequestBuilder)req).sourceOnly) {
+		if (sourceOnly) {
 			return json;
 		}
 		Map<String, Object> map = getParsedJson();
@@ -155,7 +188,7 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		return false;
 	}
 	
-	public WebEx getError() {
+	public RuntimeException getError() {
 		return error;
 	}
 	
@@ -180,9 +213,23 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 	}
 
 	@Override
-	public <X> List<X> getSearchResults() {
+	public List<Map<String, Object>> getSearchResults() {
 		List<Map> hits = getHits();
 		List results = Containers.apply(hits, hit -> hit.get("_source"));
+		return results;		
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Uses {@link #gson()} for the convertor.
+	 */
+	@Override
+	public <X> List<X> getSearchResults(Class<? extends X> klass) {
+		check();
+		Map<String, Object> jobj = getJsonMap();
+		List<Map> hits = (List<Map>) ((Map)jobj.get("hits")).get("hits");
+		List<X> results = Containers.apply(hits, map -> gson().convert((Map)map.get("_source"), klass));
 		return results;
 	}
 
@@ -244,4 +291,21 @@ public class ESHttpResponse implements IESResponse, SearchResponse, BulkResponse
 		Object sid = map.get("_scroll_id");
 		return (String) sid;
 	}
+
+	@Override
+	public List<Map> getSuggesterHits(String name) {
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getParsedJson();
+		Map suggesters = (Map) map.get("suggest");
+		List<Map> res = (List<Map>) suggesters.get(name);
+		//  Do num -> result -> options -> num -> _source to get a doc
+		List hits = Containers.flatten(Containers.apply(res, r -> r.get("options")));
+		return hits;
+	}
+
+	@Override
+	public Object toJson2() throws UnsupportedOperationException {
+		return Containers.objectAsMap(this);
+	}
+	
 }

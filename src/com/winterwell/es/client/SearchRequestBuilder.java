@@ -18,10 +18,15 @@ import org.elasticsearch.search.sort.SortOrder;
 
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.agg.Aggregation;
+import com.winterwell.es.client.agg.Aggregations;
+import com.winterwell.es.client.query.ESQueryBuilder;
+import com.winterwell.es.client.query.ESQueryBuilders;
+import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.time.Time;
@@ -91,9 +96,17 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 
-
+	/**
+	 * 
+	 * @param qb WARNING: This will make a copy, so any subsequent edits will not be used!
+	 * @return
+	 */
 	public SearchRequestBuilder setQuery(QueryBuilder qb) {
 		return setQuery(ESUtils.jobj(qb));
+	}
+	
+	public SearchRequestBuilder setQuery(ESQueryBuilder qb) {
+		return setQuery(qb.toJson2());
 	}
 
 	public SearchRequestBuilder setQuery(Map queryJson) {
@@ -102,22 +115,10 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 	
 	public SearchRequestBuilder setFilter(QueryBuilder qb) {
-		SimpleJson.set(body(), ESUtils.jobj(qb), "query", "bool", "filter");
+		Map jobj = ESUtils.jobj(qb);
+		SimpleJson.set(body(), jobj, "query", "bool", "filter");
 		return this;
 	}
-	
-//	/**
-//	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html#_filtering_without_a_query
-//	 * @param fb
-//	 */
-//	public SearchRequestBuilder setQuery(Object FilterBuilderfb) {
-////		filtered = "filtered: {filter: "+fb.toString()+"}";
-//		BoolQueryBuilder q = QueryBuilders.boolQuery().m filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilderfb);
-////		body.put("query", filtered);
-//		setQuery(q);
-//		return this;
-//	}
-
 
 	public SearchRequestBuilder setFrom(int i) {
 		params.put("from", i);
@@ -149,34 +150,22 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 	
-	/**
-	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
-	 * @param sort
-	 * @return
-	 */
-	public SearchRequestBuilder setSort(String sort) {
-		List sorts = (List) body().get("sort");
-		if (sorts==null) {
-			sorts = new ArrayList();
-			body().put("sort", sorts);
-		}
-		sorts.clear();
-		sorts.add("\""+sort+"\"");
-		return this;
-	}
-
-//	public SearchRequestBuilder addFacet(FacetBuilder field) {
-//		// TOTAL HACK
-//		org.elasticsearch.action.search.SearchRequestBuilder srb = new org.elasticsearch.action.search.SearchRequestBuilder(new DummyClient());
-//		srb.addFacet(field);
-//		String srbs = srb.toString();
-//		Map map = hClient.gson.fromJson(srbs, Map.class);
-//		Object facets = map.get("facets");
-//		body.put("facets", hClient.gson.toJson(facets));
+//	/**
+//	 * @deprecated Use {@link #addSort(SortBuilder)}
+//	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
+//	 * @param sort
+//	 * @return
+//	 */
+//	public SearchRequestBuilder setSort(String sort) {
+//		List sorts = (List) body().get("sort");
+//		if (sorts==null) {
+//			sorts = new ArrayList();
+//			body().put("sort", sorts);
+//		}
+//		sorts.clear();
+//		sorts.add("\""+sort+"\"");
 //		return this;
 //	}
-
-
 
 	public void addSort(String field, SortOrder order) {
 		addSort(SortBuilders.fieldSort(field).order(order));
@@ -205,22 +194,15 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	 */
 	public void setScroll(Dt keepAlive) {
 		int s = (int) keepAlive.convertTo(TUnit.SECOND).getValue();
-		setScroll(TimeValue.timeValueSeconds(s));
+		params.put("scroll", s+"s");
 	}
 
 
 	/**
-	 * 
-	 * If you only want the aggregation results and not the documents, set size-0 with {@link #setSize(int)}.
-	 * @param aggResultName
-	 * @param aggType e.g. "stats", "sum"
-	 * @param field
+	 * See {@link Aggregations}
+	 * Note: If you only want the aggregation results and not the documents, set size-0 with {@link #setSize(int)}.
 	 * @return this
 	 */
-	public SearchRequestBuilder addAggregation(String aggResultName, String aggType, String field) {
-		return addAggregation(new Aggregation(aggResultName, aggType, field));
-	}
-	
 	public SearchRequestBuilder addAggregation(Aggregation dh) {
 		// NB: This is copy pasta Aggregation.subAggregation()
 		Map sorts = (Map) body().get("aggs");
@@ -231,6 +213,46 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		// e.g.      "grades_stats" : { "stats" : { "field" : "grade" } }
 		sorts.put(dh.name, dh); //.toJson2());
 		return this;		
+	}
+	
+	/**
+	 * See {@link Suggesters}
+	 * @return this
+	 */
+	public SearchRequestBuilder addSuggester(Suggester suggester) {
+		// NB: This is copy pasta Aggregation.subAggregation()
+		Map sorts = (Map) body().get("suggest");
+		if (sorts==null) {
+			sorts = new ArrayMap();
+			body.put("suggest", sorts);
+		}
+		sorts.put(suggester.name, suggester); //.toJson2()); // TODO support late json conversion
+		// but caused a bug -- why is this behaving differently to Aggregation??
+		return this;		
+	}
+	
+	/**
+	 * Convenience method for building up AND queries.
+	 * This will set the query if null, or combine with bool-query *must* if not null.
+	 * @param qb
+	 * @return 
+	 */
+	public SearchRequestBuilder addQuery(QueryBuilder qb) {
+		Map query = (Map) body().get("query");
+		if (query==null) {
+			setQuery(qb);
+			return this;
+		}
+		// Add to it
+		// Is it a boolean?
+//		String qtype = (String) Containers.first(query.keySet());
+//		if (qtype != "bool") {
+			ESQueryBuilder qand = ESQueryBuilders.must(query, ESUtils.jobj(qb));
+			setQuery(qand.toJson2());
+//		} else {
+			// TODO merge!			
+//		}
+		return this;
 	}
 	
 }

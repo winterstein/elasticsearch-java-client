@@ -60,16 +60,21 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
      * Ref: http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/modules-scripting.html
      */
     public UpdateRequestBuilder setScriptLang(String scriptLang) {
-    	Map script = (Map) body().get("script");
+    	Map script = script();
+    	script.put("lang", scriptLang);
+        return this;
+    }
+	
+	private Map script() {
+		Map script = (Map) body().get("script");
     	if (script==null) {
     		script = new ArrayMap();
     		body().put("script", script);
     	}
-    	script.put("lang", scriptLang);
-//    	params.put("lang", scriptLang); ES v old
-        return this;
-    }
-	
+		return script;
+	}
+
+
 	public UpdateRequestBuilder setDoc(Map doc) {
 		body().put("doc", doc);
 		return this;
@@ -159,26 +164,22 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	}
 
 	public UpdateRequestBuilder setScript(String script) {
-//		String _json = hClient.gson.toJson(script);
-		String json = script; //JSON.toString(script); // older ES is different :(
-//		assert json.equals(_json); can be different -- choices on encoding chars
-		body().put("script", new ArrayMap(
-				"inline", json
-				));
+		Map s = script();
+		s.put("inline", script);
 		return this;
 	}
 	
 	/**
-	 * 
+	 * @deprecated
 	 * @return Can be null
 	 */
-	public String getScript() {
-		return body==null? null : (String) body.get("script");
+	public Object getScript() {
+		return body==null? null : body.get("script");
 	}
 
 
 	public UpdateRequestBuilder setScriptParams(Map params) {
-		body().put("params", JSON.toString(params));
+		script().put("params", params);
 		return this;
 	}
 
@@ -195,6 +196,13 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 		// HACK - poke the doc json into a wrapping doc property
 		body().put("doc", new RawJson(docJson));
 //		setBodyJson("{\"doc\":"+docJson+"}");
+	}
+
+
+	public void setScript(PainlessScriptBuilder psb) {
+		setScript(psb.getScript());
+		setScriptLang(psb.getLang());
+		setScriptParams(psb.getParams());
 	}
 
 

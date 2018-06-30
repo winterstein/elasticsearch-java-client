@@ -13,6 +13,7 @@ import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramAggre
 import com.winterwell.utils.containers.ArrayMap;
 
 /**
+ * Builder methods for making {@link Aggregation}s
  * @author daniel
  *
  */
@@ -28,6 +29,7 @@ public class Aggregations {
 	}
 
 	/**
+	 * ??TODO accuracy and coverage??
 	 * Stats on a numeric field
 	 * @param name
 	 * @param field This MUST be numeric

@@ -10,6 +10,9 @@ import org.eclipse.jetty.util.ajax.JSON;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
+import com.winterwell.es.client.query.ESQueryBuilder;
+import com.winterwell.es.client.suggest.Suggester;
+import com.winterwell.es.fail.DocNotFoundException;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
@@ -18,6 +21,7 @@ import com.winterwell.gson.JsonElement;
 import com.winterwell.gson.JsonSerializationContext;
 import com.winterwell.gson.JsonSerializer;
 import com.winterwell.gson.PlainGson;
+import com.winterwell.gson.StandardAdapters;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.Printer;
 import com.winterwell.utils.StrUtils;
@@ -54,7 +58,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 	protected String method;
 
-	final ESHttpClient hClient;
+	final transient ESHttpClient hClient;
 	String[] indices;
 	String type;
 	String id;
@@ -92,13 +96,14 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 
 	boolean debug;
 	
-	public void setDebug(boolean debug) {
+	public SubClass setDebug(boolean debug) {
 		this.debug = debug;
+		return (SubClass) this;
 	}
 	
 	/**
 	 * By default, if a request fails, it fails. You can set it to retry once or twice before giving up.
-	 * @param retries
+	 * @param retries 0 = no retries
 	 */
 	public void setRetries(int retries) {
 		assert retries >= 0;
@@ -120,7 +125,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * 
 	 * @param hClient
 	 * @param endpoint Can be null -- a lot of operations, e.g. index,  use the http method (PUT/DELETE etc)
-	 * as a marker without having their own endpoint per se.
+	 * as a marker without having their own endpoint per se. e.g. "_search"
 	 */
 	public ESHttpRequest(ESHttpClient hClient, String endpoint) {
 		this.hClient = hClient;
@@ -139,7 +144,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		return (SubClass) this;
 	}
 
+
 	public SubClass setIndex(String idx) {
+		assert idx == null || idx.equals(idx.toLowerCase()) 
+				: "invalid_index_name_exception - ES requires lowercased index names: "+idx;
 		return setIndices(idx);
 	}
 
@@ -158,6 +166,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	}
 
 
+	/**
+	 * Convenience for synchronous execute -> (wait) -> get results.
+	 * @return response (never null)
+	 */
 	public ResponseSubClass get() {
 		get2_safetyCheck();
 		return processResponse(doExecute(hClient));
@@ -232,7 +244,10 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		StringBuilder url = new StringBuilder(server);
 		if (indices==null) {
 			url.append("/_all");
+		} else if (indices.length==1 && indices[0] == null) {
+			// some operations dont target an index, e.g. IndexAliasRequest
 		} else {
+			// normal case: target some indices
 			url.append("/");
 			for(String idx : indices) {
 				url.append(WebUtils.urlEncode(idx));
@@ -261,12 +276,11 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		// -- no @class in the maps and lists -- with handling of ES Client internal objects.
 		// This is DIFFERENT from #gson(), which is for handling the caller's objects.  
 		Gson gson = GsonBuilder.safe()
-				.registerTypeAdapter(Aggregation.class, new JsonSerializer<Aggregation>() {
-					@Override
-					public JsonElement serialize(Aggregation src, Type typeOfSrc, JsonSerializationContext context) {
-						return context.serialize(src.toJson2());
-					}
-				}).create();
+				// cautious approach - only do IHasJson for "our" local classes
+				.registerTypeAdapter(Aggregation.class, StandardAdapters.IHASJSONADAPTER)
+				.registerTypeAdapter(Suggester.class, StandardAdapters.IHASJSONADAPTER)
+				.registerTypeAdapter(ESQueryBuilder.class, StandardAdapters.IHASJSONADAPTER)
+				.create();
 		bodyJson = gson.toJson(body); 
 //				TODO gson().toJson(body);
 		// sanity check the json				
@@ -281,8 +295,14 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * NB: this can be over-ridden, to allow for "complex" requests.
 	 * @param esHttpClient
 	 * @return 
+	 * 
+	 * Exceptions are usually caught and put in the response object
+	 * (to fit with async handling). 
+	 * 
+	 * @exception DocNotFoundException
 	 */
-	protected ESHttpResponse doExecute(ESHttpClient esjc) {		
+	protected ESHttpResponse doExecute(ESHttpClient esjc) {
+		final String threadName = Thread.currentThread().getName();
 		Thread.currentThread().setName("ESHttpClient: "+this);
 		String curl = "";
 		try {
@@ -299,6 +319,12 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 			
 			String jsonResult;
 			String srcJson = getBodyJson();
+			// Hack: some antivirus programs intercept HTTP PUT calls without bodies
+			// (seen with ZF 2017)
+			if (Utils.isBlank(srcJson) && "PUT".equals(method)) {
+				srcJson = "{}";
+			}
+			// get/post the request
 			if (srcJson!=null) {
 				// add in the get params
 				WebUtils2.addQueryParameters(url, params);
@@ -321,35 +347,47 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 //				assert ! "POST".equals(req.method) : "No body for post?! Call setSource() From: "+req;
 //				// DEBUG hack
 				if (debug || esjc.debug) {
-					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"GET":method)+" '"+url+"&pretty=true'");
+					String fullurl = WebUtils2.addQueryParameters(url.toString(), params);
+					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"GET":method)+" '"+fullurl+"&pretty=true'");
 					Log.d("ES.curl", curl);
 				}
 
 				jsonResult = fb.getPage(url.toString(), (Map)params);
 			}
-			
+			// wrap and return
 			ESHttpResponse r = new ESHttpResponse(this, jsonResult);
 			return r;
 		} catch(WebEx.E404 ex) {
 			// e.g. a get for an unstored object (a common case)
-			return new ESHttpResponse(this, ex);
+			DocNotFoundException err = new DocNotFoundException(getESPath());
+			return new ESHttpResponse(this, err);
 		} catch(WebEx ex) {
 			// Quite possibly a script error
 			// e.g. 40X
-			return new ESHttpResponse(this, ex);
+			return new ESHttpResponse(this, wrapError(ex, this));
 		} catch(Throwable ex) {
 			throw wrapError(ex, this);
-		}		
+		} finally {
+			Thread.currentThread().setName(threadName);
+		}
 	}
 	
 	
+	private ESPath getESPath() {
+		return new ESPath(indices, type, id);
+	}
+
 	/**
 	 * @param ex
 	 * @param req 
 	 * @return
 	 */
-	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {		
-		return new ESException(ex.getMessage()+" from "+req, ex);
+	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {
+		if (ex instanceof ESException) return (RuntimeException) ex;
+		String msg = req==null? ex.getMessage() : req.getUrl("")+" "+ex.getMessage();
+		ESException esex = new ESException(msg, ex);
+		esex.request = req;
+		return esex;
 	}
 
 
