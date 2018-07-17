@@ -8,12 +8,15 @@ import java.util.concurrent.Future;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.common.util.concurrent.ListenableFuture;
+import com.sun.mail.handlers.image_gif;
 import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.es.fail.DocNotFoundException;
 import com.winterwell.es.fail.ESException;
+import com.winterwell.es.fail.IElasticException;
+import com.winterwell.es.fail.MapperParsingException;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
@@ -357,10 +360,6 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 			// wrap and return
 			ESHttpResponse r = new ESHttpResponse(this, jsonResult);
 			return r;
-		} catch(WebEx.E404 ex) {
-			// e.g. a get for an unstored object (a common case)
-			DocNotFoundException err = new DocNotFoundException(getESPath());
-			return new ESHttpResponse(this, err);
 		} catch(WebEx ex) {
 			// Quite possibly a script error
 			// e.g. 40X
@@ -383,7 +382,20 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	 * @return
 	 */
 	private RuntimeException wrapError(Throwable ex, ESHttpRequest req) {
+		if (ex instanceof IElasticException) return (RuntimeException) ex;
 		if (ex instanceof ESException) return (RuntimeException) ex;
+		if (ex instanceof WebEx.E404) {
+			// e.g. a get for an unstored object (a common case)
+			return new DocNotFoundException(getESPath());
+		}
+		if (ex instanceof WebEx.E40X) {
+			String msg = ex.getMessage();
+			// TODO parse the json errorPage
+			if (msg.contains("mapper_parsing_exception")) {
+				return new MapperParsingException(msg);
+			}
+		}
+		// wrap
 		String msg = req==null? ex.getMessage() : req.getUrl("")+" "+ex.getMessage();
 		ESException esex = new ESException(msg, ex);
 		esex.request = req;
