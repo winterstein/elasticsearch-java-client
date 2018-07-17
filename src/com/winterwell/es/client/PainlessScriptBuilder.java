@@ -62,10 +62,13 @@ public class PainlessScriptBuilder {
 				String el = var+"."+me.getKey();
 				List<Object> vlist = Containers.asList(v);
 				// shove into params
-				String pid = psb.addParam(vlist);								
-				// ??uniqueness?? Left for the user -- get the last value				
-				sb.append("if ("+el+"!=null) "+el+".addAll(params."+pid+"); else "+el+"=params."+pid+";\n");
-				continue;
+				String pid = psb.addParam(vlist);
+				String rlist = "params."+pid; 
+				// This fugly code does set-style uniqueness. If there is a nicer way please do say.
+				// I assume naming the language "painless" is ES's joke on the rest of us.
+				sb.append("if ("+el+"!=null) {for(int i=0; i<"+rlist+".size(); i++) {def x="+rlist+".get(i); if (!"+rlist+".contains(x)) "+rlist+".add(x);}} else {"+el+"="+rlist+";}\n");
+				break;
+//				continue;
 			} else if (v instanceof Map) {
 				String el = var+"."+me.getKey();
 				Map vmap = (Map) v;								
