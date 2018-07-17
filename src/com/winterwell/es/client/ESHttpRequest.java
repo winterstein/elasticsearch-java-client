@@ -198,7 +198,7 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 	
 	@Override
 	public String toString() {
-		if (indices!=null && indices.length==1) {
+		if (indices!=null) {
 			return getClass().getSimpleName()+"["+getUrl("")+"]";
 		}
 		return getClass().getSimpleName();		
