@@ -1,5 +1,6 @@
 package com.winterwell.es.client;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -188,8 +189,35 @@ IHasJson
 		return false;
 	}
 	
+	/**
+	 * error or null
+	 * 
+	 * TODO handle bulk-request errors, which are different 
+	 * @see #getBulkErrors()  
+	 */
 	public RuntimeException getError() {
 		return error;
+	}
+	
+	/**
+	 * TODO handle bulk-request errors nicely
+	 * @return
+	 */
+	Throwable getBulkErrors() {
+		List<Object> errors = new ArrayList<>();
+		Map<String, Object> parsedJson = getParsedJson();
+		List<Map<String, Map<String, Object>>> items = (List) parsedJson.get("items");
+		if (items != null) {			
+			for(Map<String, Map<String, Object>> item : items) {
+				for (Map.Entry<String, Map<String, Object>> entry : item.entrySet()) {
+					Map<String, Object> values = entry.getValue();
+					Object err = values.get("error");
+					if (err != null) errors.add(err);					
+				}
+			}
+			return new ESException("BulkRequest errors: "+errors, null);
+		}
+		return null;
 	}
 	
 	
