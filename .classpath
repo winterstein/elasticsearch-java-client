@@ -6,7 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.utils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.web"/>
-	<classpathentry kind="lib" path="/middleware/jetty/jetty-util.jar" sourcepath="/home/agis/.m2/repository/org/eclipse/jetty/jetty-util/7.5.4.v20111024/jetty-util-7.5.4.v20111024-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/middleware/guava/guava.jar" sourcepath="/home/daniel/winterwell/code/middleware/guava/guava-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.bob"/>
