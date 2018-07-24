@@ -2,21 +2,15 @@
 package com.winterwell.es;
 
 import java.io.File;
-import java.util.Set;
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import com.winterwell.bob.tasks.CopyTask;
-import com.winterwell.bob.tasks.EclipseClasspath;
-import com.winterwell.bob.tasks.JarTask;
-import com.winterwell.bob.tasks.RSyncTask;
-import com.winterwell.bob.tasks.SCPTask;
+import com.winterwell.bob.BuildTask;
 
 import com.winterwell.utils.io.FileUtils;
 
-import jobs.BuildBob;
-import jobs.BuildDepot;
-import jobs.BuildMaths;
-import jobs.BuildDataLog;
+import jobs.BuildFlexiGson;
 import jobs.BuildUtils;
 import jobs.BuildWeb;
 import jobs.BuildWinterwellProject;
@@ -28,6 +22,17 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 		setIncSrc(true);
 	}
 
+	@Override
+	public Collection<? extends BuildTask> getDependencies() {
+		List<BuildTask> deps = new ArrayList(super.getDependencies());
+		// TODO turn lib into a maven spec
+		// WW projects
+		deps.add(new BuildUtils());
+		deps.add(new BuildWeb());
+		deps.add(new BuildFlexiGson());		
+		return deps;
+	}
+	
 	@Override
 	public void doTask() throws Exception {
 		super.doTask();		
