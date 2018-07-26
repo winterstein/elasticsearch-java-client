@@ -66,7 +66,7 @@ public class PainlessScriptBuilder {
 				String rlist = "params."+pid; 
 				// This fugly code does set-style uniqueness. If there is a nicer way please do say.
 				// I assume naming the language "painless" is ES's joke on the rest of us.
-				sb.append("if ("+el+"!=null) {for(int i=0; i<"+rlist+".size(); i++) {def x="+rlist+".get(i); if (!"+rlist+".contains(x)) "+rlist+".add(x);}} else {"+el+"="+rlist+";}\n");
+				sb.append("if ("+el+"!=null) {for(int i=0; i<"+rlist+".size(); i++) {def x="+rlist+".get(i); if (!"+el+".contains(x)) "+el+".add(x);}} else {"+el+"="+rlist+";}\n");
 				break;
 //				continue;
 			} else if (v instanceof Map) {
