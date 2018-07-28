@@ -1,8 +1,10 @@
 package com.winterwell.es.client;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.lucene.index.MergeRateLimiter;
 
@@ -23,6 +25,18 @@ public class PainlessScriptBuilder {
 	private String script;
 
 	Map params = new ArrayMap();
+
+	private Map<String, Object> jsonObject;
+
+	/**
+	 * parameters that should not be merged
+	 */
+	private Set<String> hardSetParams = new HashSet();
+	
+	public PainlessScriptBuilder setNoMergeParam(String p) {
+		hardSetParams.add(p);
+		return this;
+	}
 	
 	public Map getParams() {
 		return params.isEmpty()? null : params;
@@ -31,9 +45,25 @@ public class PainlessScriptBuilder {
 	public String getLang() {
 		return "painless";
 	}
+	
+	/**
+	 * use static methods to make??
+	 */
+	PainlessScriptBuilder() {
+	}
 
 	public String getScript() {
+		if (script==null) buildScript();
 		return script;
+	}
+
+	private void buildScript() {
+		if (jsonObject!=null) {
+			StringBuilder sb = new StringBuilder("Map e=ctx._source;\n");
+			String var = "e";
+			fromJsonObject2(jsonObject, sb, var);
+			script = sb.toString();
+		}
 	}
 
 	/**
@@ -45,24 +75,29 @@ public class PainlessScriptBuilder {
 		// TODO maybe refactor to use Merger and Diff from Depot??
 		// NB use Debug.explain(var) to get debug info out
 		PainlessScriptBuilder psb = new PainlessScriptBuilder();
-		StringBuilder sb = new StringBuilder("Map e=ctx._source;\n");
-		String var = "e";
-		fromJsonObject2(doc, psb, sb, var);
-		psb.script = sb.toString();
+		psb.jsonObject = doc;
 		return psb;
 	}
 
-	private static void fromJsonObject2(Map<String, Object> doc, PainlessScriptBuilder psb, StringBuilder sb, String var) {
+	private void fromJsonObject2(Map<String, Object> doc, StringBuilder sb, String var) {
 		for(Map.Entry me : doc.entrySet()) {
+			final String k = (String) me.getKey();
 			Object v = me.getValue();
 			if (v==null) continue;
 			
+			// hard-set parameter? This allows for _not_ doing the collection merge below
+			if (hardSetParams.contains(k)) {
+				String pid = addParam(v);
+				sb.append(var+"."+k+"=params."+pid+";\n");
+				continue;
+			}
+			
 			// collections?
 			if (v instanceof Collection || v.getClass().isArray()) {
-				String el = var+"."+me.getKey();
+				String el = var+"."+k;
 				List<Object> vlist = Containers.asList(v);
 				// shove into params
-				String pid = psb.addParam(vlist);
+				String pid = addParam(vlist);
 				String rlist = "params."+pid; 
 				// This fugly code does set-style uniqueness. If there is a nicer way please do say.
 				// I assume naming the language "painless" is ES's joke on the rest of us.
@@ -73,7 +108,7 @@ public class PainlessScriptBuilder {
 				String el = var+"."+me.getKey();
 				Map vmap = (Map) v;								
 				// shove into params
-				String pid = psb.addParam(vmap);
+				String pid = addParam(vmap);
 				// TODO recurse??
 				sb.append("if ("+el+"==null) "+el+"=params."+pid+"; else "+el+".putAll(params."+pid+");\n");
 				continue;
@@ -90,7 +125,6 @@ public class PainlessScriptBuilder {
 				// just number, boolean I think??
 				vs = v.toString();
 			}
-			String k = (String) me.getKey();
 			if (StrUtils.isWord(k)) {
 				sb.append(var+"."+k+" = "+vs+";\n");
 			} else {
