@@ -1,6 +1,5 @@
 package com.winterwell.es;
 
-import com.winterwell.data.KStatus;
 
 /**
  * Convenience for matching classes to indexes

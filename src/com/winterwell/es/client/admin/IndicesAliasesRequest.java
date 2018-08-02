@@ -18,11 +18,22 @@ import com.winterwell.utils.containers.ArrayMap;
  */
 public class IndicesAliasesRequest extends ESHttpRequest<IndicesAliasesRequest, IESResponse> {
 
+	/**
+	 * @return true if this is a no-op
+	 */
+	public boolean isEmpty() {
+		return actions.isEmpty();
+	}
+	
+	/**
+	 * NB: This is shared with the body map. Edits here change the body. 
+	 */
 	private ArrayList<Map> actions;
 
 	public IndicesAliasesRequest(IndicesAdminClient iac) {
 		super(iac.hClient, "_aliases");
 		method = "POST";
+		setIndex(null);
 		actions = new ArrayList();
 		setBodyMap(new ArrayMap("actions", actions));
 	}

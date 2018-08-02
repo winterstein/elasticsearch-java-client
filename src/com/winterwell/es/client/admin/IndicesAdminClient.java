@@ -78,10 +78,13 @@ public class IndicesAdminClient {
     public CreateIndexRequest prepareCreate(String index) {
     	return new CreateIndexRequest(hClient, index);
     }
+    
+    public IndexSettingsRequest indexSettings(String alias) {
+		return new IndexSettingsRequest(hClient).setIndex(alias);
+	}
 
-	public ESHttpRequest<IndexRequestBuilder, IESResponse> getAliases(String readIndex) {
-		// TODO Auto-generated method stub
-		throw new TodoException();
+	public GetAliasesRequest getAliases(String indexOrAlias) {
+		return new GetAliasesRequest(hClient).setIndex(indexOrAlias);
 	}
     
 

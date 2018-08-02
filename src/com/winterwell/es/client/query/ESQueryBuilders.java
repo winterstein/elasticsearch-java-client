@@ -4,11 +4,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.time.Time;
 
+/**
+ * Convenience utils
+ * @author daniel
+ *
+ */
 public class ESQueryBuilders {
 
 	/**
@@ -60,6 +66,27 @@ public class ESQueryBuilders {
 		return new ESQueryBuilder(must);
 	}
 
+	public static ESQueryBuilder dateRangeQuery(String field, Time start, Time end) {
+		assert field != null;
+		if (start==null && end==null) throw new NullPointerException("Must provide one of start/end");
+		if (start !=null && end !=null && ! end.isAfter(start)) {
+			throw new IllegalArgumentException("Empty range :"+start+" to "+end);
+		}
+		Map rq = new ArrayMap();
+		if (start!=null) {
+			rq.put("from", start.toISOString());
+			rq.put("include_lower", true);
+		}
+		if (end!=null) {
+			rq.put("to", end.toISOString());
+			rq.put("include_upper", true);
+		}
+		Map must = new ArrayMap("range", 
+				new ArrayMap(field, rq));
+		return new ESQueryBuilder(must);
+	}
+
+	
 	public static BoolQueryBuilder boolQuery() {
 		return new BoolQueryBuilder();
 	}
@@ -76,8 +103,32 @@ public class ESQueryBuilders {
 		return new ESQueryBuilder(must);
 	}
 
-	public static ESQueryBuilder dateRangeQuery(String string, Time start, Time end) {
-		throw new TodoException();
+
+
+	/**
+	 * @param field
+	 * @param min Can be null if max is set.
+	 * @param max Can be null if min is set.
+	 * @return
+	 */
+	public static ESQueryBuilder rangeQuery(String field, Number min, Number max) {
+		assert field != null;
+		if (min==null && max==null) throw new NullPointerException("Must provide one of min/max");
+		if (min !=null && max !=null && MathUtils.compare(min, max) != -1) {
+			throw new IllegalArgumentException("Empty range for "+field+": "+min+" to "+max);
+		}
+		Map rq = new ArrayMap();
+		if (min!=null) {
+			rq.put("gt", min); // or gte??
+//			rq.put("include_lower", true);
+		}
+		if (max!=null) {
+			rq.put("lt", max); // or lte??
+//			rq.put("include_upper", true);
+		}
+		Map must = new ArrayMap("range", 
+				new ArrayMap(field, rq));
+		return new ESQueryBuilder(must);
 	}
 
 }
