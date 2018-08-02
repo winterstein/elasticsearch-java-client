@@ -1,7 +1,10 @@
 package com.winterwell.es.client.admin;
 
 import com.winterwell.es.client.ESHttpClient;
+import com.winterwell.es.client.ESHttpRequest;
 import com.winterwell.es.client.IESResponse;
+import com.winterwell.es.client.IndexRequestBuilder;
+import com.winterwell.utils.TodoException;
 
 
 /**
@@ -75,6 +78,11 @@ public class IndicesAdminClient {
     public CreateIndexRequest prepareCreate(String index) {
     	return new CreateIndexRequest(hClient, index);
     }
+
+	public ESHttpRequest<IndexRequestBuilder, IESResponse> getAliases(String readIndex) {
+		// TODO Auto-generated method stub
+		throw new TodoException();
+	}
     
 
 }

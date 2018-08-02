@@ -63,4 +63,5 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		bool.put("minimum_should_match", n);
 		return this;
 	}
+
 }

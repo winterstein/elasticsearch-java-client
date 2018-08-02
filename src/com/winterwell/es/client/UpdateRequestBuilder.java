@@ -9,6 +9,7 @@ import org.eclipse.jetty.util.ajax.JSON;
 
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
+import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.threads.IFuture;
@@ -195,6 +196,11 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 		// HACK - poke the doc json into a wrapping doc property
 		body().put("doc", new RawJson(docJson));
 //		setBodyJson("{\"doc\":"+docJson+"}");
+	}
+
+
+	public void setScript(PainlessScriptBuilder psb) {
+		throw new TodoException();
 	}
 
 

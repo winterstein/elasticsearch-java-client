@@ -1,5 +1,6 @@
 package com.winterwell.es;
 
+import com.winterwell.data.KStatus;
 
 /**
  * Convenience for matching classes to indexes
@@ -16,7 +17,7 @@ public interface IESRouter {
 	 * @param dataspace Optional name-spacing -- often this maps to an index
 	 * @return
 	 */
-	ESPath getPath(String dataspace, Class type, String id, Object status);
+	ESPath getPath(CharSequence dataspace, Class type, String id, Object status);
 	
 	default ESPath getPath(Class type, String id) {
 		return getPath(null, type, id, null);
@@ -25,4 +26,5 @@ public interface IESRouter {
 	default ESPath getPath(Class type, String id, Object status) {
 		return getPath(null, type, id, status);
 	}
+
 }

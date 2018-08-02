@@ -7,6 +7,7 @@ import java.util.Map;
 import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
+import com.winterwell.utils.time.Time;
 
 public class ESQueryBuilders {
 
@@ -73,6 +74,10 @@ public class ESQueryBuilders {
 	public static ESQueryBuilder existsQuery(String field) {
 		Map must = new ArrayMap("exists", new ArrayMap("field", field));
 		return new ESQueryBuilder(must);
+	}
+
+	public static ESQueryBuilder dateRangeQuery(String string, Time start, Time end) {
+		throw new TodoException();
 	}
 
 }
