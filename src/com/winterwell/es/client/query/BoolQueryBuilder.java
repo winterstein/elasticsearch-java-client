@@ -51,7 +51,8 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 			// avoid pointless wrapping
 			if (bool.isEmpty()) {
 				// add to this bool anyway, 'cos the user might not catch the return object
-				add("must", q);
+				ESQueryBuilder q2 = q.clone(); // clone to avoid locking q
+				add("must", q2);
 				// return unwrapped
 				return (BoolQueryBuilder) q;
 			}			

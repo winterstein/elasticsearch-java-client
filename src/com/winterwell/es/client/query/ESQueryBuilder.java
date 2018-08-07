@@ -5,6 +5,7 @@ import java.util.Map;
 import org.elasticsearch.index.query.QueryBuilder;
 
 import com.winterwell.es.ESUtils;
+import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.web.IHasJson;
 
 /**
@@ -12,8 +13,14 @@ import com.winterwell.utils.web.IHasJson;
  * @author daniel
  *
  */
-public class ESQueryBuilder implements IHasJson {
+public class ESQueryBuilder implements IHasJson, Cloneable {
 
+	@Override
+	public ESQueryBuilder clone() {
+		ESQueryBuilder clone = new ESQueryBuilder(new ArrayMap(jobj));
+		return clone;
+	}
+	
 	@Override
 	public String toString() {	
 		return "ESQueryBuilder"+toJSONString();
@@ -22,6 +29,10 @@ public class ESQueryBuilder implements IHasJson {
 	Map jobj;
 	protected transient boolean lock;
 
+	/**
+	 * 
+	 * @param query Used directly! beware of side effects
+	 */
 	public ESQueryBuilder(Map query) {
 		this.jobj = query;
 	}

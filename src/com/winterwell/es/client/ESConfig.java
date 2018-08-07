@@ -30,7 +30,7 @@ public class ESConfig {
 	
 	@Override
 	public String toString() {
-		return "ESConfig [port=" + port + ", server=" + server + "]";
+		return "ESConfig[esUrl=" + esUrl + "]";
 	}
 
 	public ESConfig() {
