@@ -132,6 +132,10 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 	
+	/**
+	 * @deprecated You can use this key:value method - 
+	 * But do you want {@link #property(String, ESType)} instead? 
+	 */
 	@Override
 	public Object put(String key, Object value) {
 		lockCheck();
