@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 import com.winterwell.bob.BuildTask;
-
 import com.winterwell.utils.io.FileUtils;
 
 import jobs.BuildFlexiGson;

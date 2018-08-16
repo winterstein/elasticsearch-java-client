@@ -3,15 +3,10 @@ package com.winterwell.es;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.lucene.util.automaton.MinimizationOperations;
-import org.omg.CORBA.SetOverrideType;
-
-import com.winterwell.utils.TodoException;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.Warning;
 import com.winterwell.utils.containers.ArrayMap;

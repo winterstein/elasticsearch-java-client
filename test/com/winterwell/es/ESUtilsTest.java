@@ -1,25 +1,5 @@
 package com.winterwell.es;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.elasticsearch.client.Client;
-import org.elasticsearch.node.Node;
-import org.junit.Test;
-
-import com.winterwell.es.client.ESConfig;
-import com.winterwell.es.client.ESHttpClient;
-import com.winterwell.es.client.IESResponse;
-import com.winterwell.es.client.IndexRequestBuilder;
-import com.winterwell.es.client.SearchRequestBuilder;
-import com.winterwell.es.client.SearchResponse;
-import com.winterwell.utils.Printer;
-import com.winterwell.utils.Utils;
-import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.time.Time;
-
 public class ESUtilsTest {
 
 //	@Test

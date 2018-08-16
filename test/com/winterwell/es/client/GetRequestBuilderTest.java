@@ -1,15 +1,11 @@
 package com.winterwell.es.client;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
 import com.winterwell.utils.Dep;
-import com.winterwell.utils.Printer;
-import com.winterwell.utils.time.TUnit;
 import com.winterwell.web.WebEx;
 
 public class GetRequestBuilderTest {

@@ -6,7 +6,6 @@ import java.util.Set;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.ESHttpRequest;
 import com.winterwell.es.client.IESResponse;
-import com.winterwell.utils.Utils;
 import com.winterwell.web.WebEx;
 
 public class GetAliasesRequest extends ESHttpRequest<GetAliasesRequest, IESResponse> {

@@ -1,14 +1,8 @@
 package com.winterwell.es.query;
 
-import static org.junit.Assert.*;
-
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.junit.Test;
 
-import com.winterwell.es.client.ESHttpClient;
-import com.winterwell.es.client.SearchRequestBuilder;
 import com.winterwell.utils.containers.ArrayMap;
 
 public class MapQueryBuilderTest {

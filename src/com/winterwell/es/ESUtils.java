@@ -3,47 +3,16 @@
  */
 package com.winterwell.es;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import com.winterwell.es.client.ESConfig;
-import com.winterwell.es.client.ESHttpClient;
+import org.elasticsearch.common.xcontent.ToXContent;
+
 import com.winterwell.gson.FlexiGson;
-import com.winterwell.gson.Gson;
-import com.winterwell.gson.JsonDeserializationContext;
-import com.winterwell.gson.JsonDeserializer;
-import com.winterwell.gson.JsonElement;
-import com.winterwell.gson.JsonParseException;
-import com.winterwell.gson.JsonPrimitive;
-import com.winterwell.gson.JsonSerializationContext;
-import com.winterwell.gson.JsonSerializer;
 import com.winterwell.utils.StrUtils;
-import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
-import com.winterwell.utils.containers.Pair2;
-import com.winterwell.utils.io.ArgsParser;
-import com.winterwell.utils.log.Log;
-import com.winterwell.utils.time.Time;
-import com.winterwell.utils.web.IHasJson;
-import com.winterwell.web.data.XId;
-
-import org.elasticsearch.common.io.stream.StreamOutput;
-import org.elasticsearch.common.io.stream.Writeable;
-import org.elasticsearch.common.settings.Settings;
-import org.elasticsearch.common.xcontent.ToXContent;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.node.Node;
-//import org.elasticsearch.node.NodeBuilder;
-import org.elasticsearch.client.Client;
-//import org.elasticsearch.common.settings.ImmutableSettings;
-//import org.elasticsearch.common.settings.ImmutableSettings.Builder;
 
 /**
  * Elastic Search utils

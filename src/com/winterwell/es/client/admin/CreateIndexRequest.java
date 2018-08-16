@@ -3,14 +3,11 @@ package com.winterwell.es.client.admin;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import com.google.common.util.concurrent.ListenableFuture;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.ESHttpRequest;
 import com.winterwell.es.client.ESHttpResponse;
 import com.winterwell.es.client.IESResponse;
-import com.winterwell.es.fail.ESException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.log.Log;

@@ -3,7 +3,6 @@ package com.winterwell.es.client;
 import java.util.List;
 import java.util.Map;
 
-import com.winterwell.datalog.DataLog;
 import com.winterwell.es.client.agg.AggregationResults;
 import com.winterwell.web.WebEx;
 

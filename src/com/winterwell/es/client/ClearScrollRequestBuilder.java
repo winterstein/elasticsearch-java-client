@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.winterwell.utils.StrUtils;
 
-import com.winterwell.utils.TodoException;
-
 public class ClearScrollRequestBuilder extends ESHttpRequest<ClearScrollRequestBuilder, IESResponse> {
 
 	public ClearScrollRequestBuilder(ESHttpClient esHttpClient) {

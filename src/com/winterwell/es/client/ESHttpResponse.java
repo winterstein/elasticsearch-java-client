@@ -4,20 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jetty.util.ajax.JSON;
-
 import com.winterwell.es.client.agg.AggregationResults;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
-import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
-import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.web.IHasJson;
-import com.winterwell.web.WebEx;
 
 /**
  * Imitates {@link GetResponse}

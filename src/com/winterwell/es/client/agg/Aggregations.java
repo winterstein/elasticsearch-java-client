@@ -3,14 +3,7 @@
  */
 package com.winterwell.es.client.agg;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramAggregationBuilder;
-
-import com.winterwell.utils.containers.ArrayMap;
 
 /**
  * Builder methods for making {@link Aggregation}s

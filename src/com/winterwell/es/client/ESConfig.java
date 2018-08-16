@@ -1,17 +1,9 @@
 package com.winterwell.es.client;
 
-import java.io.File;
-
-import com.winterwell.es.ESUtils;
-import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
-import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.Dep;
-import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
-import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.io.Option;
-import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.time.Time;
 

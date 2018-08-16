@@ -1,9 +1,6 @@
 package com.winterwell.es.client.admin;
 
-import org.elasticsearch.index.IndexSettings;
-
 import com.winterwell.es.client.ESHttpClient;
-import com.winterwell.es.client.ESHttpRequest;
 import com.winterwell.es.client.IESResponse;
 
 

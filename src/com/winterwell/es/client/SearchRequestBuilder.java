@@ -7,11 +7,7 @@ import java.util.Map;
 import org.eclipse.jetty.util.ajax.JSON;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
@@ -24,12 +20,9 @@ import com.winterwell.es.client.query.ESQueryBuilders;
 import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
-import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
-import com.winterwell.utils.time.Time;
 import com.winterwell.utils.web.SimpleJson;
 
 /**

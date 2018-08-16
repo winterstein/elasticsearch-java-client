@@ -1,14 +1,10 @@
 package com.winterwell.es.client;
 
-import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.sun.mail.handlers.image_gif;
 import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.query.ESQueryBuilder;
@@ -17,20 +13,12 @@ import com.winterwell.es.fail.DocNotFoundException;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.es.fail.IElasticException;
 import com.winterwell.es.fail.MapperParsingException;
-import com.winterwell.gson.FlexiGson;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
-import com.winterwell.gson.JsonElement;
-import com.winterwell.gson.JsonSerializationContext;
-import com.winterwell.gson.JsonSerializer;
-import com.winterwell.gson.PlainGson;
 import com.winterwell.gson.StandardAdapters;
-import com.winterwell.utils.Dep;
-import com.winterwell.utils.Printer;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.web.WebUtils;
 import com.winterwell.utils.web.WebUtils2;
