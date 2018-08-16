@@ -6,6 +6,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 
 import com.winterwell.es.ESUtils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.web.IHasJson;
 
 /**
@@ -28,17 +29,34 @@ public class ESQueryBuilder implements IHasJson, Cloneable {
 	
 	Map jobj;
 	protected transient boolean lock;
+	/**
+	 * Many queries have one top level key, and the sub-object is where the settings go 
+	 */
+	protected Map props;
 
+	/**
+	 * Direct access to the jobject map.
+	 * @throws IllegalStateException see {@link #lockCheck()}
+	 */
+	public Map getUnderlyingMap() {
+		lockCheck();
+		return jobj;
+	}
+	
 	/**
 	 * 
 	 * @param query Used directly! beware of side effects
 	 */
 	public ESQueryBuilder(Map query) {
 		this.jobj = query;
+		// Convenience hack
+		if (query.size()==1) {
+			this.props = (Map) Containers.first(jobj.values());	
+		}
 	}
 	
 	public ESQueryBuilder(QueryBuilder query) {
-		this.jobj = ESUtils.jobj(query);
+		this(ESUtils.jobj(query));
 	}
 	protected void lockCheck() throws IllegalStateException {
 		if (lock) {

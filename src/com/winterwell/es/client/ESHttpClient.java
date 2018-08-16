@@ -75,7 +75,7 @@ public class ESHttpClient {
 
 
 	@Deprecated // set on requests
-	public static boolean debug = true;
+	public static boolean debug;
 
 	public void setServer(String server) {
 		this.servers = Collections.singletonList(server);

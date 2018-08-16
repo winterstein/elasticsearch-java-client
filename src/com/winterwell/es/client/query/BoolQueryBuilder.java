@@ -33,21 +33,19 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		if (q instanceof BoolQueryBuilder && ((BoolQueryBuilder) q).isEmpty()) {
 			Log.w("ES.bool", "Added non-clause to "+this+" "+ReflectionUtils.getSomeStack(8));
 		}
-		Map bool = (Map) jobj.get("bool");
-		List qs = (List) bool.get(cond);
+		List qs = (List) props.get(cond);
 		if (qs==null) {
 			qs = new ArrayList();		
-			bool.put(cond, qs);
+			props.put(cond, qs);
 		}
 		// add in json form to avoid mysterious serialisation bugs later
 		qs.add(q.toJson2());
 	}	
 
 	public BoolQueryBuilder must(ESQueryBuilder q) {
-		Map bool = (Map) jobj.get("bool");
 		if (q instanceof BoolQueryBuilder) {
 			// avoid pointless wrapping
-			if (bool.isEmpty()) {
+			if (props.isEmpty()) {
 				// add to this bool anyway, 'cos the user might not catch the return object
 				ESQueryBuilder q2 = q.clone(); // clone to avoid locking q
 				add("must", q2);
@@ -78,13 +76,11 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 
 	public ESQueryBuilder minimumNumberShouldMatch(int n) {
 		lockCheck();
-		Map bool = (Map) jobj.get("bool");
-		bool.put("minimum_should_match", n);
+		props.put("minimum_should_match", n);
 		return this;
 	}
 
 	public boolean isEmpty() {
-		Map bool = (Map) jobj.get("bool");		
-		return bool.isEmpty();
+		return props.isEmpty();
 	}
 }

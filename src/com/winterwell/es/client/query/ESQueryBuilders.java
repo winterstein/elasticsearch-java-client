@@ -139,4 +139,8 @@ public class ESQueryBuilders {
 		return new ESQueryBuilder(must);
 	}
 
+	public static MoreLikeThisQueryBuilder similar(String like, List<String> fields) {		    
+		return new MoreLikeThisQueryBuilder(like).setFields(fields);
+	}
+
 }

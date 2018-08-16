@@ -98,6 +98,11 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return setQuery(ESUtils.jobj(qb));
 	}
 	
+	/**
+	 * Best practice: Use this to set the query. / filter.
+	 * @param qb Cannot be modified afterwards.
+	 * @return
+	 */
 	public SearchRequestBuilder setQuery(ESQueryBuilder qb) {
 		return setQuery(qb.toJson2());
 	}
@@ -227,6 +232,9 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	/**
 	 * Convenience method for building up AND queries.
 	 * This will set the query if null, or combine with bool-query *must* if not null.
+	 * 
+	 * @see #setQuery(ESQueryBuilder)
+	 * 
 	 * @param qb
 	 * @return 
 	 */
