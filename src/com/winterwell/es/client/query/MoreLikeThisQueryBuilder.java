@@ -1,13 +1,13 @@
 package com.winterwell.es.client.query;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD
 
 import com.winterwell.utils.ReflectionUtils;
+=======
+>>>>>>> 6946d69df81a3187d032f38dafc789f5e2ea83d6
 import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.log.Log;
 
 /**
  * See https://www.elastic.co/guide/en/elasticsearch/reference/6.3/query-dsl-mlt-query.html
