@@ -166,7 +166,6 @@ public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
 		return processResponse(doExecute(hClient));
 	}
 	
-
 	/**
 	 * Does nothing by default. Sub-classes can over-ride to unwrap the response object
 	 * @param response

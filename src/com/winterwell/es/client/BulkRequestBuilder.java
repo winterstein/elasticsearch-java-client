@@ -12,6 +12,8 @@ import com.winterwell.utils.containers.ArrayMap;
 /**
  * Make a bulk update / insert request from several other requests - see {@link #add(ESHttpRequest)}.
  * 
+ * TODO add a streaming mode to this
+ * 
  * @author Daniel
  * @testedby {@link BulkRequestBuilderTest}
  */
@@ -24,6 +26,21 @@ public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkRes
 		return actions.isEmpty();
 	}
 	
+	/**
+	 * @deprecated TODO for large amounts of data, better to stream it out rather than build a big in-memory blob
+	 * @return
+	 */
+	public BulkRequestBuilder openStream() {
+		String sofar = getBodyJson();
+		// chop off the end
+		// open a url stream		
+		return this;
+	}
+	
+	public BulkRequestBuilder closeStream() {
+		return this;
+	}
+
 	
 	public List<ESHttpRequest> getActions() {
 		return actions;

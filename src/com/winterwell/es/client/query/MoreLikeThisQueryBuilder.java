@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.goodloop.egbot.server.min_doc_freq;
 import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.log.Log;
