@@ -106,9 +106,13 @@ IHasJson
 		return ((Map) fields).get(input);
 	}
 	
+	/**
+	 * @return Could contain POJOs depending on gson setup.
+	 *  
+	 * @see #getJsonMap() which uses a "plain gson" for Map objects 
+	 */
 	public Map<String, Object> getParsedJson() {
 		if (parsed!=null) return parsed;		
-//		String bugjson = json.replace("\"0.2\"", "0.2"); // HACK testing the Advert bug Nov 2017		
 		parsed = gson().fromJson(json, Map.class);
 		return parsed;
 	}
@@ -237,8 +241,11 @@ IHasJson
 
 	@Override
 	public List<Map<String, Object>> getSearchResults() {
-		List<Map> hits = getHits();
-		List results = Containers.apply(hits, hit -> hit.get("_source"));
+		if ( ! isSuccess()) throw error;
+		Map<String, Object> map = getJsonMap();
+		Map hits = (Map) map.get("hits");
+		List<Map<String,Object>> hitsList = (List) hits.get("hits");
+		List results = Containers.apply(hitsList, hit -> hit.get("_source"));
 		return results;		
 	}
 	

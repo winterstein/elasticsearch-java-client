@@ -35,7 +35,7 @@ public interface SearchResponse extends IESResponse {
 	Map getAggregations();
 
 	/**
-	 * Convenience for {@link #getHits()} then get _source
+	 * Like {@link #getHits()} then get _source, but without any gson to-POJO conversion.
 	 * @return list of documents
 	 * @see #getSearchResults(Class)
 	 */
