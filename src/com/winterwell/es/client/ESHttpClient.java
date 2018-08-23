@@ -161,7 +161,7 @@ public class ESHttpClient {
 					// success?
 					if (r.getError()==null) return r;
 					// micro-pause before a retry to allow whatever the problem was to clear
-					Utils.sleep(10);
+					Utils.sleep(10 + t*1000);
 				}
 				// fail
 				if (trace!=null) {				
