@@ -153,15 +153,16 @@ public class ESHttpClient {
 		@Override
 		public ESHttpResponse call() throws Exception {
 			try {
-				Thread.currentThread().setName("ESHttpClient (threaded): "+req);
+				Thread.currentThread().setName("ESHttpClient (threaded): "+req);				
 				assert req.retries+1 >= 1;
 				ESHttpResponse r = null;
 				for(int t=0; t<req.retries+1; t++) {
 					r = req.doExecute(ESHttpClient.this);
 					// success?
 					if (r.getError()==null) return r;
-					// micro-pause before a retry to allow whatever the problem was to clear
-					Utils.sleep(10 + t*1000);
+					// pause before a retry to allow whatever the problem was to clear
+					// but first retry is near instant
+					Utils.sleep(5 + t*t*1000);
 				}
 				// fail
 				if (trace!=null) {				
