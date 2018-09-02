@@ -8,7 +8,8 @@ import java.lang.annotation.RetentionPolicy;
  * - since that is the most common schema error. 
  * 
  * Usage: This will NOT do anything by itself!
- * You'll need your own reflection code to spot annotations and make ES mappings.
+ * You'll need reflection code to spot annotations and make ES mappings.
+ * AppUtils.initESMappings() does this.
  * TODO refactor AppUtils mapping-maker into a generic class here.
  * 
  * @author daniel
