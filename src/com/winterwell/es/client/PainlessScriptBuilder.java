@@ -15,7 +15,7 @@ import com.winterwell.web.data.XId;
 /**
  * Make Painless scripts
  * @author daniel
- *
+ * 
  */
 public class PainlessScriptBuilder {
 
@@ -99,8 +99,7 @@ public class PainlessScriptBuilder {
 				// This fugly code does set-style uniqueness. If there is a nicer way please do say.
 				// I assume naming the language "painless" is ES's joke on the rest of us.
 				sb.append("if ("+el+"!=null) {for(int i=0; i<"+rlist+".size(); i++) {def x="+rlist+".get(i); if (!"+el+".contains(x)) "+el+".add(x);}} else {"+el+"="+rlist+";}\n");
-				break;
-//				continue;
+				continue;
 			} else if (v instanceof Map) {
 				String el = var+"."+me.getKey();
 				Map vmap = (Map) v;								
