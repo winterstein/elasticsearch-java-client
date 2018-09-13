@@ -28,8 +28,12 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	 * @param string false | true | wait_for
 	 */
 	public void setRefresh(String refresh) {
-		assert Arrays.asList("false","true","wait_for").contains(refresh) : refresh;
-		params.put("refresh", refresh);		
+		KRefresh kr = KRefresh.valueOf(refresh.toUpperCase());
+		setRefresh(kr);
+	}
+	
+	public void setRefresh(KRefresh refresh) {
+		params.put("refresh", refresh.toString().toLowerCase());		
 	}
 
 	
