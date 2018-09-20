@@ -3,13 +3,7 @@
  */
 package com.winterwell.es.client.agg;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import org.elasticsearch.search.aggregations.AggregationBuilders;
-
-import com.winterwell.utils.containers.ArrayMap;
 
 /**
  * @author daniel

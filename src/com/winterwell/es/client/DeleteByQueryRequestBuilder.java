@@ -1,16 +1,6 @@
 package com.winterwell.es.client;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.jetty.util.ajax.JSON;
 import org.elasticsearch.index.query.QueryBuilder;
-
-import com.winterwell.utils.StrUtils;
-import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.time.Dt;
-import com.winterwell.utils.time.TUnit;
 
 /**
  * @see org.elasticsearch.action.deletebyquery.DeleteByQueryRequestBuilder

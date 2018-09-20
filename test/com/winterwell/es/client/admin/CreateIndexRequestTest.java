@@ -1,7 +1,5 @@
 package com.winterwell.es.client.admin;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 import com.winterwell.es.client.ESConfig;

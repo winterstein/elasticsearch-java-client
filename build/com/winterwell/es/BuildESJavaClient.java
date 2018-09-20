@@ -2,29 +2,27 @@
 package com.winterwell.es;
 
 import java.io.File;
-import java.util.Set;
-import java.util.logging.Level;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import com.winterwell.bob.tasks.CopyTask;
-import com.winterwell.bob.tasks.EclipseClasspath;
-import com.winterwell.bob.tasks.JarTask;
-import com.winterwell.bob.tasks.RSyncTask;
-import com.winterwell.bob.tasks.SCPTask;
-
+import com.winterwell.bob.BuildTask;
+import com.winterwell.bob.tasks.MavenDependencyTask;
 import com.winterwell.utils.io.FileUtils;
 
-import jobs.BuildBob;
-import jobs.BuildDepot;
-import jobs.BuildMaths;
-import jobs.BuildDataLog;
-import jobs.BuildUtils;
-import jobs.BuildWeb;
 import jobs.BuildWinterwellProject;
 
 public class BuildESJavaClient extends BuildWinterwellProject {
 
 	private String ESVERSION = "2";
 
+	@Override
+	public Collection<? extends BuildTask> getDependencies() {		
+		List<BuildTask> deps = new ArrayList(super.getDependencies());		
+		deps.add(new MavenDependencyTask("joda-time:joda-time:2.10"));
+		return deps;
+	}
+	
 	public BuildESJavaClient() {
 		super(
 			FileUtils.getWorkingDirectory(), // FIXME how to handle two git checkouts in different directories??

@@ -1,7 +1,6 @@
 package com.winterwell.es.client;
 
 import java.util.Arrays;
-import java.util.Map;
 
 /**
  * Index (store) a document.

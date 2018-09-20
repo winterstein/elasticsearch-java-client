@@ -8,6 +8,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.web"/>
 	<classpathentry exported="true" kind="lib" path="/middleware/guava/guava.jar" sourcepath="/home/daniel/winterwell/code/middleware/guava/guava-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/elasticsearch-2.4.6.jar"/>
+	<classpathentry kind="lib" path="dependencies/joda-time.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.bob"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/flexi-gson"/>

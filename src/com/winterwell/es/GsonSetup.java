@@ -1,23 +1,12 @@
 package com.winterwell.es;
 
-import java.lang.reflect.Type;
 import java.util.concurrent.Callable;
 
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
-import com.winterwell.gson.JsonDeserializationContext;
-import com.winterwell.gson.JsonDeserializer;
-import com.winterwell.gson.JsonElement;
-import com.winterwell.gson.JsonParseException;
-import com.winterwell.gson.JsonPrimitive;
-import com.winterwell.gson.JsonSerializationContext;
-import com.winterwell.gson.JsonSerializer;
 import com.winterwell.gson.StandardAdapters;
 import com.winterwell.utils.Dep;
-import com.winterwell.utils.containers.Properties;
-
 import com.winterwell.utils.time.Time;
-import com.winterwell.utils.web.IHasJson;
 import com.winterwell.web.data.XId;
 
 /**

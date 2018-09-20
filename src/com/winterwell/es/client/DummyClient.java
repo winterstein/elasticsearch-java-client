@@ -3,8 +3,6 @@
  */
 package com.winterwell.es.client;
 
-import java.util.Map;
-
 import org.elasticsearch.action.Action;
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.ActionListener;

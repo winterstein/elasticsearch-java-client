@@ -1,16 +1,11 @@
 package com.winterwell.es.query;
 
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.Test;
 
-import com.winterwell.depot.Desc;
 import com.winterwell.es.ESType;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.ESConfig;
@@ -22,11 +17,7 @@ import com.winterwell.es.client.admin.CreateIndexRequest;
 import com.winterwell.es.client.admin.PutMappingRequestBuilder;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.utils.Dep;
-import com.winterwell.utils.ReflectionUtils;
-import com.winterwell.utils.TodoException;
-import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.containers.Pair2;
 
 public class ESSearchTest {
 

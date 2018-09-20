@@ -1,41 +1,28 @@
 package com.winterwell.es.client;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
-import org.apache.commons.lang3.concurrent.CallableBackgroundInitializer;
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.winterwell.es.ESPath;
-import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.admin.ClusterAdminClient;
 import com.winterwell.es.client.admin.IndicesAdminClient;
 import com.winterwell.es.client.admin.StatsRequest;
 import com.winterwell.es.fail.ESException;
-import com.winterwell.gson.Gson;
-import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.Dep;
-import com.winterwell.utils.ReflectionUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.WrappedException;
-import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.io.ArgsParser;
 import com.winterwell.utils.log.Log;
-import com.winterwell.utils.threads.IFuture;
-import com.winterwell.utils.threads.AFuture;
-import com.winterwell.utils.threads.SafeExecutor;
 import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.web.WebUtils2;
 import com.winterwell.web.ConfigException;

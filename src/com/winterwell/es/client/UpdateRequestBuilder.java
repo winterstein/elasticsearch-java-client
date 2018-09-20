@@ -1,18 +1,14 @@
 package com.winterwell.es.client;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
 
 import com.winterwell.gson.RawJson;
-import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.io.FileUtils;
-import com.winterwell.utils.threads.IFuture;
 import com.winterwell.utils.time.Dt;
 
 

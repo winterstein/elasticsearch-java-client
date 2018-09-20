@@ -1,6 +1,5 @@
 package com.winterwell.es.client;
 
-import com.winterwell.es.ESPath;
 import com.winterwell.utils.StrUtils;
 
 public class GetRequestBuilder extends ESHttpRequest<GetRequestBuilder,GetResponse> {

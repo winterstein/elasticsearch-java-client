@@ -3,12 +3,9 @@ package com.winterwell.es.client;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jetty.util.ajax.JSON;
-
 import com.winterwell.es.client.agg.AggregationResults;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
-import com.winterwell.utils.MathUtils;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.Containers;
