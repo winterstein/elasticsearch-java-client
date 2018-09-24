@@ -15,6 +15,7 @@ import com.winterwell.web.data.XId;
 /**
  * Make Painless scripts
  * @author daniel
+ * @testedby {@link PainlessScriptBuilderTest}
  * 
  */
 public class PainlessScriptBuilder {
@@ -26,10 +27,14 @@ public class PainlessScriptBuilder {
 	private Map<String, Object> jsonObject;
 
 	/**
-	 * parameters that should not be merged
+	 * parameters that should not be merged (use overwrite instead)
 	 */
 	private Set<String> hardSetParams = new HashSet();
 	
+
+	/**
+	 * parameters that should not be merged (use overwrite instead)
+	 */
 	public PainlessScriptBuilder setNoMergeParam(String p) {
 		hardSetParams.add(p);
 		return this;
@@ -72,8 +77,13 @@ public class PainlessScriptBuilder {
 		// TODO maybe refactor to use Merger and Diff from Depot??
 		// NB use Debug.explain(var) to get debug info out
 		PainlessScriptBuilder psb = new PainlessScriptBuilder();
-		psb.jsonObject = doc;
+		psb.setJsonObject(doc);
 		return psb;
+	}
+	
+	public void setJsonObject(Map<String, Object> jsonObject) {
+		assert script == null;
+		this.jsonObject = jsonObject;
 	}
 
 	private void fromJsonObject2(Map<String, Object> doc, StringBuilder sb, String var) {
