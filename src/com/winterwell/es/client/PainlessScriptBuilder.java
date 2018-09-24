@@ -1,14 +1,18 @@
 package com.winterwell.es.client;
 
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
+import com.winterwell.utils.io.FileUtils;
 import com.winterwell.utils.time.Time;
 import com.winterwell.web.data.XId;
 
@@ -86,7 +90,12 @@ public class PainlessScriptBuilder {
 		this.jsonObject = jsonObject;
 	}
 
-	private void fromJsonObject2(Map<String, Object> doc, StringBuilder sb, String var) {
+	private void fromJsonObject2(Map<String, Object> doc, StringBuilder sb, String var) {		
+		if (hardSetParams.isEmpty()) {
+			fromJsonObject2_reusableScript(doc, sb, var);
+			return;
+		}
+		
 		for(Map.Entry me : doc.entrySet()) {
 			final String k = (String) me.getKey();
 			Object v = me.getValue();
@@ -138,6 +147,66 @@ public class PainlessScriptBuilder {
 				sb.append(var+".put(\""+k+"\","+vs+");\n");
 			}
 		}	
+	}
+
+	private void fromJsonObject2_reusableScript(Map<String, Object> doc, StringBuilder sb, String var) {
+		doc = deepArrayToList(doc);
+		String p = addParam(doc);
+		assert p.equals("p0") : p;
+		
+		InputStream r = PainlessScriptBuilder.class.getResourceAsStream("update.painless");
+		String s = FileUtils.read(r);
+		
+		sb.append(s);
+		// Recursion!
+		// Painless function??
+		// Use a while loop??		
+//		List<Object[]> todo = new ArrayList();
+//		while( ! todo.isEmpty()) {
+//			Object[] obj_prop_val = todo.remove(todo.size()-1);
+//			
+//		}
+
+		// This fugly code does set-style uniqueness. If there is a nicer way please do say.
+		// I assume naming the language "painless" is ES's joke on the rest of us.
+	}
+
+	/**
+	 * Standardise on List not Object[] or String[] for saner Painless scripts
+	 * @param doc
+	 * @return
+	 */
+	Map<String, Object> deepArrayToList(Map doc) {
+		Map doc2 = new ArrayMap();
+		for(Object k : doc.keySet()) {
+			Object v = doc.get(k);
+			if (v==null) continue;
+			if (v instanceof Map) {
+				v = deepArrayToList((Map)v);
+			} else if (v instanceof List) {
+				v = deepArrayToList2((List)v);			
+			} else if (v.getClass().isArray()) {
+				v = deepArrayToList2(Containers.asList(v));
+			}
+			doc2.put(k, v);
+		}
+		return doc2;
+	}
+
+	private List deepArrayToList2(List list) {
+		List vl2 = new ArrayList();
+		for (Object vli : list) {
+			if (vli==null) continue;
+			if (vli instanceof Map) {
+				vli = deepArrayToList((Map)vli);
+			} else if (vli instanceof List) {
+				vli = deepArrayToList2((List)vli);
+			} else if (vli.getClass().isArray()) {
+				vli = deepArrayToList2(Containers.asList(vli));
+			}
+			vl2.add(vli);
+		}
+		return vl2;
 	}
 
 	private String addParam(Object paramValue) {
