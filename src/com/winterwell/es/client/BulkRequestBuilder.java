@@ -45,16 +45,6 @@ public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkRes
 	public List<ESHttpRequest> getActions() {
 		return actions;
 	}
-	
-	/**
-	 * Force a refresh?
-	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html
-	 * @param string false | true | wait_for
-	 */
-	public void setRefresh(String refresh) {
-		assert Arrays.asList("false","true","wait_for").contains(refresh) : refresh;
-		params.put("refresh", refresh);		
-	}
 
 	public BulkRequestBuilder(ESHttpClient hClient) {
 		super(hClient, "_bulk");

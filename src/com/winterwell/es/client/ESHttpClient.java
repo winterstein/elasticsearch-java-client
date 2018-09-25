@@ -199,6 +199,10 @@ public class ESHttpClient {
 		drb.setIndex(esIndex).setType(esType).setId(id);
 		return drb;
 	}
+	
+	public DeleteRequestBuilder prepareDelete(ESPath path) {
+		return prepareDelete(path.index(), path.type, path.id);
+	}
 
 	/**
 	 * Convenience for using {@link GetRequestBuilder} to get a document (with no routing)
@@ -272,6 +276,8 @@ public class ESHttpClient {
 		urb.setPath(path);
 		return urb;
 	}
+
+	
 
 	
 }

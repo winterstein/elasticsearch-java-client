@@ -25,8 +25,25 @@ import com.winterwell.utils.web.WebUtils2;
 import com.winterwell.web.FakeBrowser;
 import com.winterwell.web.WebEx;
 
-public class ESHttpRequest<SubClass, ResponseSubClass extends IESResponse> {
+public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass extends IESResponse> {
 
+	/**
+	 * Force a refresh?
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html
+	 * @param string false | true | wait_for
+	 * @return 
+	 */
+	public final SubClass setRefresh(String refresh) {
+		KRefresh kr = KRefresh.valueOf(refresh.toUpperCase());
+		setRefresh(kr);
+		return (SubClass) this;
+	}
+	
+	public final SubClass setRefresh(KRefresh refresh) {
+		params.put("refresh", refresh.toString().toLowerCase());
+		return (SubClass) this;
+	}
+	
 	/**
 	 * @param fields e.g. _parent, _routing etc.
 	 * See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/mapping-fields.html

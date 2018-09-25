@@ -31,17 +31,6 @@ public class IndexRequestBuilder extends ESHttpRequest<IndexRequestBuilder, IESR
 		return this;
 	}
 	
-	
-
-	/**
-	 * Force a refresh?
-	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html
-	 * @param string false | true | wait_for
-	 */
-	public void setRefresh(String refresh) {
-		assert Arrays.asList("false","true","wait_for").contains(refresh) : refresh;
-		params.put("refresh", refresh);		
-	}
 
 	/**
 	 * If true, this will fail if a document with this ID already exists.

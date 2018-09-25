@@ -21,20 +21,6 @@ import com.winterwell.utils.time.Dt;
 public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IESResponse> {
 
 	private boolean docAsUpsert;
-	
-	/**
-	 * Force a refresh?
-	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-refresh.html
-	 * @param string false | true | wait_for
-	 */
-	public void setRefresh(String refresh) {
-		KRefresh kr = KRefresh.valueOf(refresh.toUpperCase());
-		setRefresh(kr);
-	}
-	
-	public void setRefresh(KRefresh refresh) {
-		params.put("refresh", refresh.toString().toLowerCase());		
-	}
 
 	
 	@Override

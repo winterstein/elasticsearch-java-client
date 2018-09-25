@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
@@ -154,8 +155,13 @@ public class PainlessScriptBuilder {
 		String p = addParam(doc);
 		assert p.equals("p0") : p;
 		
-		InputStream r = PainlessScriptBuilder.class.getResourceAsStream("update.painless");
+		InputStream r = PainlessScriptBuilder.class.getResourceAsStream("update.painless.js");
+		assert r != null;
 		String s = FileUtils.read(r);
+		// remove comments
+		s = Pattern.compile("^//.*$", Pattern.MULTILINE).matcher(s).replaceAll(" ");
+		// remove tabs
+		s = StrUtils.compactWhitespace(s); // NOT universally valid, but fine for this script.
 		
 		sb.append(s);
 		// Recursion!
