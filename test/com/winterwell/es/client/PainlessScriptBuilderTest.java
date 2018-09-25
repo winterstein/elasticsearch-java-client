@@ -59,7 +59,9 @@ public class PainlessScriptBuilderTest {
 		ESPath path = new ESPath("test", "thingy", "testCallES");
 		UpdateRequestBuilder up = esjc.prepareUpdate(path);
 		up.setScript(psb);
-		foo
+		up.setDebug(true);
+		IESResponse resp = up.get();
+		System.out.println(resp.getJson());
 	}
 
 }
