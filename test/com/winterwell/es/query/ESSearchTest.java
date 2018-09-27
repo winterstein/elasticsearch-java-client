@@ -21,8 +21,6 @@ import com.winterwell.utils.containers.ArrayMap;
 
 public class ESSearchTest {
 
-	private String index = "testsearch";
-
 	@Test
 	public void testSearchParentChild() {
 		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
@@ -30,7 +28,9 @@ public class ESSearchTest {
 		ESConfig esconfig = Dep.get(ESConfig.class);
 		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
 
-		init();
+
+		String index = "testparentchild";
+		init(index);
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 		
 		{
@@ -86,10 +86,10 @@ public class ESSearchTest {
 	
 	
 	
-	public void init() {
+	public void init(String index) {
 		// make index
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
-		CreateIndexRequest pc = esc.admin().indices().prepareCreate(index );
+		CreateIndexRequest pc = esc.admin().indices().prepareCreate(index);
 		pc.get(); // no check: fails naturally if index already exists
 		// mapbit
 		PutMappingRequestBuilder putMapping2 = esc.admin().indices().preparePutMapping(index, "mapbit");

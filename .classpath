@@ -6,42 +6,38 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.utils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.web"/>
-	<classpathentry exported="true" kind="lib" path="/middleware/guava/guava.jar" sourcepath="/home/daniel/winterwell/code/middleware/guava/guava-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.bob"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/flexi-gson"/>
-	<classpathentry exported="true" kind="lib" path="lib/elasticsearch-5.1.2.jar" sourcepath="src"/>
-	<classpathentry kind="lib" path="lib/HdrHistogram-2.1.6.jar"/>
-	<classpathentry kind="lib" path="lib/hppc-0.7.1.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-core-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-dataformat-cbor-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-dataformat-smile-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jackson-dataformat-yaml-2.8.1.jar"/>
-	<classpathentry kind="lib" path="lib/jna-4.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/joda-time-2.9.5.jar"/>
-	<classpathentry kind="lib" path="lib/jopt-simple-5.0.2.jar"/>
-	<classpathentry kind="lib" path="lib/jts-1.13.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2-api-2.7.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-api-2.7.jar"/>
-	<classpathentry kind="lib" path="lib/log4j-core-2.7.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-analyzers-common-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-backward-codecs-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-core-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-grouping-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-highlighter-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-join-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-memory-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-misc-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-queries-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-queryparser-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-sandbox-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-spatial-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-spatial-extras-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-spatial3d-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/lucene-suggest-6.3.0.jar"/>
-	<classpathentry kind="lib" path="lib/securesm-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/snakeyaml-1.15.jar"/>
-	<classpathentry kind="lib" path="lib/spatial4j-0.6.jar"/>
-	<classpathentry kind="lib" path="lib/t-digest-3.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="dependencies/elasticsearch.jar"/>
+	<classpathentry kind="lib" path="dependencies/HdrHistogram.jar"/>
+	<classpathentry kind="lib" path="dependencies/hppc.jar"/>
+	<classpathentry kind="lib" path="dependencies/jackson-core.jar"/>
+	<classpathentry kind="lib" path="dependencies/jackson-dataformat-cbor.jar"/>
+	<classpathentry kind="lib" path="dependencies/jackson-dataformat-smile.jar"/>
+	<classpathentry kind="lib" path="dependencies/jackson-dataformat-yaml.jar"/>
+	<classpathentry kind="lib" path="dependencies/jna.jar"/>
+	<classpathentry kind="lib" path="dependencies/joda-time.jar"/>
+	<classpathentry kind="lib" path="dependencies/jopt-simple.jar"/>
+	<classpathentry kind="lib" path="dependencies/log4j-api.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-analyzers-common.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-backward-codecs.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-core.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-grouping.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-highlighter.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-join.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-memory.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-misc.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-queries.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-queryparser.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-sandbox.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-spatial-extras.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-spatial.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-spatial3d.jar"/>
+	<classpathentry kind="lib" path="dependencies/lucene-suggest.jar"/>
+	<classpathentry kind="lib" path="dependencies/securesm.jar"/>
+	<classpathentry kind="lib" path="dependencies/snakeyaml.jar"/>
+	<classpathentry kind="lib" path="dependencies/t-digest.jar"/>
+	<classpathentry exported="true" kind="lib" path="dependencies/guava.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.winterwell.bob.BuildTask;
+import com.winterwell.bob.tasks.MavenDependencyTask;
 import com.winterwell.utils.io.FileUtils;
 
 import jobs.BuildFlexiGson;
@@ -25,6 +26,10 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 	public Collection<? extends BuildTask> getDependencies() {
 		List<BuildTask> deps = new ArrayList(super.getDependencies());
 		// TODO turn lib into a maven spec
+		MavenDependencyTask mdt = new MavenDependencyTask();
+		mdt.addDependency("com.google.guava:guava:26.0-jre");
+		mdt.addDependency("org.elasticsearch:elasticsearch:5.6.12");
+		deps.add(mdt);
 		// WW projects
 		deps.add(new BuildUtils());
 		deps.add(new BuildWeb());
