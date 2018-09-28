@@ -27,8 +27,8 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 		List<BuildTask> deps = new ArrayList(super.getDependencies());
 		// TODO turn lib into a maven spec
 		MavenDependencyTask mdt = new MavenDependencyTask();
-		mdt.addDependency("com.google.guava:guava:26.0-jre");
-		mdt.addDependency("org.elasticsearch:elasticsearch:5.6.12");
+		mdt.addDependency("com.google.guava", "guava", "26.0-jre");
+		mdt.addDependency("org.elasticsearch", "elasticsearch", "5.1.2"); // TODO upgrade ES  
 		deps.add(mdt);
 		// WW projects
 		deps.add(new BuildUtils());
