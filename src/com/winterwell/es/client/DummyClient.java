@@ -20,9 +20,9 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.explain.ExplainRequest;
 import org.elasticsearch.action.explain.ExplainRequestBuilder;
 import org.elasticsearch.action.explain.ExplainResponse;
-import org.elasticsearch.action.fieldcaps.FieldCapabilitiesRequest;
-import org.elasticsearch.action.fieldcaps.FieldCapabilitiesRequestBuilder;
-import org.elasticsearch.action.fieldcaps.FieldCapabilitiesResponse;
+//import org.elasticsearch.action.fieldcaps.FieldCapabilitiesRequest;
+//import org.elasticsearch.action.fieldcaps.FieldCapabilitiesRequestBuilder;
+//import org.elasticsearch.action.fieldcaps.FieldCapabilitiesResponse;
 import org.elasticsearch.action.fieldstats.FieldStatsRequest;
 import org.elasticsearch.action.fieldstats.FieldStatsRequestBuilder;
 import org.elasticsearch.action.fieldstats.FieldStatsResponse;
@@ -496,21 +496,21 @@ public class DummyClient implements Client
 	}
 
 	
-	public ActionFuture<FieldCapabilitiesResponse> fieldCaps(FieldCapabilitiesRequest arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	public void fieldCaps(FieldCapabilitiesRequest arg0, ActionListener<FieldCapabilitiesResponse> arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	
-	public FieldCapabilitiesRequestBuilder prepareFieldCaps() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	public ActionFuture<FieldCapabilitiesResponse> fieldCaps(FieldCapabilitiesRequest arg0) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	
+//	public void fieldCaps(FieldCapabilitiesRequest arg0, ActionListener<FieldCapabilitiesResponse> arg1) {
+//		// TODO Auto-generated method stub
+//		
+//	}
+//
+//	
+//	public FieldCapabilitiesRequestBuilder prepareFieldCaps() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

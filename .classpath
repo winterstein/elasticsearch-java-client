@@ -19,7 +19,6 @@
 	<classpathentry kind="lib" path="dependencies/jna.jar"/>
 	<classpathentry kind="lib" path="dependencies/joda-time.jar"/>
 	<classpathentry kind="lib" path="dependencies/jopt-simple.jar"/>
-	<classpathentry kind="lib" path="dependencies/log4j-api.jar"/>
 	<classpathentry kind="lib" path="dependencies/lucene-analyzers-common.jar"/>
 	<classpathentry kind="lib" path="dependencies/lucene-backward-codecs.jar"/>
 	<classpathentry kind="lib" path="dependencies/lucene-core.jar"/>
