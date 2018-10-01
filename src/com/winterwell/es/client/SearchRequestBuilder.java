@@ -17,6 +17,7 @@ import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.agg.Aggregations;
 import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.es.client.query.ESQueryBuilders;
+import com.winterwell.es.client.sort.Sort;
 import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
@@ -133,6 +134,11 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 
 
+	/**
+	 * @deprecated use {@link #addSort(Sort)}
+	 * @param sort
+	 * @return
+	 */
 	public SearchRequestBuilder addSort(SortBuilder sort) {
 		List sorts = (List) body().get("sort");
 		if (sorts==null) {
@@ -148,27 +154,27 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 	
-//	/**
-//	 * @deprecated Use {@link #addSort(SortBuilder)}
-//	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-sort.html
-//	 * @param sort
-//	 * @return
-//	 */
-//	public SearchRequestBuilder setSort(String sort) {
-//		List sorts = (List) body().get("sort");
-//		if (sorts==null) {
-//			sorts = new ArrayList();
-//			body().put("sort", sorts);
-//		}
-//		sorts.clear();
-//		sorts.add("\""+sort+"\"");
-//		return this;
-//	}
 
+	public SearchRequestBuilder addSort(Sort sort) {
+		List sorts = (List) body().get("sort");
+		if (sorts==null) {
+			sorts = new ArrayList();
+			body().put("sort", sorts);
+		}
+		sorts.add(sort.toJson2());
+		return this;
+	}
+	
+
+	/**
+	 * @deprecated use {@link #addSort(Sort)}
+	 * @param sort
+	 * @return
+	 */
 	public void addSort(String field, SortOrder order) {
 		addSort(SortBuilders.fieldSort(field).order(order));
 	}
-
+	
 	/**
 	 * How long to keep scroll resources open between requests.
 	 * NB: Scroll is typically used with setSort("_doc");
