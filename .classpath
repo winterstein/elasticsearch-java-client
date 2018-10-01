@@ -38,5 +38,7 @@
 	<classpathentry kind="lib" path="dependencies/snakeyaml.jar"/>
 	<classpathentry kind="lib" path="dependencies/t-digest.jar"/>
 	<classpathentry exported="true" kind="lib" path="dependencies/guava.jar"/>
+	<classpathentry kind="lib" path="dependencies/log4j-api.jar"/>
+	<classpathentry kind="lib" path="dependencies/log4j-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
