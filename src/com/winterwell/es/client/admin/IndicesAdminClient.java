@@ -1,5 +1,10 @@
 package com.winterwell.es.client.admin;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.IESResponse;
 
@@ -82,6 +87,19 @@ public class IndicesAdminClient {
 
 	public GetAliasesRequest getAliases(String indexOrAlias) {
 		return new GetAliasesRequest(hClient).setIndex(indexOrAlias);
+	}
+
+	/**
+	 * Convenience for using {@link GetAliasesRequest}
+	 * @param indexOrAlias
+	 * @return
+	 */
+	public List<String> getAliasesResponse(String indexOrAlias) {
+		GetAliasesRequest req = getAliases(indexOrAlias);
+		IESResponse resp = req.get();
+		Map<String, Object> jobj = resp.getParsedJson();
+		Set<String> indices = jobj.keySet();
+		return new ArrayList(indices);
 	}
     
 
