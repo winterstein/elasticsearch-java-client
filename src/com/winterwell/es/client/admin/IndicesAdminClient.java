@@ -1,7 +1,10 @@
 package com.winterwell.es.client.admin;
 
+import java.util.List;
+
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.IESResponse;
+import com.winterwell.utils.TodoException;
 
 
 /**
@@ -82,6 +85,10 @@ public class IndicesAdminClient {
 
 	public GetAliasesRequest getAliases(String indexOrAlias) {
 		return new GetAliasesRequest(hClient).setIndex(indexOrAlias);
+	}
+
+	public List<String> getAliasesResponse(String alias) {
+		throw new TodoException();
 	}
     
 
