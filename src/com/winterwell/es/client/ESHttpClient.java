@@ -284,7 +284,9 @@ public class ESHttpClient implements Flushable {
 		return urb;
 	}
 
-	@Deprecated // does nothing yet
+	/**
+	 * @deprecated does nothing yet
+	 */
 	@Override
 	public void flush() {
 		// what can we do to make sure all the CallES have been submitted??
