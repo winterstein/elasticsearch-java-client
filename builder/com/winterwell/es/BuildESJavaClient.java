@@ -20,6 +20,7 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 	public BuildESJavaClient() {
 		super(new File(FileUtils.getWinterwellDir(), "elasticsearch-java-client"));
 		setIncSrc(true);
+//		setScpToWW(true);
 	}
 
 	@Override
