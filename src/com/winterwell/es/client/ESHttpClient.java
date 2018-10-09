@@ -1,5 +1,6 @@
 package com.winterwell.es.client;
 
+import java.io.Flushable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +28,7 @@ import com.winterwell.web.ConfigException;
  * @author daniel
  *
  */
-public class ESHttpClient {
+public class ESHttpClient implements Flushable {
 
 	
 	public ESConfig getConfig() {
@@ -41,6 +42,8 @@ public class ESHttpClient {
 							= MoreExecutors.listeningDecorator(
 									Executors.newFixedThreadPool(20));
 
+	
+	
 
 	/**
 	 * Call ES to check the connection is alive and well.
@@ -121,9 +124,14 @@ public class ESHttpClient {
 	 */
 	ListenableFuture<ESHttpResponse> executeThreaded(final ESHttpRequest req) {
 		CallES call = new CallES(req);
-		ListenableFuture<ESHttpResponse> future = threads.submit(call);
+		ListenableFuture<ESHttpResponse> future = getThreads().submit(call);
 		return future;
 	}
+	
+	public static ListeningExecutorService getThreads() {
+		return threads;
+	}
+	
 	
 	/**
 	 * Pass the call across threads. This will "preserve" stacktrace across threads for easier debugging.
@@ -175,8 +183,7 @@ public class ESHttpClient {
 				throw Utils.runtime(ex);
 			}
 		}			
-	}
-	
+	}	
 
 	@Override
 	public String toString() {
@@ -275,6 +282,12 @@ public class ESHttpClient {
 		IndexRequestBuilder urb = new IndexRequestBuilder(this);
 		urb.setPath(path);
 		return urb;
+	}
+
+	@Deprecated // does nothing yet
+	@Override
+	public void flush() {
+		// what can we do to make sure all the CallES have been submitted??
 	}
 
 	

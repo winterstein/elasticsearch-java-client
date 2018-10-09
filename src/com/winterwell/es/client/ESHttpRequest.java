@@ -242,6 +242,9 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	 * Do it! Use a thread-pool to call async -- immediate response, future result.
 	 */
 	public ListenableFuture<ESHttpResponse> execute() {
+		if (debug) {
+			Log.d("ES.thread", toString()+"...");
+		}
 		return hClient.executeThreaded(this);
 		// NB this 4ends up at #doExecute(esjc)
 	}
@@ -375,6 +378,33 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		}
 	}
 	
+	/**
+	 * @deprecated for debug use
+	 * @return
+	 */
+	public String getCurl() {
+		// random load balancing (if we have multiple servers setup)
+		String server = "http://localhost:9200";
+		StringBuilder url = getUrl(server);
+
+		String srcJson = getBodyJson();
+		// Hack: some antivirus programs intercept HTTP PUT calls without bodies
+		// (seen with ZF 2017)
+		if (Utils.isBlank(srcJson) && "PUT".equals(method)) {
+			srcJson = "{}";
+		}
+		WebUtils2.addQueryParameters(url, params);
+		String curl;
+		// get/post the request
+		if (srcJson!=null) {		
+			curl = StrUtils.compactWhitespace("curl -X"+(method==null?"POST":method)+" '"+url+"' -d '"+srcJson+"'");
+			return curl;							
+		} else {
+			String fullurl = WebUtils2.addQueryParameters(url.toString(), params);
+			curl = StrUtils.compactWhitespace("curl -X"+(method==null?"GET":method)+" '"+fullurl+"&pretty=true'");
+			return curl;
+		}
+	}
 	
 	private ESPath getESPath() {
 		return new ESPath(indices, type, id);

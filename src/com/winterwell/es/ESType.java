@@ -278,22 +278,6 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 	
-//	/**
-//	 * Set the nested properties for an object type. 
-//	 * Must only be called once.
-//	 * @param keyESType 
-//	 */
-//	public ESType properties(String propName, ESType propType, Object... otherNameTypePairs) {
-//		assert get("type")==null || get("type").equals("object") : this;
-//		assert ! containsKey("properties") : this;
-//		ArrayMap props = new ArrayMap(propName, propType);
-//		for(int i=0; i<otherNameTypePairs.length; i+=2) {
-//			props.put((String)otherNameTypePairs[i], (Map)otherNameTypePairs[i+1]);
-//		}
-//		put("properties", props);
-//		return this;
-//	}
-	
 	/**
 	 * Set a nested property for an object type. Can be called repeatedly
 	 * to setup several properties.
