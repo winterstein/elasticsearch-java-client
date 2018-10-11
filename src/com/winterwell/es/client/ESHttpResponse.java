@@ -8,6 +8,7 @@ import com.winterwell.es.client.agg.AggregationResults;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
+import com.winterwell.utils.Dep;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.Containers;
@@ -142,9 +143,16 @@ IHasJson
 		return json;
 	}
 	
+	
+	
 	private Gson gson() {
-		// req should never be null -- unless its been serialised and back
-		return req.hClient.config.getGson();
+		// req should never be null -- unless its been serialised and back		
+		if (req==null || req.hClient==null) {
+			// A deserialised response (hence with no request).
+			// ...fallback to Dep for Gson
+			return Dep.get(Gson.class);
+		}
+		return req.hClient.config.getGson();				
 	}
 
 	/* (non-Javadoc)
