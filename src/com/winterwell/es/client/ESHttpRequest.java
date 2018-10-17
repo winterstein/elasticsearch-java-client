@@ -313,7 +313,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	 */
 	protected ESHttpResponse doExecute(ESHttpClient esjc) {
 		final String threadName = Thread.currentThread().getName();
-		Thread.currentThread().setName("ESHttpClient: "+this);
+		Thread.currentThread().setName("ESHttpClient: "+this);	
 		String curl = "";
 		try {
 			// random load balancing (if we have multiple servers setup)
@@ -343,8 +343,8 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 				// DEBUG hack
 				// NB: pretty=true was doc-as-upsert
 				if (debug || esjc.debug) {
-					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"POST":method)+" '"+url+"' -d '"+srcJson+"'");
-					Log.d("ES.curl", curl);
+					curl = "curl -X"+(method==null?"POST":method)+" '"+url+"' -d '"+srcJson+"'";
+					curlout(curl);
 				}
 				
 				assert JSON.parse(srcJson) != null : srcJson;
@@ -358,8 +358,8 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 //				// DEBUG hack
 				if (debug || esjc.debug) {
 					String fullurl = WebUtils2.addQueryParameters(url.toString(), params);
-					curl = StrUtils.compactWhitespace("curl -X"+(method==null?"GET":method)+" '"+fullurl+"&pretty=true'");
-					Log.d("ES.curl", curl);
+					curl = "curl -X"+(method==null?"GET":method)+" '"+fullurl+"&pretty=true'";
+					curlout(curl);
 				}
 
 				jsonResult = fb.getPage(url.toString(), (Map)params);
@@ -378,6 +378,14 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		}
 	}
 	
+	private void curlout(String curl) {
+		if (curl!=null) {
+			curl = StrUtils.compactWhitespace(curl);
+			curl = curl.replace("\\u003d","="); // a bit more readable
+			Log.d("ES.curl", curl);
+		}
+	}
+
 	/**
 	 * @deprecated for debug use
 	 * @return

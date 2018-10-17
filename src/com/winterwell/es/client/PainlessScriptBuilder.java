@@ -35,6 +35,9 @@ public class PainlessScriptBuilder {
 	 * parameters that should not be merged (use overwrite instead)
 	 */
 	private Set<String> hardSetParams = new HashSet();
+
+	public static String basicScript = loadScript(PainlessScriptBuilder.class.getResourceAsStream(
+			"update.painless.js"));
 	
 
 	/**
@@ -97,6 +100,7 @@ public class PainlessScriptBuilder {
 			return;
 		}
 		
+		sb.append("Map e=ctx._source;\n");
 		for(Map.Entry me : doc.entrySet()) {
 			final String k = (String) me.getKey();
 			Object v = me.getValue();
@@ -155,13 +159,7 @@ public class PainlessScriptBuilder {
 		String p = addParam(doc);
 		assert p.equals("p0") : p;
 		
-		InputStream r = PainlessScriptBuilder.class.getResourceAsStream("update.painless.js");
-		assert r != null;
-		String s = FileUtils.read(r);
-		// remove comments
-		s = Pattern.compile("^//.*$", Pattern.MULTILINE).matcher(s).replaceAll(" ");
-		// remove tabs
-		s = StrUtils.compactWhitespace(s); // NOT universally valid, but fine for this script.
+		String s = basicScript;
 		
 		sb.append(s);
 		// Recursion!
@@ -175,6 +173,22 @@ public class PainlessScriptBuilder {
 
 		// This fugly code does set-style uniqueness. If there is a nicer way please do say.
 		// I assume naming the language "painless" is ES's joke on the rest of us.
+	}
+
+	/**
+	 * 
+	 * @param r e.g. PainlessScriptBuilder.class.getResourceAsStream("update.painless.js");
+	 * @return
+	 */
+	public static String loadScript(InputStream r) {
+		assert r != null;
+		String s = FileUtils.read(r);
+//		assert ! s.contains("oldlc");
+		// remove comments
+		s = Pattern.compile("^\\s*//.*$", Pattern.MULTILINE).matcher(s).replaceAll(" ");
+		// remove tabs
+		s = StrUtils.compactWhitespace(s); // NOT universally valid, but fine for this script.
+		return s;
 	}
 
 	/**
