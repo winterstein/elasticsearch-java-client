@@ -66,7 +66,7 @@ public class PainlessScriptBuilder {
 
 	private void buildScript() {
 		if (jsonObject!=null) {
-			StringBuilder sb = new StringBuilder("Map e=ctx._source;\n");
+			StringBuilder sb = new StringBuilder();
 			String var = "e";
 			fromJsonObject2(jsonObject, sb, var);
 			script = sb.toString();
@@ -93,7 +93,7 @@ public class PainlessScriptBuilder {
 
 	private void fromJsonObject2(Map<String, Object> doc, StringBuilder sb, String var) {		
 		if (hardSetParams.isEmpty()) {
-			fromJsonObject2_reusableScript(doc, sb, var);
+			fromJsonObject2_reusableScript(doc, sb);
 			return;
 		}
 		
@@ -150,7 +150,7 @@ public class PainlessScriptBuilder {
 		}	
 	}
 
-	private void fromJsonObject2_reusableScript(Map<String, Object> doc, StringBuilder sb, String var) {
+	private void fromJsonObject2_reusableScript(Map<String, Object> doc, StringBuilder sb) {
 		doc = deepArrayToList(doc);
 		String p = addParam(doc);
 		assert p.equals("p0") : p;

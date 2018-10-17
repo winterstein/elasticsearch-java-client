@@ -1,3 +1,5 @@
+// Basic update: merges maps and lists. Does NOT recurse
+Map e=ctx._source;
 def p0 = params.p0;
 for(def kv : p0.entrySet()) {
 	def k = kv.getKey();
