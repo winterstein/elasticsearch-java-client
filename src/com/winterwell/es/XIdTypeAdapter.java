@@ -11,6 +11,11 @@ import com.winterwell.gson.JsonSerializationContext;
 import com.winterwell.gson.JsonSerializer;
 import com.winterwell.web.data.XId;
 
+/**
+ * 
+ * @author daniel
+ *
+ */
 public final class XIdTypeAdapter implements JsonSerializer<XId>, JsonDeserializer<XId> {
 	
 	@Override
