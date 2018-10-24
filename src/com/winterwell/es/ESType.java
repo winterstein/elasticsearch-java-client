@@ -200,12 +200,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 */
 	public ESType noIndex() {
 //		put("index", false); // FIXME this is breaking (seen Dec 17, ES 5.1)?!
-		if (get("type")!=null && ! get("type").equals("object")) {
-			Log.w("ESType", new Warning("noIndex / enabled:false is only available for type:object. Not "+this));
-			return this;
-		}
-		put("enabled", false);
-		return this;
+		return enabled(false);				
 	}
 
 	public ESType() {
@@ -302,10 +297,25 @@ public class ESType extends LinkedHashMap<String,Object> {
 		return this;
 	}
 	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-store.html
+	 * 
 	 * Store this field in the index (as well as in the source, so it can later be retrieved using selective loading when searching).
 	 */
 	public ESType store(boolean store) {
 		put("store", store);
+		return this;
+	}
+	
+	/**
+	 * Equivalent to {@link #noIndex()}
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/enabled.html
+	 */
+	public ESType enabled(boolean enabledForIndex) {
+		if (get("type")!=null && ! get("type").equals("object")) {
+			Log.w("ESType", new Warning("noIndex / enabled is only available for type:object. Not "+this));
+			return this;
+		}
+		put("enabled", enabledForIndex);
 		return this;
 	}
 
@@ -328,6 +338,8 @@ public class ESType extends LinkedHashMap<String,Object> {
 		put("_routing", new ArrayMap("required", true));
 		return this;
 	}
+	
+	
 
 	/**
 	 * see https://www.elastic.co/guide/en/elasticsearch/reference/current/geo-point.html
