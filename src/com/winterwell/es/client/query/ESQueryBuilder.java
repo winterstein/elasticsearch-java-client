@@ -23,8 +23,12 @@ public class ESQueryBuilder implements IHasJson, Cloneable {
 	}
 	
 	@Override
-	public String toString() {	
-		return "ESQueryBuilder"+toJSONString();
+	public String toString() {
+		boolean prelock = lock; // HACK - don't accidentally lock by calling toJson2
+		// NB: this prelock/lock code is not thread safe, but since its only sanity-checking code, that's OK.
+		String s = "ESQueryBuilder"+toJSONString();
+		lock = prelock;
+		return s;
 	}
 	
 	Map jobj;

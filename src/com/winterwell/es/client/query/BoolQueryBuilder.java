@@ -15,6 +15,8 @@ import com.winterwell.utils.log.Log;
  */
 public class BoolQueryBuilder extends ESQueryBuilder {
 
+	private static final String must = "must";
+
 	public BoolQueryBuilder() {
 		this(new ArrayMap("bool", new ArrayMap()));		
 	}
@@ -27,6 +29,12 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		add("should", q);
 		return this;
 	}
+	
+	/**
+	 * 
+	 * @param cond
+	 * @param q NB: This will get converted to json here and now. It cannot then be modified.
+	 */
 	private void add(String cond, ESQueryBuilder q) {
 		lockCheck();
 		// check for adding non clauses
@@ -48,12 +56,12 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 			if (props.isEmpty()) {
 				// add to this bool anyway, 'cos the user might not catch the return object
 				ESQueryBuilder q2 = q.clone(); // clone to avoid locking q
-				add("must", q2);
-				// return unwrapped
+				add(must, q2);
+				// but return the unwrapped original - hopefully they'll use that
 				return (BoolQueryBuilder) q;
 			}			
 		}
-		add("must", q);
+		add(must, q);
 		return this;
 	}
 	
@@ -70,7 +78,7 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	 * @return
 	 */
 	public BoolQueryBuilder filter(ESQueryBuilder q) {
-		add("must", q);
+		add(must, q);
 		return this;
 	}
 
@@ -83,4 +91,18 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	public boolean isEmpty() {
 		return props.isEmpty();
 	}
+
+//	/** Probably better to avoid making the wrapping
+//	 * @return a single must? then unwrap it. otherwise this
+//	 */
+//	public ESQueryBuilder simplify() {
+//		if (props.size() == 1) {
+//			List must1 = (List) props.get(must);
+//			if (must1 != null && must1.size() == 1) {
+//				Map m = must1.get(0);
+//				return new ESQueryBuilder(m);
+//			}
+//		}
+//		return this;
+//	}
 }
