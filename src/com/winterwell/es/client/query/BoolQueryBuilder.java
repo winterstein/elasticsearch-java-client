@@ -51,16 +51,20 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	}	
 
 	public BoolQueryBuilder must(ESQueryBuilder q) {
-		if (q instanceof BoolQueryBuilder) {
-			// avoid pointless wrapping
-			if (props.isEmpty()) {
-				// add to this bool anyway, 'cos the user might not catch the return object
-				ESQueryBuilder q2 = q.clone(); // clone to avoid locking q
-				add(must, q2);
-				// but return the unwrapped original - hopefully they'll use that
-				return (BoolQueryBuilder) q;
-			}			
-		}
+		// we'd like to avoid pointless wrapping of boolquerybuilders
+		// -- but we can't do that in here
+		// 'cos e.g. must(a or b).must(c) would end up as should(a or b).must(c)
+		// if we don't wrap that first or.
+		// if (q instanceof BoolQueryBuilder) {
+//			// avoid pointless wrapping
+//			if (props.isEmpty()) {
+//				// add to this bool anyway, 'cos the user might not catch the return object
+//				ESQueryBuilder q2 = q.clone(); // clone to avoid locking q ??shouldn't we lock it?
+//				add(must, q2);
+//				// but return the unwrapped original - hopefully they'll use that
+//				return (BoolQueryBuilder) q;
+//			}			
+//		}
 		add(must, q);
 		return this;
 	}

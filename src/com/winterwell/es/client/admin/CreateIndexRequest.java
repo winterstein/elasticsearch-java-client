@@ -61,6 +61,7 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 				WebEx.E40X error = new WebEx.E400("index-alias "+alias+" already exists");
 				ESHttpResponse rfail = new ESHttpResponse(this, error);
 				DeleteIndexRequest del = esjc.admin().indices().prepareDelete(thisIndex);
+				del.setDebug(debug);
 				del.execute();
 				return rfail;
 			}

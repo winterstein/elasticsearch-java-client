@@ -102,7 +102,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 
 	int retries;
 
-	boolean debug;
+	protected boolean debug;
 	
 	public SubClass setDebug(boolean debug) {
 		this.debug = debug;

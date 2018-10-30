@@ -54,7 +54,7 @@ public class CreateIndexRequestTest {
 	}
 	
 	@Test
-	public void testDuplicate() {
+	public void testDuplicateMakeBoth() {
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
 		ESConfig esconfig = Dep.get(ESConfig.class);
 		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
@@ -77,7 +77,15 @@ public class CreateIndexRequestTest {
 			assert settings.size() > 1;
 			esc.admin().indices().prepareDelete(idx, idx2).get();
 		}
-		
+	}
+	
+	@Test
+	public void testDuplicateMakeFirstOnly() {
+		Dep.setIfAbsent(ESConfig.class, new ESConfig());
+		ESConfig esconfig = Dep.get(ESConfig.class);
+		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
+
+		ESHttpClient esc = Dep.get(ESHttpClient.class);
 		{
 			String sf = "solofoo_"+Utils.getRandomString(3);
 			String v = Utils.getRandomString(3);
@@ -90,13 +98,16 @@ public class CreateIndexRequestTest {
 			String idx2 = sf+"_"+v2;
 			CreateIndexRequest cir2 = esc.admin().indices().prepareCreate(idx2).setAlias(sf);
 			cir2.setFailIfAliasExists(true);
+			cir2.setDebug(true);
 			IESResponse r2 = cir2.get(); // fail
 			assert ! r2.isSuccess();
 			
+			Utils.sleep(1000); // wait a sec for the delete to clean up idx2
+			assert ! esc.admin().indices().indexExists(idx2);
 			IndexSettingsRequest rsettings = esc.admin().indices().indexSettings(sf);
 			Map<String, Object> settings = rsettings.get().getParsedJson();
 			assert settings.size() == 1 : settings;
-			assert Containers.only(settings.keySet()).equals(idx) : settings;
+			assert Containers.only(settings.keySet()).equals(idx) : settings.keySet();
 			
 			esc.admin().indices().prepareDelete(idx, idx2).get();
 		}
