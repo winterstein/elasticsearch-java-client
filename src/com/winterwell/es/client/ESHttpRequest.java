@@ -349,7 +349,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 				
 				assert JSON.parse(srcJson) != null : srcJson;
 				
-				jsonResult = fb.post(url.toString(), FakeBrowser.MIME_TYPE_URLENCODED_FORM, srcJson);
+				jsonResult = fb.post(url.toString(), "application/json", srcJson);
 								
 			} else {
 				assert body == null : body;
