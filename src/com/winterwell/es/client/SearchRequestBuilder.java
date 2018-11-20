@@ -165,6 +165,20 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 	
+	/**
+	 * Really just an aide-memoire for {@link #addSort(Sort)}.
+	 * Differs in that being a `set` it will overwrite any existing value.
+	 * @param sort
+	 */
+	public SearchRequestBuilder setSort(Sort sort) {
+		List sorts = (List) body().get("sort");
+		if (sorts!=null) {
+			sorts.clear();
+		}
+		return addSort(sort);		
+
+	}
+	
 
 	/**
 	 * @deprecated use {@link #addSort(Sort)}
