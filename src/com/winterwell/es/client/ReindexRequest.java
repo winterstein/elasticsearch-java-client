@@ -40,6 +40,7 @@ public class ReindexRequest extends ESHttpRequest<ReindexRequest, IESResponse>
 	 */
 	public ReindexRequest(ESHttpClient hClient, String fromIndex, String toIndex) {
 		super(hClient, "_reindex");
+		setIndex(null); // NB: set indices to [null] to avoid the _all default in getUrl()
 		method = "POST";
 		body().put("source", new ArrayMap("index", fromIndex));
 		body().put("dest", new ArrayMap("index", toIndex));

@@ -67,6 +67,9 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	protected String method;
 
 	final transient ESHttpClient hClient;
+	/**
+	 * Set to [null] for "no index for this op"
+	 */
 	String[] indices;
 	String type;
 	String id;
