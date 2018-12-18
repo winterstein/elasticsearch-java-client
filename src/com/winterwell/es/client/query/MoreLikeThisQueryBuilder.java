@@ -2,6 +2,7 @@ package com.winterwell.es.client.query;
 
 import java.util.Collection;
 import java.util.Map;
+
 import com.winterwell.utils.containers.ArrayMap;
 
 /**

@@ -1,7 +1,5 @@
 package com.winterwell.es.client;
 
-import java.util.Arrays;
-
 /**
  * Index (store) a document.
  */

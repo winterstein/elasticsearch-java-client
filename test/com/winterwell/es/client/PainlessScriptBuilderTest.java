@@ -1,7 +1,5 @@
 package com.winterwell.es.client;
 
-import static org.junit.Assert.*;
-
 import java.util.Arrays;
 import java.util.Map;
 
@@ -10,7 +8,6 @@ import org.junit.Test;
 import com.winterwell.es.ESPath;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.containers.ArrayMap;
-import com.winterwell.utils.io.ConfigFactory;
 
 public class PainlessScriptBuilderTest {
 
