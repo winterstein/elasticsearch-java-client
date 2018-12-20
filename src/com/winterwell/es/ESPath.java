@@ -7,7 +7,7 @@ import java.util.Arrays;
  * @author daniel
  *
  */
-public final class ESPath {
+public final class ESPath<T> {
 
 	@Override
 	public int hashCode() {

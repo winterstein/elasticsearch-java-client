@@ -244,7 +244,7 @@ public class ESHttpClient implements Flushable {
 		return x;
 	}
 
-	public <X> X get(ESPath path, Class<X> class1) {
+	public <X> X get(ESPath<X> path, Class<X> class1) {
 		return get(path.index(), path.type, path.id, class1);
 	}
 
