@@ -3,7 +3,6 @@ package com.winterwell.es;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.winterwell.bob.BuildTask;
@@ -23,10 +22,10 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 	}
 
 	@Override
-	public Collection<? extends BuildTask> getDependencies() {
+	public List<BuildTask> getDependencies() {
 		List<BuildTask> deps = new ArrayList(super.getDependencies());
 		MavenDependencyTask mdt = new MavenDependencyTask();
-		mdt.addDependency("com.google.guava", "guava", "26.0-jre");
+		mdt.addDependency("com.google.guava", "guava", "27.0.1-jre");
 		mdt.addDependency("org.elasticsearch", "elasticsearch", "5.1.2"); // TODO upgrade ES
 		// needed by ES -- how is this not added by ES itself??
 		// https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/_log4j_2_logger.html
