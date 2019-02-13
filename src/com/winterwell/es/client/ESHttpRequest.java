@@ -329,6 +329,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 			fb.setTimeOut(esjc.config.esRequestTimeout); // 1 minute timeout
 			// e.g. HEAD
 			fb.setRequestMethod(method);
+			fb.setDebug(debug);
 			
 			String jsonResult;
 			String srcJson = getBodyJson();
