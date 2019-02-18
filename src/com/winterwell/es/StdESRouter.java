@@ -4,7 +4,7 @@ package com.winterwell.es;
 public class StdESRouter implements IESRouter {
 
 	@Override
-	public ESPath getPath(CharSequence dataspaceIsIgnored, Class type, String id, Object status) {
+	public ESPath getPath(CharSequence dataspaceIsIgnored, Class type, CharSequence id, Object status) {
 		// map personlite and person to the same DB
 //		if (type==PersonLite.class) type = Person.class;
 		String stype = type.getSimpleName().toLowerCase();
@@ -24,12 +24,12 @@ public class StdESRouter implements IESRouter {
 		case "ALL_BAR_TRASH":
 			String i1 = index;
 			String i2 = index+".draft";
-			ESPath esp = new ESPath(new String[] {i1, i2}, stype, id);
+			ESPath esp = new ESPath(new String[] {i1, i2}, stype, id.toString());
 			return esp;
 		default:
 			throw new IllegalArgumentException(type+" "+status);
 		}
-		return new ESPath(index, stype, id);
+		return new ESPath(index, stype, id.toString());
 	}
 
 

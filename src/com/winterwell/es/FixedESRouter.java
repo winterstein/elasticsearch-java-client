@@ -15,8 +15,8 @@ public class FixedESRouter implements IESRouter {
 	}
 
 	@Override
-	public ESPath getPath(CharSequence dataspaceIsIgnored, Class typeIsIgnored, String id, Object statusIsIgnored) {
-		return new ESPath(index, type, id);
+	public ESPath getPath(CharSequence dataspaceIsIgnored, Class typeIsIgnored, CharSequence id, Object statusIsIgnored) {
+		return new ESPath(index, type, id.toString());
 	}
 
 }

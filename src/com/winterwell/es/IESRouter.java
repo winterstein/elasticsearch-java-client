@@ -16,13 +16,13 @@ public interface IESRouter {
 	 * @param dataspace Optional name-spacing -- often this maps to an index
 	 * @return
 	 */
-	<T> ESPath<T> getPath(CharSequence dataspace, Class<T> type, String id, Object status);
+	<T> ESPath<T> getPath(CharSequence dataspace, Class<T> type, CharSequence id, Object status);
 	
-	default <T> ESPath<T> getPath(Class<T> type, String id) {
+	default <T> ESPath<T> getPath(Class<T> type, CharSequence id) {
 		return getPath(null, type, id, null);
 	}
 	
-	default <T> ESPath<T> getPath(Class<T> type, String id, Object status) {
+	default <T> ESPath<T> getPath(Class<T> type, CharSequence id, Object status) {
 		return getPath(null, type, id, status);
 	}
 }

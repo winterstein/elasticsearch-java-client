@@ -47,13 +47,13 @@ public final class ESPath<T> {
 	public final String type;
 	public final String[] indices;
 	
-	public ESPath(String[] indices, String type, String id) {
-		this.id = id;
+	public ESPath(String[] indices, String type, CharSequence id) {
+		this.id = id==null? null : id.toString();
 		this.type = type;
 		this.indices = indices;		
 	}
 	
-	public ESPath(String index, String type, String id) {
+	public ESPath(String index, String type, CharSequence id) {
 		this(new String[] {index}, type, id);
 	}
 
