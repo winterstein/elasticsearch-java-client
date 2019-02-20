@@ -29,7 +29,7 @@ public class StdESRouter implements IESRouter {
 		default:
 			throw new IllegalArgumentException(type+" "+status);
 		}
-		return new ESPath(index, stype, id.toString());
+		return new ESPath(index, stype, id);
 	}
 
 
