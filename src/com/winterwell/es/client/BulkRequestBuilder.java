@@ -62,7 +62,7 @@ public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkRes
 		
 	@Override
 	public String getBodyJson() {
-		String srcJson = "";
+		StringBuilder srcJson = new StringBuilder();
 		for(ESHttpRequest req : actions) {
 			String op = req.bulkOpName;
 			if (op==null) throw new TodoException(req);
@@ -73,10 +73,10 @@ public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkRes
 				opMap.putAll(req.params);
 			}
 			Map actionObj = new ArrayMap(op, opMap);
-			srcJson += gson().toJson(actionObj).trim()+"\n";
-			srcJson += req.getBodyJson().trim()+"\n";
+			srcJson.append(gson().toJson(actionObj).trim()+"\n");
+			srcJson.append(req.getBodyJson().trim()+"\n");
 		}
-		return srcJson;
+		return srcJson.toString();
 	}
 	
 }
