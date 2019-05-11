@@ -16,7 +16,7 @@ import com.winterwell.utils.containers.ArrayMap;
 public class BulkRequestBuilderTest {
 
 
-	final String INDEX = "testbulk";
+	final static String INDEX = "testbulk";
 
 
 	@Test
@@ -94,10 +94,9 @@ public class BulkRequestBuilderTest {
 			bulk.add(pi);
 			ids.add("s_"+i);
 		}		
+		bulk.setRefresh(KRefresh.WAIT_FOR);
 		BulkResponse br = bulk.get();
 		assert ! br.hasErrors();
-		
-		Utils.sleep(1500);
 		
 		Map<String, Object> got = esc.get(INDEX, "simple", "s_22");
 		System.out.println(got);

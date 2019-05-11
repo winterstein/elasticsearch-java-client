@@ -27,6 +27,7 @@ import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.web.SimpleJson;
 
 /**
+ * @testedby 
  * @see org.elasticsearch.action.search.SearchRequestBuilder
  * @author daniel
  *
@@ -125,6 +126,7 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 	/**
 	 * How many results to fetch. The default is 10.
+	 * Important: If this is used in a scroll -- this is the *batch size*!
 	 * @param n 
 	 * @return this
 	 */
@@ -274,6 +276,15 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 			// TODO merge!			
 //		}
 		return this;
+	}
+	
+	/**
+	 * 
+	 * @return Can be null (unset => 10)
+	 */
+	public Integer getSize() {
+		Number n = (Number) params.get("size");
+		return n==null? null : n.intValue();
 	}
 	
 }
