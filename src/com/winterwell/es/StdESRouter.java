@@ -24,7 +24,7 @@ public class StdESRouter implements IESRouter {
 		case "ALL_BAR_TRASH":
 			String i1 = index;
 			String i2 = index+".draft";
-			ESPath esp = new ESPath(new String[] {i1, i2}, stype, id.toString());
+			ESPath esp = new ESPath(new String[] {i1, i2}, stype, id==null? null : id.toString());
 			return esp;
 		default:
 			throw new IllegalArgumentException(type+" "+status);

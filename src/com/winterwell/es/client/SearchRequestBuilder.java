@@ -27,7 +27,7 @@ import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.web.SimpleJson;
 
 /**
- * @testedby 
+ * @testedby SearchRequestBuilderTest
  * @see org.elasticsearch.action.search.SearchRequestBuilder
  * @author daniel
  *
