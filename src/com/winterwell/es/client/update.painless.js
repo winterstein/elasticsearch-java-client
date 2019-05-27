@@ -14,7 +14,7 @@ for(def kv : p0.entrySet()) {
 			old.putAll(v);
 		} else if (v instanceof List) {
 			// Handle the case where old isnt a List (see lg bugs May 2019)
-			if ( ! old instanceof Collection) {
+			if ( ! (old instanceof Collection)) {
 				def v2 = new ArrayList();
 				v2.add(old); v2.addAll(v);
 				e.put(k, v2);

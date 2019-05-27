@@ -30,7 +30,7 @@ public class SearchRequestScrollOverAllTest {
 			out += list.size()+"\t"+total+"\n";
 		}
 		assert total == 10;
-		assert out.equals("6	6\n4	10");
+		assert out.equals("6	6\n4	10") : out;
 	}
 
 }
