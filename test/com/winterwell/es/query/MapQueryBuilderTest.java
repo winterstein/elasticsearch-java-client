@@ -3,9 +3,10 @@ package com.winterwell.es.query;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.utils.containers.ArrayMap;
 
-public class MapQueryBuilderTest {
+public class MapQueryBuilderTest extends ESTest {
 
 	@Test
 	public void testMapFilterBuilder() {

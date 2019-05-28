@@ -7,9 +7,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.utils.Dep;
 
-public class SearchRequestBuilderTest {
+public class SearchRequestBuilderTest extends ESTest  {
 
 	@Test
 	public void testSetSize() {

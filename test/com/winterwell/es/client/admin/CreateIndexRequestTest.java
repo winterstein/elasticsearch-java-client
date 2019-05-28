@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.es.client.ESConfig;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.IESResponse;
@@ -13,7 +14,7 @@ import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 
-public class CreateIndexRequestTest {
+public class CreateIndexRequestTest extends ESTest {
 
 	@Test
 	public void testAlias() {

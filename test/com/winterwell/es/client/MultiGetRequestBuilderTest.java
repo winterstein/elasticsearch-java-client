@@ -6,9 +6,10 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.winterwell.es.ESPath;
+import com.winterwell.es.ESTest;
 import com.winterwell.utils.Dep;
 
-public class MultiGetRequestBuilderTest {
+public class MultiGetRequestBuilderTest extends ESTest  {
 
 	@Test
 	public void testGet() {

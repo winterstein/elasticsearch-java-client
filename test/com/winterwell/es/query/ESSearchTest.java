@@ -6,6 +6,7 @@ import java.util.Map;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.es.ESType;
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.ESConfig;
@@ -19,7 +20,7 @@ import com.winterwell.gson.FlexiGson;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.containers.ArrayMap;
 
-public class ESSearchTest {
+public class ESSearchTest extends ESTest {
 
 	@Test
 	public void testSearchParentChild() {

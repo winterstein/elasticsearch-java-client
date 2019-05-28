@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.es.ESType;
 import com.winterwell.es.client.admin.PutMappingRequestBuilder;
 import com.winterwell.gson.FlexiGson;
@@ -13,7 +14,7 @@ import com.winterwell.utils.Dep;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 
-public class BulkRequestBuilderTest {
+public class BulkRequestBuilderTest extends ESTest {
 
 
 	final static String INDEX = "testbulk";
@@ -40,7 +41,7 @@ public class BulkRequestBuilderTest {
 		pik.get();
 		bulk.add(pik);
 		BulkResponse br = bulk.get();
-		assert ! br.hasErrors();
+		assert ! br.hasErrors() : br.getError();
 		System.out.println(br.getJson());
 		Utils.sleep(1500);
 		

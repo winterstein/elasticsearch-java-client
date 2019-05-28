@@ -297,11 +297,13 @@ IHasJson
 		if (hits == null){
 			throw new IllegalArgumentException("hits field cannot be null");
 		}
-		Number hitTotal = (Number) hits.get("total");
+		// c.f. https://www.elastic.co/guide/en/elasticsearch/reference/7.x/search-request-track-total-hits.html
+		Map hitTotal = (Map) hits.get("total");
 		if (hitTotal == null){
 			throw new IllegalArgumentException("hitTotal field cannot be null");
 		}
-		return hitTotal.longValue();
+		Number hitTotalValue = (Number) hitTotal.get("value");
+		return hitTotalValue.longValue();
 	}
 
 	

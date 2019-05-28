@@ -5,10 +5,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.utils.Dep;
 import com.winterwell.web.WebEx;
 
-public class GetRequestBuilderTest {
+public class GetRequestBuilderTest extends ESTest {
 
 	@Test
 	public void testGet() {

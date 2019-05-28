@@ -5,11 +5,12 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.Printer;
 import com.winterwell.utils.time.TUnit;
 
-public class SearchScrollRequestBuilderTest {
+public class SearchScrollRequestBuilderTest extends ESTest {
 
 	@Test
 	public void testGet() {

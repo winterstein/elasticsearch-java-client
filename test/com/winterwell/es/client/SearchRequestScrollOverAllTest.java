@@ -7,10 +7,12 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.winterwell.es.ESTest;
 import com.winterwell.utils.Dep;
+import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.time.TUnit;
 
-public class SearchRequestScrollOverAllTest {
+public class SearchRequestScrollOverAllTest extends ESTest {
 
 	@Test
 	public void testSetSize() {
@@ -30,7 +32,8 @@ public class SearchRequestScrollOverAllTest {
 			out += list.size()+"\t"+total+"\n";
 		}
 		assert total == 10;
-		assert out.equals("6	6\n4	10") : out;
+		out = StrUtils.compactWhitespace(out);
+		assert out.equals("6 6 4 10") : out;
 	}
 
 }
