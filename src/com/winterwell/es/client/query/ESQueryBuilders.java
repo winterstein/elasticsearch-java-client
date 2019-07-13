@@ -70,7 +70,7 @@ public class ESQueryBuilders {
 	 * @param value
 	 * @return
 	 */
-	public static ESQueryBuilder termQuery(String field, String value) {
+	public static ESQueryBuilder termQuery(String field, Object value) {
 		Map must = new ArrayMap("term", new ArrayMap(field, value));
 		return new ESQueryBuilder(must);
 	}

@@ -35,7 +35,7 @@ public class Aggregations {
 	/**
 	 * document count by field=value,
 	 * If you want to sum a numerical value from the documents, use this with a stats() subAggregation
-	 * @param name
+	 * @param name Your name for this aggregation
 	 * @param field usually a keyword field
 	 * @return
 	 */
@@ -43,6 +43,12 @@ public class Aggregations {
 		return new Aggregation(name, "terms", field);
 	}
 	
+	/**
+	 * ??How does this differ from {@link #terms(String, String)}??
+	 * @param name
+	 * @param field
+	 * @return
+	 */
 	public static Aggregation significantTerms(String name, String field) {
 		return new Aggregation(name, "significant_terms", field);
 	}
