@@ -5,6 +5,8 @@ package com.winterwell.es.client.agg;
 
 import java.util.Map;
 
+import com.winterwell.utils.time.Dt;
+import com.winterwell.utils.time.TUnit;
 /**
  * Builder methods for making {@link Aggregation}s
  * @author daniel
@@ -13,12 +15,26 @@ import java.util.Map;
 public class Aggregations {
 
 	/**
-	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-datehistogram-aggregation.html
-	 * @param name
-	 * @return
+	 * Default to one day interval
 	 */
 	public static Aggregation dateHistogram(String name, String field) {
-		return new Aggregation(name, "date_histogram", field).put("interval", "day");
+		return dateHistogram(name, field, TUnit.DAY.dt);
+	}
+	
+
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-datehistogram-aggregation.html
+	 * @param name
+	 * @param interval e.g. day / month / hour
+	 * @return
+	 */
+	public static Aggregation dateHistogram(String name, String field, Dt interval) {
+		// TODO properly implement https://www.elastic.co/guide/en/elasticsearch/reference/7.0/search-aggregations-bucket-datehistogram-aggregation.html
+		String _interval = interval.getUnit().toString().toLowerCase();
+		if (interval.getValue() != 1.0) {
+			_interval = ((int)interval.getValue())+_interval; // FIXME do fractions work?!
+		}
+		return new Aggregation(name, "date_histogram", field).put("interval", _interval);
 	}
 
 	/**
