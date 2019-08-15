@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.web.IHasJson;
 
 /**
@@ -17,7 +18,9 @@ public class Aggregation implements IHasJson {
 	
 	@Override
 	public String toString() {
-		return "Aggregation [name=" + name + ", field=" + getField() + ", type=" + type + ", props=" + props + "]";
+		return "Aggregation[name=" + name + ", field=" + getField()+ ", type=" + type + ", props=" + props
+				+(aggs==null?"": ", aggs="+aggs)			
+		+"]";
 	}
 
 	/**
@@ -71,7 +74,7 @@ public class Aggregation implements IHasJson {
 	/**
 	 * child sub-aggregations, can be null
 	 */
-	Map aggs;
+	Map<String,Aggregation> aggs;
 	/**
 	 * a weak defence against lifecycle-breaking edits -- but this does not protect against sub-aggs being edited!
 	 */
@@ -83,10 +86,12 @@ public class Aggregation implements IHasJson {
 	 * This does NOT include the name, which is used by the parent search
 	 */
 	@Override
-	public Map toJson2() throws UnsupportedOperationException {		
+	public Map toJson2() {		
 		if (type!=null) map.put(type, props);
+		// convert sub-aggregations
 		if (aggs!=null) {
-			map.put("aggs", aggs);
+			Map<String, Object> jsonaggs = Containers.applyToValues(IHasJson.RECURSE_TOJSON2, aggs);
+			map.put("aggs", jsonaggs);
 		}
 		toJsond = true;
 		return map;
@@ -120,6 +125,14 @@ public class Aggregation implements IHasJson {
 	public void setSize(int numTerms) {
 		if ( ! "terms".equals(type)) throw new IllegalStateException("Wrong type of agg: "+this);
 		put("size", numTerms);
+	}
+
+	/**
+	 * Can be null
+	 * @return e.g. "terms"
+	 */
+	public String getType() {
+		return type;
 	}
 
 }
