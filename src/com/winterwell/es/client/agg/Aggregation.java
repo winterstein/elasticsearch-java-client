@@ -20,13 +20,19 @@ public class Aggregation implements IHasJson {
 		return "Aggregation [name=" + name + ", field=" + getField() + ", type=" + type + ", props=" + props + "]";
 	}
 
-	private String getField() {
+	/**
+	 * @return Can be null
+	 */
+	public String getField() {
 		return (String) props.get("field");
 	}
 
 	public final String name;
 	private String type;
-	private final ArrayMap props;
+	/**
+	 * the type props
+	 */
+	private final ArrayMap props = new ArrayMap();	
 	
 	/**
 	 * The missing parameter defines how documents that are missing a value should be treated. 
@@ -56,12 +62,15 @@ public class Aggregation implements IHasJson {
 	 * @param field
 	 */
 	Aggregation(String aggResultName, String aggType, String field) {
-		Utils.check4null(aggResultName, aggType, field);
+		Utils.check4null(aggResultName);
 		this.name = aggResultName;
 		this.type = aggType;
-		this.props = new ArrayMap("field", field);
+		if (field != null) props.put("field", field);
 	}
 
+	/**
+	 * child sub-aggregations, can be null
+	 */
 	Map aggs;
 	/**
 	 * a weak defence against lifecycle-breaking edits -- but this does not protect against sub-aggs being edited!
@@ -74,14 +83,19 @@ public class Aggregation implements IHasJson {
 	 * This does NOT include the name, which is used by the parent search
 	 */
 	@Override
-	public Map toJson2() throws UnsupportedOperationException {
-		ArrayMap map = new ArrayMap(type, props);
+	public Map toJson2() throws UnsupportedOperationException {		
+		if (type!=null) map.put(type, props);
 		if (aggs!=null) {
 			map.put("aggs", aggs);
 		}
 		toJsond = true;
 		return map;
 	}
+	
+	/**
+	 * The base map. We'll poke things into this in toJson2()
+	 */
+	ArrayMap map = new ArrayMap();
 
 	public Aggregation put(String k, Object v) {
 		assert ! toJsond : "Cannot modify with "+k+"="+v+". This has already been converted into json :(";

@@ -115,11 +115,12 @@ public class ESQueryBuilders {
 
 	/**
 	 * @param field
-	 * @param min Can be null if max is set.
-	 * @param max Can be null if min is set.
+	 * @param min > this Can be null if max is set.
+	 * @param max < this Can be null if min is set.
+	 * @param inclusive If true, use <= and >=.
 	 * @return
 	 */
-	public static ESQueryBuilder rangeQuery(String field, Number min, Number max) {
+	public static ESQueryBuilder rangeQuery(String field, Number min, Number max, boolean inclusive) {
 		assert field != null;
 		if (min==null && max==null) throw new NullPointerException("Must provide one of min/max");
 		if (min !=null && max !=null && MathUtils.compare(min, max) != -1) {
@@ -127,12 +128,10 @@ public class ESQueryBuilders {
 		}
 		Map rq = new ArrayMap();
 		if (min!=null) {
-			rq.put("gt", min); // or gte??
-//			rq.put("include_lower", true);
+			rq.put(inclusive? "gte" : "gt", min);
 		}
 		if (max!=null) {
-			rq.put("lt", max); // or lte??
-//			rq.put("include_upper", true);
+			rq.put(inclusive? "lte" : "lt", max);
 		}
 		Map must = new ArrayMap("range", 
 				new ArrayMap(field, rq));

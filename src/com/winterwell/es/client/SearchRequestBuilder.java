@@ -22,6 +22,7 @@ import com.winterwell.es.client.suggest.Suggester;
 import com.winterwell.gson.RawJson;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.log.Log;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
 import com.winterwell.utils.web.SimpleJson;
@@ -231,7 +232,15 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 			body.put("aggs", sorts);
 		}
 		// e.g.      "grades_stats" : { "stats" : { "field" : "grade" } }
-		sorts.put(dh.name, dh); //.toJson2());
+		Object noOld = sorts.put(dh.name, dh);
+		// safety check
+		if (noOld != null) {
+			if (noOld==dh) {
+				Log.w("search", "2x aggregation "+dh.name);
+			} else {
+				throw new IllegalStateException("Duplicate named aggregations: "+dh.name+" "+noOld+" vs "+dh);
+			}
+		}
 		return this;		
 	}
 	

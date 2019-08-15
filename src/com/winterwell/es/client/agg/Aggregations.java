@@ -5,6 +5,7 @@ package com.winterwell.es.client.agg;
 
 import java.util.Map;
 
+import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
 /**
@@ -21,6 +22,12 @@ public class Aggregations {
 		return dateHistogram(name, field, TUnit.DAY.dt);
 	}
 	
+	public static Aggregation filtered(String name, ESQueryBuilder filter, Aggregation agg) {
+		Aggregation fagg = new Aggregation(name, null, null);
+		fagg.map.put("filter", filter.toJson2());
+		fagg.subAggregation(agg);
+		return fagg;
+	}
 
 	/**
 	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-aggregations-bucket-datehistogram-aggregation.html
