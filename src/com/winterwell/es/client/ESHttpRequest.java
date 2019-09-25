@@ -1,5 +1,6 @@
 package com.winterwell.es.client;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
@@ -19,6 +20,7 @@ import com.winterwell.gson.StandardAdapters;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.ArraySet;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.web.WebUtils;
 import com.winterwell.utils.web.WebUtils2;
@@ -70,11 +72,11 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	/**
 	 * Set to [null] for "no index for this op"
 	 */
-	String[] indices;
+	ArraySet<String> indices;
 	String type;
 	String id;
 	
-	protected String[] getIndices() {
+	protected ArraySet<String> getIndices() {
 		return indices;
 	}
 	
@@ -167,7 +169,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	}
 	
 	public SubClass setIndices(String... indices) {
-		this.indices = indices;
+		this.indices = new ArraySet<String>(indices);
 		return (SubClass) this;
 	}
 	
@@ -257,7 +259,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		StringBuilder url = new StringBuilder(server);
 		if (indices==null) {
 			url.append("/_all");
-		} else if (indices.length==1 && indices[0] == null) {
+		} else if (indices.size()==1 && indices.get(0) == null) {
 			// some operations dont target an index, e.g. IndexAliasRequest
 		} else {
 			// normal case: target some indices
@@ -266,7 +268,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 				url.append(WebUtils.urlEncode(idx));
 				url.append(",");
 			}
-			if (indices.length!=0) StrUtils.pop(url, 1);
+			if (indices.size()!=0) StrUtils.pop(url, 1);
 		}
 		if (type!=null) url.append("/"+WebUtils.urlEncode(type));
 		if (id!=null) url.append("/"+WebUtils.urlEncode(id));
@@ -419,7 +421,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	}
 	
 	private ESPath getESPath() {
-		return new ESPath(indices, type, id);
+		return new ESPath(getIndices(), type, id);
 	}
 
 	/**

@@ -51,7 +51,7 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 		Map<String,Object> settingsFromIndex = resp.getParsedJson();
 		if (settingsFromIndex.size() == 1) return r;
 		// Oh no! overlap -- was this the first in the race?
-		String thisIndex = getIndices()[0];
+		String thisIndex = getIndices().get(0);
 		long cd = Long.valueOf(SimpleJson.get(settingsFromIndex, thisIndex, "settings", "index", "creation_date"));		
 		for(String idx : settingsFromIndex.keySet()) {
 			if (idx.equals(thisIndex)) continue;

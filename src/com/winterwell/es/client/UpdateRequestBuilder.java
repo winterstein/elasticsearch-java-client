@@ -24,7 +24,7 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	
 	@Override
 	protected void get2_safetyCheck() {
-		if (indices==null || indices.length==0) throw new IllegalStateException("No index specified for update: "+this);
+		if (indices==null || indices.size()==0) throw new IllegalStateException("No index specified for update: "+this);
 		if (type==null) throw new IllegalStateException("No type specified for update: "+this);
 		if (id==null) throw new IllegalStateException("No id specified for update: "+this);
 	}
