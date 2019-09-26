@@ -22,11 +22,6 @@ public class ESQueryBuilders {
 	 */
 	public static final String UNSET = "unset";
 
-	public static Map queryStringQuery(String q) {
-		// TODO Auto-generated method stub
-		throw new TodoException();
-	}
-
 	/**
 	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html
 	 * @return
