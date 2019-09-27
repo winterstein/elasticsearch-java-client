@@ -59,6 +59,11 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		params.put("fields", fieldsAsCSL);	return (SubClass) this;
 	}
 	
+	/**
+	 * Set as much of path as is set.
+	 * @param path Can contain nulls
+	 * @return this
+	 */
 	public SubClass setPath(ESPath path) {
 		if (path.indices!=null) setIndices(path.indices);
 		if (path.type!=null) setType(path.type);
