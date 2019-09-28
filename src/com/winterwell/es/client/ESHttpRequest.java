@@ -264,7 +264,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		StringBuilder url = new StringBuilder(server);
 		if (indices==null) {
 			url.append("/_all");
-		} else if (indices.size()==1 && indices.get(0) == null) {
+		} else if (indices.isEmpty() || (indices.size()==1 && indices.get(0) == null)) {
 			// some operations dont target an index, e.g. IndexAliasRequest
 		} else {
 			// normal case: target some indices
@@ -281,6 +281,8 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 			// NB: Only a few requests, such as get, don't need an endpoint
 			url.append("/"+endpoint);		
 		}
+		// paranoia check: must not be //_thing, as that fails
+		assert url.indexOf("//_") == -1 : url;
 		return url;
 	}
 
