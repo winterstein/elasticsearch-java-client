@@ -1,6 +1,10 @@
 package com.winterwell.es;
 
-
+/**
+ * An implementation based on Good-Loop's webappbase data patterns.
+ * @author daniel
+ *
+ */
 public class StdESRouter implements IESRouter {
 
 	@Override
@@ -11,9 +15,10 @@ public class StdESRouter implements IESRouter {
 		// type==NGO.class? "charity" :
 		// HACK to implement KStatus handling without a class dependency :(
 		String index = stype;
+		// NB: our "standard" KStatus enum is out of project scope here
 		String ks = status==null? "PUBLISHED" : status.toString().toUpperCase();
 		switch(ks) {
-		case "PUBLISHED":
+		case "PUBLISHED": case "ARCHIVED": case "PUB_OR_ARC":
 			break;
 		case "DRAFT": case "PENDING": case "REQUEST_PUBLISH": case "MODIFIED":
 			index += ".draft";
