@@ -25,6 +25,11 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		super(query);
 	}
 
+	/**
+	 * aka OR
+	 * @param q
+	 * @return this
+	 */
 	public BoolQueryBuilder should(ESQueryBuilder q) {
 		add("should", q);
 		return this;

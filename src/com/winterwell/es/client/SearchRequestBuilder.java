@@ -109,6 +109,33 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	public SearchRequestBuilder setQuery(ESQueryBuilder qb) {
 		return setQuery(qb.toJson2());
 	}
+	/**
+	 * Convenience method for building up AND queries.
+	 * This will set the query if null, or combine with bool-query *must* if not null.
+	 * 
+	 * @see #setQuery(ESQueryBuilder)
+	 * 
+	 * @param qb
+	 * @return 
+	 */
+	public SearchRequestBuilder addQuery(ESQueryBuilder qb) {
+		Map query = (Map) body().get("query");
+		if (query==null) {
+			setQuery(qb);
+			return this;
+		}
+		// Add to it
+		// Is it a boolean?
+//		String qtype = (String) Containers.first(query.keySet());
+//		if (qtype != "bool") {
+			ESQueryBuilder qand = ESQueryBuilders.must(query, qb);
+			setQuery(qand.toJson2());
+//		} else {
+			// TODO merge!			
+//		}
+		return this;
+	}
+	
 
 	public SearchRequestBuilder setQuery(Map queryJson) {
 		body().put("query", queryJson);
@@ -261,30 +288,10 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 	
 	/**
-	 * Convenience method for building up AND queries.
-	 * This will set the query if null, or combine with bool-query *must* if not null.
-	 * 
-	 * @see #setQuery(ESQueryBuilder)
-	 * 
-	 * @param qb
-	 * @return 
+	 * @see #addQuery(ESQueryBuilder)
 	 */
 	public SearchRequestBuilder addQuery(QueryBuilder qb) {
-		Map query = (Map) body().get("query");
-		if (query==null) {
-			setQuery(qb);
-			return this;
-		}
-		// Add to it
-		// Is it a boolean?
-//		String qtype = (String) Containers.first(query.keySet());
-//		if (qtype != "bool") {
-			ESQueryBuilder qand = ESQueryBuilders.must(query, ESUtils.jobj(qb));
-			setQuery(qand.toJson2());
-//		} else {
-			// TODO merge!			
-//		}
-		return this;
+		return addQuery(new ESQueryBuilder(qb));
 	}
 	
 	/**
