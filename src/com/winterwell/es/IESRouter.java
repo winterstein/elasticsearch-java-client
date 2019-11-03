@@ -12,8 +12,8 @@ public interface IESRouter {
 	 * 
 	 * @param type
 	 * @param id
-	 * @param status
-	 * @param dataspace Optional name-spacing -- often this maps to an index
+	 * @param status (sometimes optional) status
+	 * @param dataspace (sometimes optional) name-spacing -- often this maps to an index
 	 * @return
 	 */
 	<T> ESPath<T> getPath(CharSequence dataspace, Class<T> type, CharSequence id, Object status);
