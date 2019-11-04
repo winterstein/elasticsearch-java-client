@@ -3,6 +3,8 @@ package com.winterwell.es.client;
 import java.util.List;
 import java.util.Map;
 
+import com.winterwell.es.fail.ESException;
+
 public interface IESResponse
 // not possible 'cos ESHttpresponse implements several sub-types
 //<ResponseSubClass extends IESResponse> 
@@ -30,6 +32,7 @@ public interface IESResponse
 	 * Convenience method: Check that the response was error-free -- and throw
 	 * a runtime-exception if there was an error.
 	 * @return this
+	 * @throws ESException
 	 */
 	// NB: sadly we can't give a sub-class here -- see notes above
 	IESResponse check();
