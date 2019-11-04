@@ -10,10 +10,11 @@ import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.es.client.suggest.Suggester;
-import com.winterwell.es.fail.DocNotFoundException;
+import com.winterwell.es.fail.ESDocNotFoundException;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.es.fail.IElasticException;
-import com.winterwell.es.fail.MapperParsingException;
+import com.winterwell.es.fail.ESIndexAlreadyExistsException;
+import com.winterwell.es.fail.ESMapperParsingException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.gson.StandardAdapters;
@@ -441,15 +442,18 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		if (ex instanceof ESException) return (RuntimeException) ex;
 		if (ex instanceof WebEx.E404) {
 			// e.g. a get for an unstored object (a common case)
-			return new DocNotFoundException(getESPath());
+			return new ESDocNotFoundException(getESPath());
 		}
 		if (ex instanceof WebEx.E40X) {
 			String msg = ex.getMessage();
 			// TODO parse the json errorPage
 			if (msg.contains("mapper_parsing_exception")) {
-				return new MapperParsingException(msg);
+				return new ESMapperParsingException(msg);
 			}
-		}
+			if (msg.contains("index_already_exists_exception")) {
+				return new ESIndexAlreadyExistsException(msg);
+			}
+		}		
 		// wrap
 		String msg = req==null? ex.getMessage() : req.getUrl("")+" "+ex.getMessage();
 		ESException esex = new ESException(msg, ex);

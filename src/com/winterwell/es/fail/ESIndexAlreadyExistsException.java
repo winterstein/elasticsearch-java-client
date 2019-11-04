@@ -2,9 +2,9 @@ package com.winterwell.es.fail;
 
 import com.winterwell.web.WebEx;
 
-public class MapperParsingException extends WebEx.E40X implements IElasticException {
+public class ESIndexAlreadyExistsException extends WebEx.E40X implements IElasticException {
 
-	public MapperParsingException(String msg) {
+	public ESIndexAlreadyExistsException(String msg) {
 		super(400, null, msg);
 	}
 
