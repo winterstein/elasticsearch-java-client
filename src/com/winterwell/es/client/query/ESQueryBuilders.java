@@ -70,6 +70,21 @@ public class ESQueryBuilders {
 		return new ESQueryBuilder(must);
 	}
 	
+	/**
+	 * match or multi_match with * all fields
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/6.2/query-dsl-match-query.html
+	 */
+	public static ESQueryBuilder matchQuery(String optionalField, Object value) {
+		if (optionalField != null) {
+			Map must = new ArrayMap("match", new ArrayMap(optionalField, value));
+			return new ESQueryBuilder(must);
+		}
+		Map must = new ArrayMap("multi_match", new ArrayMap(
+				"query", value,
+				"fields", Arrays.asList("*")));
+		return new ESQueryBuilder(must);		
+	}
+	
 	public static ESQueryBuilder dateRangeQuery(String field, Time start, Time end) {
 		assert field != null;
 		if (start==null && end==null) throw new NullPointerException("Must provide one of start/end");
@@ -135,6 +150,18 @@ public class ESQueryBuilders {
 
 	public static MoreLikeThisQueryBuilder similar(String like, List<String> fields) {		    
 		return new MoreLikeThisQueryBuilder(like).setFields(fields);
+	}
+
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/6.2/query-dsl-simple-query-string-query.html
+	 * @param q
+	 * @return
+	 */
+	public static ESQueryBuilder simpleQueryStringQuery(String q) {
+		Map must = new ArrayMap("simple_query_string", new ArrayMap(
+				"query", q,
+				"default_operator", "and"));
+		return new ESQueryBuilder(must);		
 	}
 
 }
