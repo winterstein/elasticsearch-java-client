@@ -351,7 +351,10 @@ public class ESType extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters-completion.html
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/search-suggesters.html#completion-suggester
+	 * <p>
+	 * Completion suggester is optimized for speed. The suggester uses data structures that enable fast lookups, 
+	 * but are costly to build and are stored in-memory.
 	 */
 	public ESType completion() {
 		put("type", "completion");
