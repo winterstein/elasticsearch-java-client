@@ -164,4 +164,17 @@ public class ESQueryBuilders {
 		return new ESQueryBuilder(must);		
 	}
 
+	/**
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/7.5/query-dsl-prefix-query.html
+	 * Index setup can speed these up!
+	 * 
+	 * @param field
+	 * @param prefix
+	 * @return
+	 */
+	public static ESQueryBuilder prefixQuery(String field, String prefix) {
+		Map qmap = new ArrayMap("prefix", new ArrayMap(field, prefix));
+		return new ESQueryBuilder(qmap);
+	}
+
 }
