@@ -192,13 +192,13 @@ public class ESType extends LinkedHashMap<String,Object> {
 	/**
 	 * Store but do not index this property (so you can't search on it).
 	 * 
-	 * This seems to be broken! But enabled:false works?
-	 * It's not clear what versions of ES support what! Tested on ES 5.1
 	 * 
 	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-index.html
 	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/enabled.html
 	 */
 	public ESType noIndex() {
+//		 * NB: noIndex This seems to be broken! But enabled:false works?
+//				 * It's not clear what versions of ES support what! Tested on ES 5.1
 //		put("index", false); // FIXME this is breaking (seen Dec 17, ES 5.1)?!
 		return enabled(false);				
 	}
