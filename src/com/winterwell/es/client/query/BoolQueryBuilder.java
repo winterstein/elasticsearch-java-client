@@ -36,7 +36,7 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	}
 	
 	/**
-	 * 
+	 * Add an extra condition
 	 * @param cond
 	 * @param q NB: This will get converted to json here and now. It cannot then be modified.
 	 */
@@ -91,7 +91,7 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		return this;
 	}
 
-	public ESQueryBuilder minimumNumberShouldMatch(int n) {
+	public BoolQueryBuilder minimumNumberShouldMatch(int n) {
 		lockCheck();
 		props.put("minimum_should_match", n);
 		return this;
