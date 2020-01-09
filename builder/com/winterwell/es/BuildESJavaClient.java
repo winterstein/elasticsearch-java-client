@@ -25,12 +25,12 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 	public List<BuildTask> getDependencies() {
 		List<BuildTask> deps = new ArrayList(super.getDependencies());
 		MavenDependencyTask mdt = new MavenDependencyTask();
-		mdt.addDependency("com.google.guava", "guava", "27.0.1-jre");
+		mdt.addDependency("com.google.guava", "guava", "28.1-jre");
 //		mdt.setIncSrc(true);
-		mdt.addDependency("org.elasticsearch", "elasticsearch", "5.3.3"); // TODO upgrade ES
+		mdt.addDependency("org.elasticsearch", "elasticsearch", "5.6.16");
 		// needed by ES -- how is this not added by ES itself??
 		// https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/_log4j_2_logger.html
-		mdt.addDependency("org.apache.logging.log4j", "log4j-core", "2.11.1");		
+		mdt.addDependency("org.apache.logging.log4j", "log4j-core", "2.13.0");		
 		deps.add(0, mdt);
 		// WW projects
 		deps.add(new BuildUtils());
