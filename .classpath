@@ -3,13 +3,17 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="src" path="builder"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.utils"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.web"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/winterwell.bob"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/flexi-gson"/>
-	<classpathentry exported="true" kind="lib" path="dependencies/elasticsearch.jar"/>
+	<classpathentry exported="true" kind="lib" path="dependencies/elasticsearch.jar" sourcepath="dependencies/elasticsearch-sources.jar"/>
 	<classpathentry kind="lib" path="dependencies/HdrHistogram.jar"/>
 	<classpathentry kind="lib" path="dependencies/hppc.jar"/>
 	<classpathentry kind="lib" path="dependencies/jackson-core.jar"/>
@@ -38,7 +42,14 @@
 	<classpathentry kind="lib" path="dependencies/snakeyaml.jar"/>
 	<classpathentry kind="lib" path="dependencies/t-digest.jar"/>
 	<classpathentry exported="true" kind="lib" path="dependencies/guava.jar" sourcepath="dependencies/guava-27.0.1-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/log4j-api.jar"/>
-	<classpathentry kind="lib" path="dependencies/log4j-core.jar"/>
+	<classpathentry kind="lib" path="dependencies/log4j-api.jar" sourcepath="dependencies/log4j-api-sources.jar"/>
+	<classpathentry kind="lib" path="dependencies/log4j-core.jar" sourcepath="dependencies/log4j-core-sources.jar"/>
+	<classpathentry kind="lib" path="dependencies/jsr305.jar"/>
+	<classpathentry kind="lib" path="dependencies/animal-sniffer-annotations.jar"/>
+	<classpathentry kind="lib" path="dependencies/checker-qual.jar"/>
+	<classpathentry kind="lib" path="dependencies/error_prone_annotations.jar"/>
+	<classpathentry kind="lib" path="dependencies/failureaccess.jar"/>
+	<classpathentry kind="lib" path="dependencies/j2objc-annotations.jar"/>
+	<classpathentry kind="lib" path="dependencies/listenablefuture.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

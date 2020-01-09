@@ -97,7 +97,7 @@ public class ESSearchTest {
 				new ESType()
 					.setParentType("topmap")
 					.property("k", new ESType().text().keyword().noIndex())
-					.property("v", new ESType().DOUBLE().noIndex())
+					.property("v", new ESType().DOUBLE())
 				);
 		putMapping2.get().check();
 		// topmap
@@ -105,7 +105,7 @@ public class ESSearchTest {
 		putMapping1.setMapping(new ESType().property("kvs", 
 				new ESType()
 					.property("k", new ESType().text().keyword().noIndex())
-					.property("v", new ESType().DOUBLE().noIndex())
+					.property("v", new ESType().DOUBLE())
 				)
 			);
 		putMapping1.get().check();
