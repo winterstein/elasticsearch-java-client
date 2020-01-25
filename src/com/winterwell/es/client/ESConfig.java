@@ -57,7 +57,7 @@ public class ESConfig {
 		return protocol+"://"+server+(port>0? ":"+port : "");
 	}
 	
-	private Gson gson;
+	transient private Gson gson;
 	
 	/**
 	 * Bit of a hack. When creating indices, its nice to use a versioned-name + public-alias.
