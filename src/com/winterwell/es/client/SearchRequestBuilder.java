@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.common.unit.TimeValue;
 
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.agg.Aggregation;
@@ -69,14 +67,14 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 
 
-	/**
-	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-search-type.html
-	 * @param searchType
-	 * @return
-	 */
-	public SearchRequestBuilder setSearchType(SearchType searchType) {
-		return setSearchType(searchType.toString().toLowerCase());
-	}
+//	/**
+//	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-search-type.html
+//	 * @param searchType
+//	 * @return
+//	 */
+//	public SearchRequestBuilder setSearchType(SearchType searchType) {
+//		return setSearchType(searchType.toString().toLowerCase());
+//	}
 	
 	/**
 	 * See https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-search-type.html
@@ -169,19 +167,6 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 
 	}
 	
-	/**
-	 * How long to keep scroll resources open between requests.
-	 * NB: Scroll is typically used with setSort("_doc");
-	 * 
-	 * @link https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-scroll.html
-	 *  
-	 * @param keepAlive
-	 *  
-	 */
-	public void setScroll(TimeValue keepAlive) {
-		// lean on TimeValue.toString() fitting the right format
-		params.put("scroll", keepAlive);
-	}
 	/**
 	 * How long to keep scroll resources open between requests.
 	 * NB: Scroll is typically used with setSort("_doc");
