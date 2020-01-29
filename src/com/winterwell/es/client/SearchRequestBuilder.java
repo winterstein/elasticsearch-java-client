@@ -7,10 +7,6 @@ import java.util.Map;
 import org.eclipse.jetty.util.ajax.JSON;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.common.unit.TimeValue;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.search.sort.SortBuilder;
-import org.elasticsearch.search.sort.SortBuilders;
-import org.elasticsearch.search.sort.SortOrder;
 
 import com.winterwell.es.ESUtils;
 import com.winterwell.es.client.agg.Aggregation;
@@ -93,15 +89,6 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	}
 
 	/**
-	 * 
-	 * @param qb WARNING: This will make a copy, so any subsequent edits will not be used!
-	 * @return
-	 */
-	public SearchRequestBuilder setQuery(QueryBuilder qb) {
-		return setQuery(ESUtils.jobj(qb));
-	}
-	
-	/**
 	 * Best practice: Use this to set the query. / filter.
 	 * @param qb Cannot be modified afterwards.
 	 * @return
@@ -142,12 +129,6 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 	
-	public SearchRequestBuilder setFilter(QueryBuilder qb) {
-		Map jobj = ESUtils.jobj(qb);
-		SimpleJson.set(body(), jobj, "query", "bool", "filter");
-		return this;
-	}
-
 	public SearchRequestBuilder setFrom(int i) {
 		params.put("from", i);
 		return this;
@@ -163,34 +144,13 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		return this;
 	}
 
-
-	/**
-	 * @deprecated use {@link #addSort(Sort)}
-	 * @param sort
-	 * @return
-	 */
-	public SearchRequestBuilder addSort(SortBuilder sort) {
-		List sorts = (List) body().get("sort");
-		if (sorts==null) {
-			sorts = new ArrayList();
-			body().put("sort", sorts);
-		}
-		// HACK correct the toString from ES
-		// TODO Better!!
-		String ss = sort.toString();
-//		ss = "{"+ss.replace("\"{", "\": {") +"}";
-		assert JSON.parse(ss) != null;
-		sorts.add(new RawJson(ss));
-		return this;
-	}
-	
-
 	public SearchRequestBuilder addSort(Sort sort) {
+		// type Map (normal) | String (ScoreSort)
 		List sorts = (List) body().get("sort");
 		if (sorts==null) {
 			sorts = new ArrayList();
 			body().put("sort", sorts);
-		}
+		}		
 		sorts.add(sort.toJson2());
 		return this;
 	}
@@ -201,22 +161,12 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 	 * @param sort
 	 */
 	public SearchRequestBuilder setSort(Sort sort) {
-		List sorts = (List) body().get("sort");
+		List<Map> sorts = (List) body().get("sort");
 		if (sorts!=null) {
 			sorts.clear();
 		}
 		return addSort(sort);		
 
-	}
-	
-
-	/**
-	 * @deprecated use {@link #addSort(Sort)}
-	 * @param sort
-	 * @return
-	 */
-	public void addSort(String field, SortOrder order) {
-		addSort(SortBuilders.fieldSort(field).order(order));
 	}
 	
 	/**
@@ -285,13 +235,6 @@ public class SearchRequestBuilder extends ESHttpRequest<SearchRequestBuilder,Sea
 		sorts.put(suggester.name, suggester); //.toJson2()); // TODO support late json conversion
 		// but caused a bug -- why is this behaving differently to Aggregation??
 		return this;		
-	}
-	
-	/**
-	 * @see #addQuery(ESQueryBuilder)
-	 */
-	public SearchRequestBuilder addQuery(QueryBuilder qb) {
-		return addQuery(new ESQueryBuilder(qb));
 	}
 	
 	/**

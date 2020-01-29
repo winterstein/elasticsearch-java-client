@@ -42,7 +42,7 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 		// needed by ES -- how is this not added by ES itself??
 		// https://www.elastic.co/guide/en/elasticsearch/client/java-api/current/_log4j_2_logger.html
 		mdt.addDependency("org.apache.logging.log4j", "log4j-core", "2.11.1");		
-		deps.add(0, mdt);
+		deps.add(0, mdt); // Off!
 		// WW projects
 		deps.add(new BuildUtils());
 		deps.add(new BuildWeb());

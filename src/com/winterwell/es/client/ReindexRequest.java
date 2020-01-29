@@ -5,8 +5,6 @@ package com.winterwell.es.client;
 
 import java.util.Map;
 
-import org.elasticsearch.index.query.QueryBuilder;
-
 import com.winterwell.es.ESUtils;
 import com.winterwell.utils.TodoException;
 import com.winterwell.utils.containers.ArrayMap;
@@ -47,10 +45,6 @@ public class ReindexRequest extends ESHttpRequest<ReindexRequest, IESResponse>
 		if (fromIndex.equals(toIndex)) {
 			throw new TodoException();
 		}
-	}
-	
-	public ReindexRequest setQuery(QueryBuilder qb) {
-		return setQuery(ESUtils.jobj(qb));
 	}
 
 	/**

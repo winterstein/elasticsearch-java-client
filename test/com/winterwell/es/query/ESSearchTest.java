@@ -3,7 +3,6 @@ package com.winterwell.es.query;
 import java.util.List;
 import java.util.Map;
 
-import org.elasticsearch.index.query.QueryBuilder;
 import org.junit.Test;
 
 import com.winterwell.es.ESType;
@@ -21,68 +20,68 @@ import com.winterwell.utils.containers.ArrayMap;
 
 public class ESSearchTest {
 
-//	@Test
-	public void testSearchParentChild() {
-		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
-		Dep.setIfAbsent(ESConfig.class, new ESConfig());
-		ESConfig esconfig = Dep.get(ESConfig.class);
-		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-
-
-		String index = "testparentchild";
-		init(index);
-		ESHttpClient esc = Dep.get(ESHttpClient.class);
-		
-		{
-			Map<String, Object> topMap = new ArrayMap("p1", "Becca");
-			List<Map<String, Object>> kvs = ESUtils.assocListFromMap(topMap, "k", "v");
-			// ...save that
-			IndexRequestBuilder pi = esc.prepareIndex(index, "topmap", "parent1");
-			pi.setBodyMap(new ArrayMap("kvs", kvs));
-			pi.execute();
-			// and a kid
-			IndexRequestBuilder pi2 = esc.prepareIndex(index, "mapbit", "kid1");
-			pi2.setParent("parent1");
-			Map<String, Object> ktopMap = new ArrayMap("name", "Joshi");
-			List<Map<String, Object>> kkvs = ESUtils.assocListFromMap(ktopMap, "k", "v");
-			pi2.setBodyMap(new ArrayMap("kvs", kkvs));
-			pi2.execute();		
-		}
-		{
-			Map<String, Object> topMap = new ArrayMap("p2", "Annabel");
-			IndexRequestBuilder pi = esc.prepareIndex(index, "topmap", "parent2");
-			List<Map<String, Object>> kvs = ESUtils.assocListFromMap(topMap, "k", "v");
-			pi.setBodyMap(new ArrayMap("kvs", kvs));
-			pi.execute();
-			// and a kid
-			Map<String, Object> ktopMap = new ArrayMap("name", "Xander");
-			List<Map<String, Object>> kkvs = ESUtils.assocListFromMap(ktopMap, "k", "v");
-			IndexRequestBuilder pi2 = esc.prepareIndex(index, "mapbit", "kid1");
-			pi2.setParent("parent2");
-			pi2.setBodyMap(new ArrayMap("kvs", kkvs));
-			pi2.execute();		
-		}
-		
-		
-		// search for same
-		SearchRequestBuilder s = esc.prepareSearch(index);
-		// Eclipse is upset about classes here??
-		QueryBuilder q = new MapQueryBuilder(new ArrayMap(
-				"parent_id", new ArrayMap(
-						"type", "mapbit",
-						"id", "parent1"
-						)
-				));
-		// TODO add a min count or recent filter
-		s.setQuery(q);
-		// TODO scroll to get all results :(
-//		// how many before we have to use a scroll??
-		s.setSize(10000);
-		SearchResponse response = s.get();
-		List<Map> hits = response.getHits();
-		// TODO assemble maps
-		System.out.println(hits);
-	}
+//	@Test Need to recode, following the removal of MapQueryBuilder
+//	public void testSearchParentChild() {
+//		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
+//		Dep.setIfAbsent(ESConfig.class, new ESConfig());
+//		ESConfig esconfig = Dep.get(ESConfig.class);
+//		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
+//
+//
+//		String index = "testparentchild";
+//		init(index);
+//		ESHttpClient esc = Dep.get(ESHttpClient.class);
+//		
+//		{
+//			Map<String, Object> topMap = new ArrayMap("p1", "Becca");
+//			List<Map<String, Object>> kvs = ESUtils.assocListFromMap(topMap, "k", "v");
+//			// ...save that
+//			IndexRequestBuilder pi = esc.prepareIndex(index, "topmap", "parent1");
+//			pi.setBodyMap(new ArrayMap("kvs", kvs));
+//			pi.execute();
+//			// and a kid
+//			IndexRequestBuilder pi2 = esc.prepareIndex(index, "mapbit", "kid1");
+//			pi2.setParent("parent1");
+//			Map<String, Object> ktopMap = new ArrayMap("name", "Joshi");
+//			List<Map<String, Object>> kkvs = ESUtils.assocListFromMap(ktopMap, "k", "v");
+//			pi2.setBodyMap(new ArrayMap("kvs", kkvs));
+//			pi2.execute();		
+//		}
+//		{
+//			Map<String, Object> topMap = new ArrayMap("p2", "Annabel");
+//			IndexRequestBuilder pi = esc.prepareIndex(index, "topmap", "parent2");
+//			List<Map<String, Object>> kvs = ESUtils.assocListFromMap(topMap, "k", "v");
+//			pi.setBodyMap(new ArrayMap("kvs", kvs));
+//			pi.execute();
+//			// and a kid
+//			Map<String, Object> ktopMap = new ArrayMap("name", "Xander");
+//			List<Map<String, Object>> kkvs = ESUtils.assocListFromMap(ktopMap, "k", "v");
+//			IndexRequestBuilder pi2 = esc.prepareIndex(index, "mapbit", "kid1");
+//			pi2.setParent("parent2");
+//			pi2.setBodyMap(new ArrayMap("kvs", kkvs));
+//			pi2.execute();		
+//		}
+//		
+//		
+//		// search for same
+//		SearchRequestBuilder s = esc.prepareSearch(index);
+//		// Eclipse is upset about classes here??
+//		QueryBuilder q = new MapQueryBuilder(new ArrayMap(
+//				"parent_id", new ArrayMap(
+//						"type", "mapbit",
+//						"id", "parent1"
+//						)
+//				));
+//		// TODO add a min count or recent filter
+//		s.setQuery(q);
+//		// TODO scroll to get all results :(
+////		// how many before we have to use a scroll??
+//		s.setSize(10000);
+//		SearchResponse response = s.get();
+//		List<Map> hits = response.getHits();
+//		// TODO assemble maps
+//		System.out.println(hits);
+//	}
 	
 	
 	

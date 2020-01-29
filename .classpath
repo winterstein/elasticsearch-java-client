@@ -13,43 +13,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="dependencies/elasticsearch.jar" sourcepath="dependencies/elasticsearch-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/HdrHistogram.jar"/>
-	<classpathentry kind="lib" path="dependencies/hppc.jar"/>
-	<classpathentry kind="lib" path="dependencies/jna.jar"/>
-	<classpathentry kind="lib" path="dependencies/joda-time.jar"/>
-	<classpathentry kind="lib" path="dependencies/jopt-simple.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-analyzers-common.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-backward-codecs.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-core.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-grouping.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-highlighter.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-join.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-memory.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-misc.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-queries.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-queryparser.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-sandbox.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-spatial-extras.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-spatial.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-spatial3d.jar"/>
-	<classpathentry kind="lib" path="dependencies/lucene-suggest.jar"/>
-	<classpathentry kind="lib" path="dependencies/securesm.jar"/>
-	<classpathentry kind="lib" path="dependencies/snakeyaml.jar"/>
-	<classpathentry kind="lib" path="dependencies/t-digest.jar"/>
-	<classpathentry kind="lib" path="dependencies/guava.jar" sourcepath="dependencies/guava-27.0.1-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/log4j-api.jar" sourcepath="dependencies/log4j-api-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/log4j-core.jar" sourcepath="dependencies/log4j-core-sources.jar"/>
-	<classpathentry kind="lib" path="dependencies/jsr305.jar"/>
-	<classpathentry kind="lib" path="dependencies/animal-sniffer-annotations.jar"/>
-	<classpathentry kind="lib" path="dependencies/checker-qual.jar"/>
-	<classpathentry kind="lib" path="dependencies/error_prone_annotations.jar"/>
-	<classpathentry kind="lib" path="dependencies/failureaccess.jar"/>
-	<classpathentry kind="lib" path="dependencies/j2objc-annotations.jar"/>
-	<classpathentry kind="lib" path="dependencies/listenablefuture.jar"/>
-	<classpathentry kind="lib" path="dependencies/jackson-core.jar"/>
-	<classpathentry kind="lib" path="dependencies/jackson-dataformat-cbor.jar"/>
-	<classpathentry kind="lib" path="dependencies/jackson-dataformat-smile.jar"/>
-	<classpathentry kind="lib" path="dependencies/jackson-dataformat-yaml.jar"/>
+	<classpathentry exported="true" kind="lib" path="dependencies/guava.jar"/>
+	<classpathentry kind="lib" path="dependencies/elasticsearch.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
