@@ -7,7 +7,7 @@ import com.winterwell.utils.containers.ArrayMap;
 
 public class MapQueryBuilderTest {
 
-	@Test
+//	@Test
 	public void testMapFilterBuilder() {
 		MapQueryBuilder mfb = new MapQueryBuilder(new ArrayMap());
 		// link parent/child to get time & details

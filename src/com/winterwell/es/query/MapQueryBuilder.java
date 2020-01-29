@@ -13,6 +13,8 @@ import org.elasticsearch.index.query.QueryShardContext;
 import com.winterwell.utils.TodoException;
 
 /**
+ * @deprecated Relies on the ES jars, which we want to remove ('cos the Jackson and Log4J dependencies are a jar-hell problem) 
+ * 
  * Directly make the query input. This is useful for "manually" bridging between ES versions.
  * @author daniel
  */

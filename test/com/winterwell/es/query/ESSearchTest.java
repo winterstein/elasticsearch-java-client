@@ -21,7 +21,7 @@ import com.winterwell.utils.containers.ArrayMap;
 
 public class ESSearchTest {
 
-	@Test
+//	@Test
 	public void testSearchParentChild() {
 		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
