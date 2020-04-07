@@ -26,9 +26,16 @@ public class ESQueryBuilders {
 	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html
 	 * @return
 	 */
-	public static ESQueryBuilder matchAll() {
-//		match_all
-		throw new TodoException();
+	public static ESQueryBuilder match_all() {
+		return new ESQueryBuilder(new ArrayMap("match_all", new ArrayMap()));
+	}
+	
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html
+	 * @return
+	 */
+	public static ESQueryBuilder match_none() {
+		return new ESQueryBuilder(new ArrayMap("match_none", new ArrayMap()));
 	}
 	
 	/**

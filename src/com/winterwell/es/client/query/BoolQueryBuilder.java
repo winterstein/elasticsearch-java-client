@@ -18,13 +18,9 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	private static final String must = "must";
 
 	public BoolQueryBuilder() {
-		this(new ArrayMap("bool", new ArrayMap()));		
+		super(new ArrayMap("bool", new ArrayMap()));		
 	}
 	
-	public BoolQueryBuilder(Map query) {
-		super(query);
-	}
-
 	/**
 	 * aka OR
 	 * @param q
