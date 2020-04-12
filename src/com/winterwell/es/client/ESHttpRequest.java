@@ -132,10 +132,16 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		this.retries = retries;
 	}
 
-	public SubClass setParent(String parentId) {
-		params.put("parent", parentId);
-		return (SubClass) this;
-	}
+//	/**
+//	 * Gone in ESv7
+//	 * See https://www.elastic.co/guide/en/elasticsearch/reference/7.6/parent-join.html
+//	 * @param parentId
+//	 * @return
+//	 */
+//	public SubClass setParent(String parentId) {
+//		params.put("parent", parentId);
+//		return (SubClass) this;
+//	}
 
 	
 	public SubClass setId(String id) {
@@ -268,6 +274,9 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 
 	/**
 	 * @deprecated Why not embrace the new typeless world?
+	 * 
+	 * MUST be called before {@link #setType(String)} or {@link #setPath(ESPath)} 
+	 * to have an effect!
 	 * 
 	 * See https://www.elastic.co/guide/en/elasticsearch/reference/7.6/removal-of-types.html
 	 * @param include_type_name true by default in ESv6, false by default in ESv7

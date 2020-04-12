@@ -9,6 +9,9 @@ import com.winterwell.utils.Dep;
 
 public class UtilsForESTests {
 
+	/**
+	 * @deprecated Use {@link ESTest#getESJC()}
+	 */
 	public static void init() {
 		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
@@ -18,9 +21,9 @@ public class UtilsForESTests {
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 		esc.admin().indices().prepareCreate(BulkRequestBuilderTest.INDEX).get();
 		
-		PutMappingRequestBuilder pm = esc.admin().indices().preparePutMapping(BulkRequestBuilderTest.INDEX, "kid");
-		pm.setBodyMap(new ESType().setParentType("parent"));
-		pm.get();	
+//		PutMappingRequestBuilder pm = esc.admin().indices().preparePutMapping(BulkRequestBuilderTest.INDEX, "kid");
+//		pm.setBodyMap(new ESType().setParentType("parent"));
+//		pm.get();	
 	}
 
 }

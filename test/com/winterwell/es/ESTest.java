@@ -17,7 +17,7 @@ public class ESTest {
 		Printer.out(config);
 	}
 	
-	protected ESHttpClient getESJC() {
+	protected static ESHttpClient getESJC() {
 //		Dep.setIfAbsent(ESConfig.class, new ESConfig()); done in setupES
 //		ESConfig esconfig = Dep.get(ESConfig.class);
 		if ( ! Dep.has(ESHttpClient.class)) {

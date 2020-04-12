@@ -57,12 +57,13 @@ public class PutMappingRequestBuilderTest extends ESTest {
 				
 		// set a mapping
 		String type = "mytype";
-		PutMappingRequestBuilder pm = esjc.admin().indices().preparePutMapping(idx, type);
+		PutMappingRequestBuilder pm = esjc.admin().indices().preparePutMapping(idx);
 		ESType mytype = new ESType()
 				.property("foo", ESType.keyword)
 				.property("bar", new ESType().text());
-		pm.setMapping(mytype);
 		pm.setIncludeTypeName(true);
+		pm.setType(type);
+		pm.setMapping(mytype);		
 		pm.setDebug(true);
 		
 		IESResponse resp = pm.get().check();

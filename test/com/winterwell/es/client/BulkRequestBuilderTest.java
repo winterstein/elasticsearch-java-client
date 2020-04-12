@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.winterwell.es.ESTest;
@@ -20,35 +21,40 @@ public class BulkRequestBuilderTest extends ESTest {
 
 	public final static String INDEX = "testbulk";
 
-
-	@Test
-	public void testBulkIndexKids() {
-		UtilsForESTests.init();
-		ESHttpClient esc = Dep.get(ESHttpClient.class);
-
-		{
-			BulkRequestBuilder bulk = esc.prepareBulk();
-			IndexRequestBuilder pi = esc.prepareIndex(INDEX, "parent", "p2");
-			pi.setBodyMap(new ArrayMap("name", "Becca"));
-			bulk.add(pi);
-			bulk.get();
-		}
-		Utils.sleep(1500);
-		
-		BulkRequestBuilder bulk = esc.prepareBulk();
-		IndexRequestBuilder pik = esc.prepareIndex(INDEX, "kid", "k2");
-		pik.setBodyMap(new ArrayMap("name", "Joshi"));
-		pik.setParent("p2");
-		pik.get();
-		bulk.add(pik);
-		BulkResponse br = bulk.get();
-		assert ! br.hasErrors() : br.getError();
-		System.out.println(br.getJson());
-		Utils.sleep(1500);
-		
-		Map<String, Object> got = esc.get(INDEX, "kid", "k1");
-		System.out.println(got);
+	@BeforeClass
+	public static void setup() {
+		ESHttpClient esjc = getESJC();
+		esjc.admin().indices().prepareCreate(BulkRequestBuilderTest.INDEX).get();
 	}
+
+//	@Test No parent-child in ESv7
+//	public void testBulkIndexKids() {
+//		UtilsForESTests.init();
+//		ESHttpClient esc = Dep.get(ESHttpClient.class);
+//
+//		{
+//			BulkRequestBuilder bulk = esc.prepareBulk();
+//			IndexRequestBuilder pi = esc.prepareIndex(INDEX, "parent", "p2");
+//			pi.setBodyMap(new ArrayMap("name", "Becca"));
+//			bulk.add(pi);
+//			bulk.get();
+//		}
+//		Utils.sleep(1500);
+//		
+//		BulkRequestBuilder bulk = esc.prepareBulk();
+//		IndexRequestBuilder pik = esc.prepareIndex(INDEX, "kid", "k2");
+//		pik.setBodyMap(new ArrayMap("name", "Joshi"));
+//		pik.setParent("p2");
+//		pik.get();
+//		bulk.add(pik);
+//		BulkResponse br = bulk.get();
+//		assert ! br.hasErrors() : br.getError();
+//		System.out.println(br.getJson());
+//		Utils.sleep(1500);
+//		
+//		Map<String, Object> got = esc.get(INDEX, "kid", "k1");
+//		System.out.println(got);
+//	}
 	
 	@Test
 	public void testBulkIndex1() {
