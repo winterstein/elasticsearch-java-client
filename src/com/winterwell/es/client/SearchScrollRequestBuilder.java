@@ -1,7 +1,5 @@
 package com.winterwell.es.client;
 
-import org.elasticsearch.common.unit.TimeValue;
-
 import com.winterwell.utils.time.Dt;
 import com.winterwell.utils.time.TUnit;
 
@@ -61,9 +59,6 @@ public class SearchScrollRequestBuilder extends ESHttpRequest<SearchScrollReques
 		throw new UnsupportedOperationException();
 	}
 
-	public void setScroll(TimeValue keepAlive) {
-		params.put("scroll", keepAlive);
-	}
 	public void setScroll(Dt keepAlive) {
 		int s = (int) keepAlive.convertTo(TUnit.SECOND).getValue();
 		params.put("scroll", s+"s");

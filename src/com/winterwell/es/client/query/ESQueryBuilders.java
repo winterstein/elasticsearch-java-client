@@ -22,18 +22,20 @@ public class ESQueryBuilders {
 	 */
 	public static final String UNSET = "unset";
 
-	public static Map queryStringQuery(String q) {
-		// TODO Auto-generated method stub
-		throw new TodoException();
-	}
-
 	/**
 	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html
 	 * @return
 	 */
-	public static ESQueryBuilder matchAll() {
-//		match_all
-		throw new TodoException();
+	public static ESQueryBuilder match_all() {
+		return new ESQueryBuilder(new ArrayMap("match_all", new ArrayMap()));
+	}
+	
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-match-all-query.html
+	 * @return
+	 */
+	public static ESQueryBuilder match_none() {
+		return new ESQueryBuilder(new ArrayMap("match_none", new ArrayMap()));
 	}
 	
 	/**
@@ -70,9 +72,24 @@ public class ESQueryBuilders {
 	 * @param value
 	 * @return
 	 */
-	public static ESQueryBuilder termQuery(String field, String value) {
+	public static ESQueryBuilder termQuery(String field, Object value) {
 		Map must = new ArrayMap("term", new ArrayMap(field, value));
 		return new ESQueryBuilder(must);
+	}
+	
+	/**
+	 * match or multi_match with * all fields
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/6.2/query-dsl-match-query.html
+	 */
+	public static ESQueryBuilder matchQuery(String optionalField, Object value) {
+		if (optionalField != null) {
+			Map must = new ArrayMap("match", new ArrayMap(optionalField, value));
+			return new ESQueryBuilder(must);
+		}
+		Map must = new ArrayMap("multi_match", new ArrayMap(
+				"query", value,
+				"fields", Arrays.asList("*")));
+		return new ESQueryBuilder(must);		
 	}
 	
 	public static ESQueryBuilder dateRangeQuery(String field, Time start, Time end) {
@@ -115,11 +132,12 @@ public class ESQueryBuilders {
 
 	/**
 	 * @param field
-	 * @param min Can be null if max is set.
-	 * @param max Can be null if min is set.
+	 * @param min > this Can be null if max is set.
+	 * @param max < this Can be null if min is set.
+	 * @param inclusive If true, use <= and >=.
 	 * @return
 	 */
-	public static ESQueryBuilder rangeQuery(String field, Number min, Number max) {
+	public static ESQueryBuilder rangeQuery(String field, Number min, Number max, boolean inclusive) {
 		assert field != null;
 		if (min==null && max==null) throw new NullPointerException("Must provide one of min/max");
 		if (min !=null && max !=null && MathUtils.compare(min, max) != -1) {
@@ -127,12 +145,10 @@ public class ESQueryBuilders {
 		}
 		Map rq = new ArrayMap();
 		if (min!=null) {
-			rq.put("gt", min); // or gte??
-//			rq.put("include_lower", true);
+			rq.put(inclusive? "gte" : "gt", min);
 		}
 		if (max!=null) {
-			rq.put("lt", max); // or lte??
-//			rq.put("include_upper", true);
+			rq.put(inclusive? "lte" : "lt", max);
 		}
 		Map must = new ArrayMap("range", 
 				new ArrayMap(field, rq));
@@ -141,6 +157,31 @@ public class ESQueryBuilders {
 
 	public static MoreLikeThisQueryBuilder similar(String like, List<String> fields) {		    
 		return new MoreLikeThisQueryBuilder(like).setFields(fields);
+	}
+
+	/**
+	 * https://www.elastic.co/guide/en/elasticsearch/reference/6.2/query-dsl-simple-query-string-query.html
+	 * @param q
+	 * @return
+	 */
+	public static ESQueryBuilder simpleQueryStringQuery(String q) {
+		Map must = new ArrayMap("simple_query_string", new ArrayMap(
+				"query", q,
+				"default_operator", "and"));
+		return new ESQueryBuilder(must);		
+	}
+
+	/**
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/7.5/query-dsl-prefix-query.html
+	 * Index setup can speed these up!
+	 * 
+	 * @param field
+	 * @param prefix
+	 * @return
+	 */
+	public static ESQueryBuilder prefixQuery(String field, String prefix) {
+		Map qmap = new ArrayMap("prefix", new ArrayMap(field, prefix));
+		return new ESQueryBuilder(qmap);
 	}
 
 }

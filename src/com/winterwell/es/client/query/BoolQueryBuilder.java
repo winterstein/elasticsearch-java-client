@@ -18,20 +18,21 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 	private static final String must = "must";
 
 	public BoolQueryBuilder() {
-		this(new ArrayMap("bool", new ArrayMap()));		
+		super(new ArrayMap("bool", new ArrayMap()));		
 	}
 	
-	public BoolQueryBuilder(Map query) {
-		super(query);
-	}
-
+	/**
+	 * aka OR
+	 * @param q
+	 * @return this
+	 */
 	public BoolQueryBuilder should(ESQueryBuilder q) {
 		add("should", q);
 		return this;
 	}
 	
 	/**
-	 * 
+	 * Add an extra condition
 	 * @param cond
 	 * @param q NB: This will get converted to json here and now. It cannot then be modified.
 	 */
@@ -86,7 +87,7 @@ public class BoolQueryBuilder extends ESQueryBuilder {
 		return this;
 	}
 
-	public ESQueryBuilder minimumNumberShouldMatch(int n) {
+	public BoolQueryBuilder minimumNumberShouldMatch(int n) {
 		lockCheck();
 		props.put("minimum_should_match", n);
 		return this;

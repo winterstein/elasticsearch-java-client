@@ -67,7 +67,7 @@ public class BulkRequestBuilder extends ESHttpRequest<BulkRequestBuilder,BulkRes
 			String op = req.bulkOpName;
 			if (op==null) throw new TodoException(req);
 			ArrayMap opMap = new ArrayMap(
-					"_index", req.indices[0], "_type", req.type, "_id", req.id
+					"_index", req.indices.get(0), "_type", req.type, "_id", req.id
 			);
 			if ( ! req.params.isEmpty()) {
 				opMap.putAll(req.params);

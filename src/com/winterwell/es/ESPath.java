@@ -1,6 +1,9 @@
 package com.winterwell.es;
 
 import java.util.Arrays;
+import java.util.Collection;
+
+import com.winterwell.utils.StrUtils;
 
 /**
  * Wrap the 3 parts of an ES identifier (index, type, id) into one object
@@ -53,6 +56,9 @@ public final class ESPath<T> {
 		this.indices = indices;		
 	}
 	
+	public ESPath(Collection<String> indices, String type, CharSequence id) {
+		this(indices.toArray(StrUtils.ARRAY), type, id);		
+	}
 	public ESPath(String index, String type, CharSequence id) {
 		this(new String[] {index}, type, id);
 	}

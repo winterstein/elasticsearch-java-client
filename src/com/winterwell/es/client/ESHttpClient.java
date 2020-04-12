@@ -249,7 +249,12 @@ public class ESHttpClient implements Flushable {
 	}
 
 	
-
+	/**
+	 * Convenience for `new SearchRequestBuilder(this)`.
+	 * Provided for drop-in similarity to the ES classes.
+	 * @param index
+	 * @return
+	 */
 	public SearchRequestBuilder prepareSearch(String index) {
 		return new SearchRequestBuilder(this).setIndex(index);
 	}

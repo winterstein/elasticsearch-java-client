@@ -1,5 +1,6 @@
 package com.winterwell.es.client;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.eclipse.jetty.util.ajax.JSON;
@@ -9,16 +10,18 @@ import com.winterwell.es.ESPath;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.es.client.suggest.Suggester;
-import com.winterwell.es.fail.DocNotFoundException;
+import com.winterwell.es.fail.ESDocNotFoundException;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.es.fail.IElasticException;
-import com.winterwell.es.fail.MapperParsingException;
+import com.winterwell.es.fail.ESIndexAlreadyExistsException;
+import com.winterwell.es.fail.ESMapperParsingException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.gson.StandardAdapters;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
+import com.winterwell.utils.containers.ArraySet;
 import com.winterwell.utils.log.Log;
 import com.winterwell.utils.web.WebUtils;
 import com.winterwell.utils.web.WebUtils2;
@@ -57,6 +60,11 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		params.put("fields", fieldsAsCSL);	return (SubClass) this;
 	}
 	
+	/**
+	 * Set as much of path as is set.
+	 * @param path Can contain nulls
+	 * @return this
+	 */
 	public SubClass setPath(ESPath path) {
 		if (path.indices!=null) setIndices(path.indices);
 		if (path.type!=null) setType(path.type);
@@ -70,11 +78,11 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	/**
 	 * Set to [null] for "no index for this op"
 	 */
-	String[] indices;
+	ArraySet<String> indices;
 	String type;
 	String id;
 	
-	protected String[] getIndices() {
+	protected ArraySet<String> getIndices() {
 		return indices;
 	}
 	
@@ -167,7 +175,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	}
 	
 	public SubClass setIndices(String... indices) {
-		this.indices = indices;
+		this.indices = new ArraySet<String>(indices);
 		return (SubClass) this;
 	}
 	
@@ -257,7 +265,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		StringBuilder url = new StringBuilder(server);
 		if (indices==null) {
 			url.append("/_all");
-		} else if (indices.length==1 && indices[0] == null) {
+		} else if (indices.isEmpty() || (indices.size()==1 && indices.get(0) == null)) {
 			// some operations dont target an index, e.g. IndexAliasRequest
 		} else {
 			// normal case: target some indices
@@ -266,7 +274,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 				url.append(WebUtils.urlEncode(idx));
 				url.append(",");
 			}
-			if (indices.length!=0) StrUtils.pop(url, 1);
+			if (indices.size()!=0) StrUtils.pop(url, 1);
 		}
 		if (type!=null) url.append("/"+WebUtils.urlEncode(type));
 		if (id!=null) url.append("/"+WebUtils.urlEncode(id));
@@ -274,6 +282,8 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 			// NB: Only a few requests, such as get, don't need an endpoint
 			url.append("/"+endpoint);		
 		}
+		// paranoia check: must not be //_thing, as that fails
+		assert url.indexOf("//_") == -1 : url;
 		return url;
 	}
 
@@ -419,7 +429,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	}
 	
 	private ESPath getESPath() {
-		return new ESPath(indices, type, id);
+		return new ESPath(getIndices(), type, id);
 	}
 
 	/**
@@ -432,15 +442,18 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		if (ex instanceof ESException) return (RuntimeException) ex;
 		if (ex instanceof WebEx.E404) {
 			// e.g. a get for an unstored object (a common case)
-			return new DocNotFoundException(getESPath());
+			return new ESDocNotFoundException(getESPath());
 		}
 		if (ex instanceof WebEx.E40X) {
 			String msg = ex.getMessage();
 			// TODO parse the json errorPage
 			if (msg.contains("mapper_parsing_exception")) {
-				return new MapperParsingException(msg);
+				return new ESMapperParsingException(msg);
 			}
-		}
+			if (msg.contains("index_already_exists_exception")) {
+				return new ESIndexAlreadyExistsException(msg);
+			}
+		}		
 		// wrap
 		String msg = req==null? ex.getMessage() : req.getUrl("")+" "+ex.getMessage();
 		ESException esex = new ESException(msg, ex);

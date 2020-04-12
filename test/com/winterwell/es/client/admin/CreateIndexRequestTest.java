@@ -9,10 +9,14 @@ import com.winterwell.es.client.ESConfig;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.IESResponse;
 import com.winterwell.es.client.IndexRequestBuilder;
+import com.winterwell.es.fail.ESException;
+import com.winterwell.es.fail.ESIndexAlreadyExistsException;
 import com.winterwell.utils.Dep;
+import com.winterwell.utils.Printer;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
+import com.winterwell.utils.io.SysOutCollectorStream;
 
 public class CreateIndexRequestTest extends ESTest {
 
@@ -54,6 +58,8 @@ public class CreateIndexRequestTest extends ESTest {
 		}		
 	}
 	
+	
+
 	@Test
 	public void testDuplicateMakeBoth() {
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
@@ -77,6 +83,30 @@ public class CreateIndexRequestTest extends ESTest {
 			Map<String, Object> settings = rsettings.get().getParsedJson();
 			assert settings.size() > 1;
 			esc.admin().indices().prepareDelete(idx, idx2).get();
+		}
+	}
+	
+	
+	@Test
+	public void testIndexAlreadyExists() {
+		Dep.setIfAbsent(ESConfig.class, new ESConfig());
+		ESConfig esconfig = Dep.get(ESConfig.class);
+		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
+
+		ESHttpClient esc = Dep.get(ESHttpClient.class);
+		
+		try {
+			String v = Utils.getRandomString(3);
+			String idx = "testalready_"+v;
+			CreateIndexRequest cir = esc.admin().indices().prepareCreate(idx);
+			cir.get().check();
+			Utils.sleep(100);
+			
+			CreateIndexRequest cir2 = esc.admin().indices().prepareCreate(idx);
+			cir2.get().check();
+			assert false;
+		} catch(ESIndexAlreadyExistsException ex) {
+			Printer.out(ex);
 		}
 	}
 	

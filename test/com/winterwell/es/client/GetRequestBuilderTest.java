@@ -6,6 +6,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.winterwell.es.ESTest;
+import com.winterwell.es.UtilsForESTests;
 import com.winterwell.utils.Dep;
 import com.winterwell.web.WebEx;
 
@@ -32,7 +33,7 @@ public class GetRequestBuilderTest extends ESTest {
 	public void testGet404() {
 		try {
 			BulkRequestBuilderTest brbt = new BulkRequestBuilderTest();
-			brbt.init();
+			UtilsForESTests.init();
 			// now get one
 			ESHttpClient esc = Dep.get(ESHttpClient.class);
 			GetRequestBuilder srb = new GetRequestBuilder(esc).setIndex(brbt.INDEX).setId("no_nevermadethisthingever");

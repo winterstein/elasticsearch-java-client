@@ -9,6 +9,7 @@ import org.junit.Test;
 import com.winterwell.es.ESTest;
 import com.winterwell.es.ESType;
 import com.winterwell.es.client.admin.PutMappingRequestBuilder;
+import com.winterwell.es.UtilsForESTests;
 import com.winterwell.gson.FlexiGson;
 import com.winterwell.utils.Dep;
 import com.winterwell.utils.Utils;
@@ -17,12 +18,12 @@ import com.winterwell.utils.containers.ArrayMap;
 public class BulkRequestBuilderTest extends ESTest {
 
 
-	final static String INDEX = "testbulk";
+	public final static String INDEX = "testbulk";
 
 
 	@Test
 	public void testBulkIndexKids() {
-		init();
+		UtilsForESTests.init();
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 
 		{
@@ -55,7 +56,7 @@ public class BulkRequestBuilderTest extends ESTest {
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
 		ESConfig esconfig = Dep.get(ESConfig.class);
 		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-		init();
+		UtilsForESTests.init();
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 
 		BulkRequestBuilder bulk = esc.prepareBulk();
@@ -84,7 +85,7 @@ public class BulkRequestBuilderTest extends ESTest {
 		Dep.setIfAbsent(ESConfig.class, new ESConfig());
 		ESConfig esconfig = Dep.get(ESConfig.class);
 		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-		init();
+		UtilsForESTests.init();
 		ESHttpClient esc = Dep.get(ESHttpClient.class);
 
 		List<String> ids = new ArrayList();
@@ -102,20 +103,5 @@ public class BulkRequestBuilderTest extends ESTest {
 		Map<String, Object> got = esc.get(INDEX, "simple", "s_22");
 		System.out.println(got);
 		return ids;
-	}
-
-	
-	void init() {
-		Dep.setIfAbsent(FlexiGson.class, new FlexiGson());
-		Dep.setIfAbsent(ESConfig.class, new ESConfig());
-		ESConfig esconfig = Dep.get(ESConfig.class);
-		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-		
-		ESHttpClient esc = Dep.get(ESHttpClient.class);
-		esc.admin().indices().prepareCreate(INDEX).get();
-		
-		PutMappingRequestBuilder pm = esc.admin().indices().preparePutMapping(INDEX, "kid");
-		pm.setBodyMap(new ESType().setParentType("parent"));
-		pm.get();	
 	}
 }

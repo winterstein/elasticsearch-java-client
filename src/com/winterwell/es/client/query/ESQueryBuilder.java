@@ -2,12 +2,12 @@ package com.winterwell.es.client.query;
 
 import java.util.Map;
 
-import org.elasticsearch.index.query.QueryBuilder;
-
 import com.winterwell.es.ESUtils;
 import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.utils.containers.Containers;
 import com.winterwell.utils.web.IHasJson;
+
+import shadoworg.elasticsearch.index.query.QueryBuilder.QueryBuilder;
 
 /**
  * Base class for query-builders. For common cases use the convenience methods in {@link ESQueryBuilders}
