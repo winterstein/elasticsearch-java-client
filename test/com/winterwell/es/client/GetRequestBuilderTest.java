@@ -18,6 +18,27 @@ import com.winterwell.web.WebEx;
 public class GetRequestBuilderTest extends ESTest {
 
 	@Test
+	public void testPut() {
+		ESHttpClient esjc = getESJC();		
+		// make an index
+		String v = Utils.getRandomString(3);
+		String idx = "test_put_"+v;
+		CreateIndexRequest cir = esjc.admin().indices().prepareCreate(idx);
+		cir.get().check();
+		Utils.sleep(100);					
+		
+		// now index an item
+		IndexRequestBuilder irb = esjc.prepareIndex(idx, "test_id_1");
+		irb.setBodyDoc(new ArrayMap(
+			"foo", "hello",
+			"bar", "world"
+		));
+		irb.setDebug(true);
+		IESResponse resp2 = irb.get().check();
+		System.out.println(resp2);
+	}
+	
+	@Test
 	public void testPutGet() {
 		ESHttpClient esjc = getESJC();		
 		// make an index

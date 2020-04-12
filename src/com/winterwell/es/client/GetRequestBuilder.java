@@ -8,6 +8,7 @@ public class GetRequestBuilder extends ESHttpRequest<GetRequestBuilder,GetRespon
 
 	public GetRequestBuilder(ESHttpClient hClient) {
 		super(hClient, null);
+		setType("_doc"); // the new ESv7 omni-type
 	}
 
 
