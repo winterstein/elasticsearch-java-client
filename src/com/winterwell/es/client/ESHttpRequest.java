@@ -68,7 +68,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	 */
 	public SubClass setPath(ESPath path) {
 		if (path.indices!=null) setIndices(path.indices);
-		if (path.type!=null) setType(path.type);
+		if (path.type!=null) setType(path.type); // no types in ESv7
 		if (path.id!=null) setId(path.id);
 		return (SubClass) this;
 	}
@@ -183,7 +183,10 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	}
 	
 	public SubClass setType(String type) {
-		this.type = type;
+		// ESv7 - no types
+		if (include_type_name || "_doc".equals(type)) {
+			this.type = type;
+		}
 		return (SubClass) this;
 	}
 
