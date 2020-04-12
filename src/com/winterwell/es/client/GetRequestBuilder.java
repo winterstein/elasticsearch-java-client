@@ -2,6 +2,11 @@ package com.winterwell.es.client;
 
 import com.winterwell.utils.StrUtils;
 
+/**
+ * @testedby {@link GetRequestBuilderTest}
+ * @author daniel
+ *
+ */
 public class GetRequestBuilder extends ESHttpRequest<GetRequestBuilder,GetResponse> {
 	
 	boolean sourceOnly;

@@ -25,7 +25,7 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 	@Override
 	protected void get2_safetyCheck() {
 		if (indices==null || indices.size()==0) throw new IllegalStateException("No index specified for update: "+this);
-		if (type==null) throw new IllegalStateException("No type specified for update: "+this);
+//		typeless ESv7 if (type==null) throw new IllegalStateException("No type specified for update: "+this);
 		if (id==null) throw new IllegalStateException("No id specified for update: "+this);
 	}
 	
@@ -33,6 +33,7 @@ public class UpdateRequestBuilder extends ESHttpRequest<UpdateRequestBuilder,IES
 		super(esHttpClient,"_update");
 		method = "POST";
 		bulkOpName = "update";
+		setType("_doc"); // the new ESv7 omni-type
 	}
 	
 	/**

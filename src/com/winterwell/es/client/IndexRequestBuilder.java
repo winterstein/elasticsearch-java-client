@@ -13,6 +13,7 @@ public class IndexRequestBuilder extends ESHttpRequest<IndexRequestBuilder, IESR
 		super(esHttpClient, null);
 		method = "POST";
 		bulkOpName = "index";
+		setType("_doc"); // the new ESv7 omni-type
 	}
 	
 	/**

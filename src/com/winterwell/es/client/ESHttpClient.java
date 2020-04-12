@@ -297,7 +297,6 @@ public class ESHttpClient implements Flushable {
 	public IndexRequestBuilder prepareIndex(ESPath path) {
 		IndexRequestBuilder urb = new IndexRequestBuilder(this);
 		urb.setPath(path);
-		urb.setType("_doc"); // the new ESv7 omni-type
 		return urb;
 	}
 
