@@ -7,6 +7,7 @@ import org.eclipse.jetty.util.ajax.JSON;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import com.winterwell.es.ESPath;
+import com.winterwell.es.client.admin.PutMappingRequestBuilder;
 import com.winterwell.es.client.agg.Aggregation;
 import com.winterwell.es.client.query.ESQueryBuilder;
 import com.winterwell.es.client.suggest.Suggester;
@@ -114,6 +115,8 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	int retries;
 
 	protected boolean debug;
+
+	private boolean include_type_name;
 	
 	public SubClass setDebug(boolean debug) {
 		this.debug = debug;
@@ -260,7 +263,19 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		// NB this 4ends up at #doExecute(esjc)
 	}
 
-	StringBuilder getUrl(String server) {
+	/**
+	 * @deprecated Why not embrace the new typeless world?
+	 * 
+	 * See https://www.elastic.co/guide/en/elasticsearch/reference/7.6/removal-of-types.html
+	 * @param include_type_name true by default in ESv6, false by default in ESv7
+	 */
+	public SubClass setIncludeTypeName(boolean include_type_name) {
+		getParams().put("include_type_name", include_type_name);
+		this.include_type_name = include_type_name;
+		return (SubClass) this;
+	}
+
+	protected StringBuilder getUrl(String server) {
 		// see https://www.elastic.co/guide/en/elasticsearch/reference/current/multi-index.html
 		StringBuilder url = new StringBuilder(server);
 		if (indices==null) {
@@ -276,7 +291,13 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 			}
 			if (indices.size()!=0) StrUtils.pop(url, 1);
 		}
-		if (type!=null) url.append("/"+WebUtils.urlEncode(type));
+		
+		// Note: Types have effectively gone in ESv7
+		// -- but sometimes the dummy type _doc is needed
+		if (type!=null && ("_doc".equals(type) || include_type_name)) {
+			url.append("/"+WebUtils.urlEncode(type));
+		}
+		
 		if (id!=null) url.append("/"+WebUtils.urlEncode(id));
 		if (endpoint!=null) {
 			// NB: Only a few requests, such as get, don't need an endpoint
@@ -340,6 +361,7 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 			// e.g. HEAD
 			fb.setRequestMethod(method);
 			fb.setDebug(debug);
+			fb.setRequestHeader("Content-Type", "application/json");
 			
 			String jsonResult;
 			String srcJson = getBodyJson();
@@ -393,11 +415,12 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 	}
 	
 	private void curlout(String curl) {
-		if (curl!=null) {
-			curl = StrUtils.compactWhitespace(curl);
-			curl = curl.replace("\\u003d","="); // a bit more readable
-			Log.d("ES.curl", curl);
-		}
+		if (curl==null) return;
+		curl = StrUtils.compactWhitespace(curl);
+		curl = curl.replace("\\u003d","="); // a bit more readable
+		// add the content type (required from ESv6+)
+		curl += " -H'Content-Type: application/json'";
+		Log.d("ES.curl", curl);		
 	}
 
 	/**
@@ -450,7 +473,8 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 			if (msg.contains("mapper_parsing_exception")) {
 				return new ESMapperParsingException(msg);
 			}
-			if (msg.contains("index_already_exists_exception")) {
+			// NB: type:index_already_exists_exception in ESv5, resouce_already_exists_exception in ESv7
+			if (msg.contains("already_exists_exception")) {
 				return new ESIndexAlreadyExistsException(msg);
 			}
 		}		

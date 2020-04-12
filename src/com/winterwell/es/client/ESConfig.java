@@ -10,7 +10,7 @@ import com.winterwell.utils.time.Time;
 public class ESConfig {
 
 	public static final String CLIENT_VERSION = "0.9";
-	public static final String ES_SUPPORTED_VERSION = "5.0";
+	public static final String ES_SUPPORTED_VERSION = "7.0";
 	
 	/**
 	 * This is for code that wishes to dynamically change based on the ES version its connecting to.

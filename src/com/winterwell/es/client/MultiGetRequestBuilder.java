@@ -93,7 +93,7 @@ public class MultiGetRequestBuilder extends ESHttpRequest<MultiGetRequestBuilder
     }
     
     @Override
-    StringBuilder getUrl(String server) {
+    protected StringBuilder getUrl(String server) {
     	// see https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-multi-get.html
 		return super.getUrl(server);
     }

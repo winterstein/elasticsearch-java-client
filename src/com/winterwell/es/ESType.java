@@ -33,6 +33,9 @@ import com.winterwell.utils.time.Time;
 public class ESType extends LinkedHashMap<String,Object> {	
 	private static final long serialVersionUID = 1L;
 	
+	/**
+	 * Convenience for a no-options keyword
+	 */
 	public static final ESType keyword = new ESType().keyword().lock();
 
 	private transient boolean lock;

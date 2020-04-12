@@ -38,13 +38,21 @@ public class IndicesAdminClient {
 	}
 
 	/**
+	 * @deprecated types are gone - use the other constructor
 	 * Sets field.type info for a type (or several types)
 	 * @param idx The index
 	 * @param type 
-	 * @return
 	 */
 	public PutMappingRequestBuilder preparePutMapping(String idx, String type) {
 		return new PutMappingRequestBuilder(hClient, idx, type);
+	}
+	
+	/**
+	 * Sets field.type info for the index
+	 * @param idx The index
+	 */
+	public PutMappingRequestBuilder preparePutMapping(String idx) {
+		return new PutMappingRequestBuilder(hClient, idx, null);
 	}
 	
 	/**

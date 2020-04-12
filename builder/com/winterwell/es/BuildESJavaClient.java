@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.winterwell.bob.BuildTask;
+import com.winterwell.bob.tasks.EclipseClasspath;
 import com.winterwell.bob.tasks.MavenDependencyTask;
 import com.winterwell.bob.wwjobs.BuildFlexiGson;
 import com.winterwell.bob.wwjobs.BuildUtils;
@@ -24,16 +25,19 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 	@Override
 	public List<BuildTask> getDependencies() {
 		List<BuildTask> deps = new ArrayList(super.getDependencies());
-		
+				
 		MavenDependencyTask mdt = new MavenDependencyTask();
-		mdt.addDependency("com.google.guava", "guava", "28.1-jre");
+		mdt.addDependency("com.google.guava", "guava", "28.2-jre");
 		mdt.setIncSrc(true);		
 		deps.add(mdt);
+
+		UpdateEclipseClasspathTask uect = new UpdateEclipseClasspathTask(
+				new EclipseClasspath(projectDir)
+				);
+		File depdir = new File(projectDir, MavenDependencyTask.MAVEN_DEPENDENCIES_FOLDER);
+		uect.setSyncDir(depdir);
+		deps.add(uect);
 		
-		// WW projects
-		deps.add(new BuildUtils());
-		deps.add(new BuildWeb());
-		deps.add(new BuildFlexiGson());			
 		return deps;
 	}
 	

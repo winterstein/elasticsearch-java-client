@@ -14,5 +14,11 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry exported="true" kind="lib" path="dependencies/guava.jar" sourcepath="dependencies/guava-27.0.1-sources.jar"/>
+	<classpathentry kind="lib" path="dependencies/checker-qual.jar"/>
+	<classpathentry kind="lib" path="dependencies/error_prone_annotations.jar"/>
+	<classpathentry kind="lib" path="dependencies/failureaccess.jar"/>
+	<classpathentry kind="lib" path="dependencies/j2objc-annotations.jar"/>
+	<classpathentry kind="lib" path="dependencies/jsr305.jar"/>
+	<classpathentry kind="lib" path="dependencies/listenablefuture.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

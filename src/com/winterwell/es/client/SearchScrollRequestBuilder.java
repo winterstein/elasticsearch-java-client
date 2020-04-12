@@ -31,7 +31,7 @@ public class SearchScrollRequestBuilder extends ESHttpRequest<SearchScrollReques
 	}
 	
 	@Override
-	StringBuilder getUrl(String server) {
+	protected StringBuilder getUrl(String server) {
 		// no indices
 		StringBuilder url = new StringBuilder(server);
 		url.append("/"+endpoint);				

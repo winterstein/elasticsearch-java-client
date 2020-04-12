@@ -18,7 +18,7 @@ public final class ESPath<T> {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + Arrays.hashCode(indices);
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
+//		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -38,34 +38,65 @@ public final class ESPath<T> {
 			return false;
 		if (!Arrays.equals(indices, other.indices))
 			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
+//		if (type == null) {
+//			if (other.type != null)
+//				return false;
+//		} else if (!type.equals(other.type))
+//			return false;
 		return true;
 	}
 
 	public final String id;
+	
+	/**
+	 * @deprecated types are gone in ESv7
+	 */
 	public final String type;
+	
 	public final String[] indices;
 	
+	public ESPath(String index, CharSequence id) {
+		this(new String[]{index},null,id);
+	}
+	public ESPath(String[] indices, CharSequence id) {
+		this(indices, null, id);
+	}
+	
+	/**
+	 * @deprecated go typeless
+	 * @param indices
+	 * @param type
+	 * @param id
+	 */
 	public ESPath(String[] indices, String type, CharSequence id) {
 		this.id = id==null? null : id.toString();
 		this.type = type;
 		this.indices = indices;		
 	}
 	
+	/**
+	 * @deprecated go typeless
+	 * @param indices
+	 * @param type
+	 * @param id
+	 */
 	public ESPath(Collection<String> indices, String type, CharSequence id) {
 		this(indices.toArray(StrUtils.ARRAY), type, id);		
 	}
+	
+	/**
+	 * @deprecated go typeless
+	 * @param index
+	 * @param type
+	 * @param id
+	 */
 	public ESPath(String index, String type, CharSequence id) {
 		this(new String[] {index}, type, id);
 	}
 
 	@Override
 	public String toString() {
-		return "ESPath[" +Arrays.toString(indices)+" / " + type + " / " +id+ "]";
+		return "ESPath[" +Arrays.toString(indices)+" / " +id+ "]";
 	}
 
 	public String index() {

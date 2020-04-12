@@ -43,7 +43,7 @@ public class GetRequestBuilder extends ESHttpRequest<GetRequestBuilder,GetRespon
     }
     
     @Override
-    StringBuilder getUrl(String server) {
+    protected StringBuilder getUrl(String server) {
     	// c.f. http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/docs-get.html#type
     	if (type==null) type = "_all";
     	StringBuilder url = super.getUrl(server);

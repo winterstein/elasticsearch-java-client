@@ -23,6 +23,11 @@ public class ESException extends WrappedException implements IElasticException {
 		super(msg, ex);
 	}
 
+	public ESException(String msg) {
+		super(msg, null);
+	}
+	
+
 	private static final long serialVersionUID = 1L;
 
 }

@@ -9,6 +9,7 @@ import com.winterwell.es.client.ESConfig;
 import com.winterwell.es.client.ESHttpClient;
 import com.winterwell.es.client.IESResponse;
 import com.winterwell.es.client.IndexRequestBuilder;
+import com.winterwell.es.client.admin.CreateIndexRequest.Analyzer;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.es.fail.ESIndexAlreadyExistsException;
 import com.winterwell.utils.Dep;
@@ -21,12 +22,23 @@ import com.winterwell.utils.io.SysOutCollectorStream;
 public class CreateIndexRequestTest extends ESTest {
 
 	@Test
+	public void testES7UpgradeBug() {
+		ESHttpClient esjc = getESJC();
+		String baseIndex = "test_create_"+Utils.getRandomString(4);
+		CreateIndexRequest pc = esjc.admin().indices().prepareCreate(baseIndex);			
+//		actually, you can have multiple for all pc.setFailIfAliasExists(true); // this is synchronized, but what about other servers?
+		pc.setDefaultAnalyzer(Analyzer.keyword);
+		// aliases: index and index.all both point to baseIndex  
+		// Set the query index here. The write one is set later as an atomic swap.			
+		pc.setAlias("test_create_aliase");
+		pc.setDebug(true);			
+		IESResponse cres = pc.get();
+		cres.check();
+	}
+	
+	@Test
 	public void testAlias() {
-		Dep.setIfAbsent(ESConfig.class, new ESConfig());
-		ESConfig esconfig = Dep.get(ESConfig.class);
-		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-
-		ESHttpClient esc = Dep.get(ESHttpClient.class);
+		ESHttpClient esc = getESJC();
 		
 		{
 			String v = Utils.getRandomString(3);
@@ -62,11 +74,7 @@ public class CreateIndexRequestTest extends ESTest {
 
 	@Test
 	public void testDuplicateMakeBoth() {
-		Dep.setIfAbsent(ESConfig.class, new ESConfig());
-		ESConfig esconfig = Dep.get(ESConfig.class);
-		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-
-		ESHttpClient esc = Dep.get(ESHttpClient.class);
+		ESHttpClient esc = getESJC();
 		
 		{
 			String v = Utils.getRandomString(3);
@@ -89,11 +97,7 @@ public class CreateIndexRequestTest extends ESTest {
 	
 	@Test
 	public void testIndexAlreadyExists() {
-		Dep.setIfAbsent(ESConfig.class, new ESConfig());
-		ESConfig esconfig = Dep.get(ESConfig.class);
-		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-
-		ESHttpClient esc = Dep.get(ESHttpClient.class);
+		ESHttpClient esc = getESJC();
 		
 		try {
 			String v = Utils.getRandomString(3);
@@ -112,11 +116,7 @@ public class CreateIndexRequestTest extends ESTest {
 	
 	@Test
 	public void testDuplicateMakeFirstOnly() {
-		Dep.setIfAbsent(ESConfig.class, new ESConfig());
-		ESConfig esconfig = Dep.get(ESConfig.class);
-		if ( ! Dep.has(ESHttpClient.class)) Dep.setSupplier(ESHttpClient.class, false, ESHttpClient::new);
-
-		ESHttpClient esc = Dep.get(ESHttpClient.class);
+		ESHttpClient esc = getESJC();
 		{
 			String sf = "solofoo_"+Utils.getRandomString(3);
 			String v = Utils.getRandomString(3);

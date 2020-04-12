@@ -65,7 +65,7 @@ public class BulkRequestBuilderTest extends ESTest {
 		bulk.add(pi);
 		
 		BulkResponse br = bulk.get();
-		assert ! br.hasErrors();
+		assert ! br.hasErrors() : br.getError();
 		
 		Utils.sleep(1500);
 		
@@ -97,8 +97,9 @@ public class BulkRequestBuilderTest extends ESTest {
 			ids.add("s_"+i);
 		}		
 		bulk.setRefresh(KRefresh.WAIT_FOR);
+		bulk.setDebug(true);
 		BulkResponse br = bulk.get();
-		assert ! br.hasErrors();
+		assert ! br.hasErrors() : br.getError();
 		
 		Map<String, Object> got = esc.get(INDEX, "simple", "s_22");
 		System.out.println(got);

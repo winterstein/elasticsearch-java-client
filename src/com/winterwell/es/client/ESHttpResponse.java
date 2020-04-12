@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.winterwell.es.client.agg.AggregationResults;
+import com.winterwell.es.fail.ESBulkException;
 import com.winterwell.es.fail.ESException;
 import com.winterwell.gson.Gson;
 import com.winterwell.gson.GsonBuilder;
 import com.winterwell.utils.Dep;
+import com.winterwell.utils.Printer;
 import com.winterwell.utils.StrUtils;
 import com.winterwell.utils.Utils;
 import com.winterwell.utils.containers.Containers;
@@ -71,6 +73,19 @@ IHasJson
 	ESHttpResponse(ESHttpRequest req, String json, RuntimeException ex) {
 		this.req = req;
 		this.json = json;
+		
+//		// HACK - ESv7 doesnt throw errors from bulk requests 
+//		if (ex==null && json!=null && req instanceof BulkRequestBuilder) {
+//			Map<String, Object> jobj = getParsedJson();
+//			Object errors = jobj.get("errors");
+//			if (Utils.yes(errors)) {
+//				List<Map> items = (List) jobj.get("items");
+//				List<Object> itemErrors = Containers.filterNulls(Containers.apply(items, i -> i.get("error")));
+//				
+//				ex = new ESBulkException(itemExs);
+//				Printer.out(items);
+//			}
+//		}
 		this.error = ex;
 		// source only?
 		if (req instanceof GetRequestBuilder && ((GetRequestBuilder) req).sourceOnly) {			
@@ -189,7 +204,7 @@ IHasJson
 			return true;
 		}
 		Map<String, Object> map = getParsedJson();
-		Object fails = map.get("errors"); // TODO Out of date?!
+		Object fails = map.get("errors"); // NB: boolean in ESv7, was the errors in ESv5		
 		if (Utils.yes(fails)) {
 			return true;
 		}
@@ -203,6 +218,10 @@ IHasJson
 	 * @see #getBulkErrors()  
 	 */
 	public RuntimeException getError() {
+		// HACK! unreliable if deserialising cos req is transient
+		if (req instanceof BulkRequestBuilder && error==null) {
+			return getBulkErrors();
+		}
 		return error;
 	}
 	
@@ -210,20 +229,24 @@ IHasJson
 	 * TODO handle bulk-request errors nicely
 	 * @return
 	 */
-	Throwable getBulkErrors() {
-		List<Object> errors = new ArrayList<>();
+	RuntimeException getBulkErrors() {
+		List<Exception> errors = new ArrayList<>();
 		Map<String, Object> parsedJson = getParsedJson();
 		List<Map<String, Map<String, Object>>> items = (List) parsedJson.get("items");
-		if (items != null) {			
-			for(Map<String, Map<String, Object>> item : items) {
-				for (Map.Entry<String, Map<String, Object>> entry : item.entrySet()) {
-					Map<String, Object> values = entry.getValue();
-					Object err = values.get("error");
-					if (err != null) errors.add(err);					
-				}
+		if (items == null) return null;
+		for(Map<String, Map<String, Object>> item : items) {
+			for (Map.Entry<String, Map<String, Object>> entry : item.entrySet()) {
+				Map<String, Object> values = entry.getValue();
+				Map err = (Map) values.get("error");
+				if (err == null) continue;
+				String errs = err.toString();
+				ESException ex = new ESException((String)err.get("reason"));				
+				errors.add(ex);									
 			}
-			return new ESException("BulkRequest errors: "+errors, null);
 		}
+		if ( ! errors.isEmpty()) {
+			return new ESBulkException(errors);
+		}		
 		return null;
 	}
 	

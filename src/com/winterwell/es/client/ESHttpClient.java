@@ -191,6 +191,7 @@ public class ESHttpClient implements Flushable {
 	}
 
 	/**
+	 * @deprecated go typeless
 	 * Prepare to index (aka store or insert) a document!
 	 * @param index
 	 * @param type
@@ -199,6 +200,16 @@ public class ESHttpClient implements Flushable {
 	 */
 	public IndexRequestBuilder prepareIndex(String index, String type, String id) {
 		return prepareIndex(new ESPath(index, type, id));
+	}
+	
+	/**
+	 * Prepare to index (aka store or insert) a document!
+	 * @param index
+	 * @param id
+	 * @return an IndexRequestBuilder Typical usage: call setBodyDoc(), then get()
+	 */
+	public IndexRequestBuilder prepareIndex(String index, String id) {
+		return prepareIndex(new ESPath(index, id));
 	}
 
 	public DeleteRequestBuilder prepareDelete(String esIndex, String esType, String id) {
@@ -286,6 +297,7 @@ public class ESHttpClient implements Flushable {
 	public IndexRequestBuilder prepareIndex(ESPath path) {
 		IndexRequestBuilder urb = new IndexRequestBuilder(this);
 		urb.setPath(path);
+		urb.setType("_doc"); // the new ESv7 omni-type
 		return urb;
 	}
 

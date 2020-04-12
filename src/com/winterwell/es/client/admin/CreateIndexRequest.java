@@ -16,6 +16,7 @@ import com.winterwell.web.WebEx;
 
 /**
  * Create a new index!
+ * https://www.elastic.co/guide/en/elasticsearch/reference/7.6/indices-create-index.html
  * 
  * @author daniel
  * @testedby CreateIndexRequestTest
@@ -73,13 +74,15 @@ public class CreateIndexRequest extends ESHttpRequest<CreateIndexRequest,IESResp
 	
 	/**
 	 * 
-	 * @param analyzer e.g. keyword See http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/analysis-analyzers.html
+	 * @param analyzer e.g. keyword See 
+	 * http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/analysis-analyzers.html
 	 * @return 
 	 * @see Analyzer
 	 */
 	public CreateIndexRequest setDefaultAnalyzer(String analyzer) {
 		SimpleJson.set(body(), analyzer, 
-				"index", "analysis", "analyzer", "default", "type");
+				"settings", // NB: was "index" for ESv5 
+				"analysis", "analyzer", "default", "type");
 		return this;
 	}
 
