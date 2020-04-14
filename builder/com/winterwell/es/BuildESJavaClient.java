@@ -8,9 +8,6 @@ import java.util.List;
 import com.winterwell.bob.BuildTask;
 import com.winterwell.bob.tasks.EclipseClasspath;
 import com.winterwell.bob.tasks.MavenDependencyTask;
-import com.winterwell.bob.wwjobs.BuildFlexiGson;
-import com.winterwell.bob.wwjobs.BuildUtils;
-import com.winterwell.bob.wwjobs.BuildWeb;
 import com.winterwell.bob.wwjobs.BuildWinterwellProject;
 import com.winterwell.utils.io.FileUtils;
 
