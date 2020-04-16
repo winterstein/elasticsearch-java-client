@@ -28,11 +28,9 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 		mdt.setIncSrc(true);		
 		deps.add(mdt);
 
-		UpdateEclipseClasspathTask uect = new UpdateEclipseClasspathTask(
-				new EclipseClasspath(projectDir)
-				);
 		File depdir = new File(projectDir, MavenDependencyTask.MAVEN_DEPENDENCIES_FOLDER);
-		uect.setSyncDir(depdir);
+		UpdateEclipseClasspathTask uect = new UpdateEclipseClasspathTask(
+				new EclipseClasspath(projectDir), depdir);		
 		deps.add(uect);
 		
 		return deps;

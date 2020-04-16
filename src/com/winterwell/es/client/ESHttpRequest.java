@@ -183,6 +183,10 @@ public class ESHttpRequest<SubClass extends ESHttpRequest, ResponseSubClass exte
 		return hClient.config.getGson();
 	}
 	
+	/**
+	 * @param indices NB: uses a set, so it can contain repeats which will be filtered
+	 * @return
+	 */
 	public SubClass setIndices(String... indices) {
 		this.indices = new ArraySet<String>(indices);
 		return (SubClass) this;
