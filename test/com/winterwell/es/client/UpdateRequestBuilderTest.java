@@ -18,10 +18,11 @@ import com.winterwell.utils.containers.ArrayMap;
 import com.winterwell.web.WebEx;
 
 public class UpdateRequestBuilderTest extends ESTest {
-
+	
 	@Test
 	public void testPutUpdate() {
-		ESHttpClient esjc = getESJC();		
+		ESHttpClient esjc = getESJC();
+		esjc.debug = true;
 		// make an index
 		String v = Utils.getRandomString(3);
 		String idx = "test_put_"+v;
@@ -41,12 +42,18 @@ public class UpdateRequestBuilderTest extends ESTest {
 		Utils.sleep(100);
 		
 		// and update it
-		
-		UpdateRequestBuilder up = esjc.prepareUpdate(new ESPath(idx, "test_id_1"));
+		ESPath path = new ESPath(idx, "test_id_1");
+		UpdateRequestBuilder up = esjc.prepareUpdate(path);
 		up.setDoc(new ArrayMap("bar", "Mars"));
 		up.setDebug(true);
+		up.setRefresh(KRefresh.TRUE);
 		IESResponse resp3 = up.get().check();
 		Printer.out(resp3);
+		
+		Map<String, Object> got = esjc.get(path);
+		System.out.println(got);
+		assert got.get("bar").equals("Mars");
+		assert got.get("foo").equals("hello");
 	}
 	
 }

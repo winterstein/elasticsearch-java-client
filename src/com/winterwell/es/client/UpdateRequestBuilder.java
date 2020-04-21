@@ -13,6 +13,7 @@ import com.winterwell.utils.time.Dt;
  * Update a document based on a script provided.
  * https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.html#_literal_doc_as_upsert_literal
  * 
+ * @see UpdateByQueryRequestBuilder
  * @see org.elasticsearch.action.update.UpdateRequestBuilder
  * @author daniel
  * @testedby UpdateRequestBuilderTest
