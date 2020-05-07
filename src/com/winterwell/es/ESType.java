@@ -233,7 +233,14 @@ public class ESType extends LinkedHashMap<String,Object> {
 	}
 	
 	
-	
+	/**
+	 * Pick a type from the Java class, e.g. Double -> double
+	 * @param type
+	 */
+	public ESType(Class<?> type) {
+		setType(type);
+	}
+
 	/**
 	 * Convenience for setting one of the primitive types. 
 	 * Best practice is to use methods like {@link #DOUBLE()} or {@link #keyword()} instead,
