@@ -192,15 +192,38 @@ public class ESType extends LinkedHashMap<String,Object> {
 	/**
 	 * Store but do not index this property (so you can't search on it).
 	 * 
+	 * This method handles index:no vs enabled:false.
 	 * 
+	 * So it should be called after type info has been set.
+	 * <p>
+	 * index vs enabled? What's the difference?
+	 * 
+	 *  - index is for primitive fields
+	 *  - enabled is for Object fields.
+	 *  
+	 * <p>
+	 * See
+	 * https://stackoverflow.com/questions/20661980/what-is-the-difference-between-enabled-false-and-index-no-in-elasticsearch 
+	 * https://discuss.elastic.co/t/whats-the-difference-between-enabled-index-and-store/10717/4 
 	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-index.html
 	 * ref: https://www.elastic.co/guide/en/elasticsearch/reference/current/enabled.html
+	 * 
+	 * 
 	 */
 	public ESType noIndex() {
 //		 * NB: noIndex This seems to be broken! But enabled:false works?
 //				 * It's not clear what versions of ES support what! Tested on ES 5.1
 //		put("index", false); // FIXME this is breaking (seen Dec 17, ES 5.1)?!
-		return enabled(false);				
+		// object type?
+		if (get("type")==null || get("type").equals("object")) {
+			return enabled(false);
+		}
+		assert ! containsKey("properties") : this;
+		
+		// Hm - when did "no" become legacy??
+		// https://www.elastic.co/guide/en/elasticsearch/reference/5.6/mapping-index.html
+		
+		return index(false);
 	}
 
 	public ESType() {
@@ -307,8 +330,8 @@ public class ESType extends LinkedHashMap<String,Object> {
 	}
 	
 	/**
-	 * Equivalent to {@link #noIndex()}
-	 * https://www.elastic.co/guide/en/elasticsearch/reference/current/enabled.html
+	 * @see #noIndex()
+	 * @ref https://www.elastic.co/guide/en/elasticsearch/reference/current/enabled.html
 	 */
 	public ESType enabled(boolean enabledForIndex) {
 		if (get("type")!=null && ! get("type").equals("object")) {
@@ -316,6 +339,18 @@ public class ESType extends LinkedHashMap<String,Object> {
 			return this;
 		}
 		put("enabled", enabledForIndex);
+		return this;
+	}
+
+	/**
+	 * @see #noIndex() 
+	 */
+	public ESType index(boolean b) {
+		if ("object".equals(get("type")) || containsKey("properties")) {
+			Log.w("ESType", new Warning("index is only available for primitive types. Not "+this+". Use enabled() or noIndex()"));
+			return this;
+		}
+		put("index", false);
 		return this;
 	}
 
@@ -360,6 +395,17 @@ public class ESType extends LinkedHashMap<String,Object> {
 		put("type", "completion");
 		return this;
 	}
+
+	/**
+	 * @return true if this is indexed (the default), 
+	 * false if index:false or enabled:false has been set.
+	 */
+	public boolean isIndexed() {
+		boolean noi = Boolean.FALSE.equals(get("enabled")) 
+				|| Boolean.FALSE.equals(get("index"));
+		return ! noi;
+	}
+
 
 	
 }
