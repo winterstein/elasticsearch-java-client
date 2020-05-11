@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.winterwell.bob.BuildTask;
-import com.winterwell.bob.tasks.EclipseClasspath;
 import com.winterwell.bob.tasks.MavenDependencyTask;
 import com.winterwell.bob.wwjobs.BuildWinterwellProject;
 import com.winterwell.utils.io.FileUtils;
@@ -28,10 +27,11 @@ public class BuildESJavaClient extends BuildWinterwellProject {
 		mdt.setIncSrc(true);		
 		deps.add(mdt);
 
-		File depdir = new File(projectDir, MavenDependencyTask.MAVEN_DEPENDENCIES_FOLDER);
-		UpdateEclipseClasspathTask uect = new UpdateEclipseClasspathTask(
-				new EclipseClasspath(projectDir), depdir);		
-		deps.add(uect);
+		// TODO
+//		File depdir = new File(projectDir, MavenDependencyTask.MAVEN_DEPENDENCIES_FOLDER);
+//		UpdateEclipseClasspathTask uect = new UpdateEclipseClasspathTask(
+//				new EclipseClasspath(projectDir), depdir);		
+//		deps.add(uect);
 		
 		return deps;
 	}
