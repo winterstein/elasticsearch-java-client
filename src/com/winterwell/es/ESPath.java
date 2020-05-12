@@ -34,15 +34,10 @@ public final class ESPath<T> {
 		if (id == null) {
 			if (other.id != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if ( ! id.equals(other.id))
 			return false;
-		if (!Arrays.equals(indices, other.indices))
+		if ( ! Arrays.equals(indices, other.indices))
 			return false;
-//		if (type == null) {
-//			if (other.type != null)
-//				return false;
-//		} else if (!type.equals(other.type))
-//			return false;
 		return true;
 	}
 
