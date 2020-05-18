@@ -188,7 +188,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 * @return
 	 */
 	public ESType noAnalyzer() {
-		put("index", "not_analyzed");
+		put("index", "false");
 		return this;
 	}
 	
