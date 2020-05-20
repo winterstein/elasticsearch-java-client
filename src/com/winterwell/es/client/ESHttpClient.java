@@ -214,6 +214,7 @@ public class ESHttpClient implements Flushable {
 
 	public DeleteRequestBuilder prepareDelete(String esIndex, String esType, String id) {
 		com.winterwell.es.client.DeleteRequestBuilder drb = new DeleteRequestBuilder(this);
+		drb.setIgnoreError404(true);
 		drb.setIndex(esIndex).setType(esType).setId(id);
 		return drb;
 	}
