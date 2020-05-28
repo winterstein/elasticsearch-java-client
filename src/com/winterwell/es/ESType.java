@@ -188,7 +188,7 @@ public class ESType extends LinkedHashMap<String,Object> {
 	 * @return
 	 */
 	public ESType noAnalyzer() {
-		put("index", "false");
+		put("index", "false"); // changed from es5's "not_analyzed" to es6-and-up "false"
 		return this;
 	}
 	
