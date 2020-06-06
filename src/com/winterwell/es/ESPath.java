@@ -91,7 +91,7 @@ public final class ESPath<T> {
 
 	@Override
 	public String toString() {
-		return "ESPath[" +Arrays.toString(indices)+" / " +id+ "]";
+		return "ESPath[" +Arrays.toString(indices)+" / id: " +id+ "]";
 	}
 
 	public String index() {
