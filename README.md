@@ -1,3 +1,6 @@
+
+# This Repo has moved to: </good-loop/elasticsearch-java-client>
+
 # ESJC: elasticsearch-java-client
 
 ESJC is a Java client for using ElasticSearch over the http API.
