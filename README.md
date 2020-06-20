@@ -1,5 +1,5 @@
 
-# This Repo has moved to: </good-loop/elasticsearch-java-client>
+# This Repo has moved to: https://github.com/good-loop/elasticsearch-java-client
 
 # ESJC: elasticsearch-java-client
 
